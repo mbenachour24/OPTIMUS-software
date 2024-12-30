@@ -1,4 +1,5 @@
 Optimus: Rule of Law Backend System
+--
 
 Optimus is a computational model designed to simulate the institutional logic of the State and the Rule of Law. This project builds on the principles of systems theory, legal philosophy, and agent-based modeling (ABM) to demonstrate how political and judicial systems interact while maintaining coherence through structured decision-making.
 
@@ -19,7 +20,7 @@ Project Highlights
 	•	Provide feedback to the political system.
 	•	Dynamic Notifications and Logs: Real-time updates on actions taken by each system.
 
-2. The Four Rules of the Optimus Method
+3. The Four Rules of the Optimus Method
 
 This project adheres to Mohamed Ben Achour’s Optimus Framework:
 	1.	Functional Differentiation: Political and judicial systems operate autonomously with their own logic.
@@ -34,27 +35,29 @@ This project adheres to Mohamed Ben Achour’s Optimus Framework:
 	•	State Management: Simple in-memory tracking for day progression and completed actions.
 
 How to Run
+--
 
 1. Clone the Repository
 
-git clone https://github.com/mbenachour24/OPTIMUS-software.git
-cd OPTIMUS-software/Backend
+	git clone https://github.com/mbenachour24/OPTIMUS-software.git
+	cd OPTIMUS-software/Backend
 
 2. Set Up the Environment
 
-Install Python dependencies:
-
-pip install -r requirements.txt
+	Install Python dependencies:
+	
+	pip install -r requirements.txt
 
 3. Run the Flask App
 
-python app.py
+	python app.py
 
 4. Access the Interfaces
 	•	Political System: http://127.0.0.1:5000/political
 	•	Judicial System: http://127.0.0.1:5000/judicial
 
 How It Works
+--
 
 Day Progression
 	1.	The political system creates a norm.
