@@ -89,6 +89,6 @@ Credits
 --
 	•	Author: Mohamed Ben Achour
 	•	Email: mbenachour24@gmail.com
-	•	Blog: Im Werden Sein
+	•	Blog: Imwerdensein.wordpress.com
 
 Explore, expand, and contribute to Coding the State with Optimus. 🚀
