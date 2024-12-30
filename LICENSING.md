@@ -1,6 +1,6 @@
 1. Open Source License
 
-This project is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) license.
+This project is licensed under the Creative Commons Attribution Non-Commercial 4.0 International (CC BY NC 4.0) license.
 You are free to:
 
 	•	Share: Copy and redistribute the material in any medium or format.
@@ -11,7 +11,7 @@ Conditions:
 	•	Attribution: You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
 	•	Non-Commercial: This open-source license does not allow commercial use of the project or its derivatives.
 
-The full text of the CC BY 4.0 license can be found here.
+The full text of the CC BY 4.0 license can be found here : https://creativecommons.org/licenses/by-nc/4.0/deed.en
 
 2. Commercial Use
 
