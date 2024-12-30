@@ -86,6 +86,7 @@ Future Improvements
 	•	Introduce more dynamic frontends with ReactJS or similar frameworks.
 
 Credits
+--
 	•	Author: Mohamed Ben Achour
 	•	Email: mbenachour24@gmail.com
 	•	Blog: Im Werden Sein
