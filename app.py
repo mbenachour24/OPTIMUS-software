@@ -1,3 +1,7 @@
+# This file is part of the OPTMUS project.
+# Licensed under CC BY-NC 4.0. Non-commercial use only.
+# For more details, see the LICENSE file in the repository.
+
 from flask import Flask, jsonify, request, render_template
 from models.minioptimus import Society
 
