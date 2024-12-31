@@ -92,3 +92,8 @@ Credits
 	•	Blog: Imwerdensein.wordpress.com
 
 Explore, expand, and contribute to Coding the State with Optimus. 🚀
+
+## License
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).  
+Non-commercial use only. For commercial licensing inquiries, contact [Your Email Address].
+
