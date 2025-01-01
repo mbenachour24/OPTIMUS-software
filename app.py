@@ -2,6 +2,7 @@
 # Licensed under CC BY-NC 4.0. Non-commercial use only.
 # For more details, see the LICENSE file in the repository.
 
+import logging
 from flask import Flask, jsonify, request, render_template
 from models.minioptimus import Society
 
@@ -71,6 +72,8 @@ def check_constitutionality():
     })
 
 # API Endpoint to mark a norm as unconstitutional
+notifications = []  # Store notifications globally
+
 @app.route('/api/mark_unconstitutional', methods=['POST'])
 def mark_unconstitutional():
     norm_id = request.json.get('norm_id')
@@ -78,16 +81,29 @@ def mark_unconstitutional():
     if not norm:
         return jsonify({"error": "Norm not found"}), 404
 
-    norm.invalidate()  # Explicitly invalidate the norm
-    actions_completed["judicial"] = True  # Mark judicial action as completed
-    check_day_progress()
-    activities.append(f"Marked Norm #{norm.id} as unconstitutional")
+    # Invalidate the norm
+    norm.invalidate()
+
+    # Create a notification for the Political System
+    notification = f"Norm #{norm.id} ({norm.text}) marked as unconstitutional."
+    notifications.append(notification)
+
+    # Log the notification
+    print(f"Notification sent to Political System: {notification}")
+    logging.info(f"Political System Notification: {notification}")
+
     return jsonify({
         "id": norm.id,
         "text": norm.text,
         "valid": norm.valid,
-        "complexity": norm.complexity
+        "complexity": norm.complexity,
+        "message": f"Political System notified: {notification}"
     })
+
+
+@app.route('/api/get_notifications', methods=['GET'])
+def get_notifications():
+    return jsonify(notifications)
 
 # API Endpoint to notify the political system
 @app.route('/api/notify_political', methods=['POST'])
@@ -127,11 +143,20 @@ def get_norms():
 # API Endpoint pour récupérer toutes les cases
 @app.route('/api/get_cases', methods=['GET'])
 def get_cases():
+    print("Debug: Retrieving cases from JudicialSystem")
+    print("Current Cases:", society.judicial_system.cases)
+
     cases = [
         {"id": case.id, "text": case.text, "constitutional": case.constitutional}
         for case in society.judicial_system.cases
     ]
     return jsonify(cases)
+
+@app.route('/api/add_test_case', methods=['POST'])
+def add_test_case():
+    norm = society.parliament.create_norm()
+    case = society.judicial_system.create_case(norm)
+    return jsonify({"message": "Test case added", "case_id": case.id})
 
 # API Endpoint for today's activities
 @app.route('/api/get_activities', methods=['GET'])

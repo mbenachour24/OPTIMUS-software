@@ -70,28 +70,46 @@ class JudicialSystem:
         logging.info(log_message)
         print(log_message)
         
+        # Determine validity based on complexity
         if norm.complexity > 5:
             norm.invalidate()
         
-        # Log message indicating constitutionality check is complete
-        log_message = f"Judicial System: Norm {norm.id} has been checked for constitutionality. Valid status: {norm.valid}"
+        # Log the result of the check
+        log_message = f"Judicial System: Norm {norm.id} checked. Valid status: {norm.valid}"
         logging.info(log_message)
         print(log_message)
+        
+        # Create a case to document the constitutionality check
+        self.create_case(norm)
 
     def create_case(self, norm):
-        if not norm.valid:
-            log_message = f"Judicial System: Cannot create case based on invalid norm {norm.id}"
-            logging.info(log_message)
-            print(log_message)
-            return None
-
         self.case_counter += 1
         case = Case(
             case_id=self.case_counter,
-            text=f'Case {self.case_counter} referencing {norm.text}',
+            text=f'Case {self.case_counter} referencing Norm {norm.id}',
             norm=norm
         )
         self.cases.append(case)
+
+        # Log case creation
+        log_message = f"Case created: ID {case.id}, Text: {case.text}, Constitutional: {case.constitutional}"
+        logging.info(log_message)
+        print(log_message)
+        
+        return case
+
+        # Debugging: Log the case creation
+        log_message = f"Case created: ID {case.id}, Text: {case.text}, Constitutional: {case.constitutional}"
+        logging.info(log_message)
+        print(log_message)
+
+        # Debugging: Log the current list of cases
+        log_message = f"Current cases: {[c.text for c in self.cases]}"
+        logging.info(log_message)
+        print(log_message)
+
+        print(f"Debug: Cases in JudicialSystem after creation: {[case.text for case in self.cases]}")
+     
         return case
 
 class Society:
@@ -103,33 +121,22 @@ class Society:
     async def simulate(self):
         while self.iteration < SIMULATION_DAYS:
             self.iteration += 1
-            log_message = f"\n\n{'='*20} START OF DAY {self.iteration} {'='*20}\n"
-            logging.info(log_message)
-            print(log_message)
+            print(f"Debug: Starting Day {self.iteration}")
 
             # Political system creates a norm
             norm = self.parliament.create_norm()
-            log_message = f"Political System produced: {norm.text}"
-            logging.info(log_message)
-            print(log_message)
+            print(f"Debug: Created Norm: {norm.text}, Valid: {norm.valid}")
 
-            # Judicial system checks constitutionality
+            # Judicial system checks constitutionality (and creates a case)
             self.judicial_system.check_constitutionality(norm)
 
-            # Judicial system creates a case
-            case = self.judicial_system.create_case(norm)
-            if case:
-                log_message = f"Judicial System produced: {case.text}"
-                logging.info(log_message)
-                print(log_message)
+            # Debugging: Log the current state of cases
+            print("Debug: Current cases in JudicialSystem:")
+            for case in self.judicial_system.cases:
+                print(f"Case ID: {case.id}, Text: {case.text}, Constitutional: {case.constitutional}")
 
-            log_message = f"\n{'='*20} END OF DAY {self.iteration} {'='*20}\n"
-            logging.info(log_message)
-            print(log_message)
-            
-            await asyncio.sleep(1)  # Simulate the passage of time
-
-        logging.info("Simulation completed.")
+            print(f"Debug: Ending Day {self.iteration}")
+            await asyncio.sleep(1)
 
 async def main():
     society = Society()

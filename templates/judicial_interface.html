@@ -19,11 +19,6 @@
             </ul>
             <h3>Logs</h3>
             <ul>
-                <ul>
-                    <li><a href="/judicial">Judicial System</a></li>
-                    <li><strong>Political System</strong></li>
-                    <li><a href="/general_log">Society</a></li>
-                </ul>
                 <h3>Logs</h3>
                 <ul>
                     <li><a href="/general_log">Today's Activities</a></li> <!-- Link to General Log -->
@@ -77,29 +72,28 @@
         // Mark norm as unconstitutional
         async function markNormUnconstitutional() {
             const normId = prompt("Enter the Norm ID to mark as unconstitutional:");
-            if (!normId) return;
+        if (!normId) return;
 
-            try {
-                const response = await fetch('/api/mark_unconstitutional', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ norm_id: parseInt(normId) })
-                });
-                const result = await response.json();
+        try {
+            const response = await fetch('/api/mark_unconstitutional', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ norm_id: parseInt(normId) })
+            });
+            const result = await response.json();
 
-                if (result.error) {
-                    alert(`Error: ${result.error}`);
-                } else {
-                    alert(`Norm #${result.id} marked as unconstitutional. Valid: ${result.valid}`);
-                    document.getElementById('latest-notification').innerText = `Norm #${result.id} marked as unconstitutional.`;
-                }
-
-                fetchLogs(); // Refresh the logs to show updated norms
-            } catch (error) {
-                console.error('Error marking norm as unconstitutional:', error);
-                alert('An error occurred while marking the norm as unconstitutional.');
+            if (result.error) {
+                alert(`Error: ${result.error}`);
+            } else {
+                alert(`Notification sent to Political System: Norm #${result.id} is unconstitutional.`);
+                document.getElementById('latest-notification').innerText =
+                    `Political System notified about Norm #${result.id}: unconstitutional.`;
             }
+        } catch (error) {
+            console.error('Error marking norm as unconstitutional:', error);
+            alert('An error occurred while marking the norm as unconstitutional.');
         }
+    }
 
         // Request reform (placeholder)
         function requestReform() {

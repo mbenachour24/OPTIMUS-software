@@ -20,9 +20,9 @@
             <h3>Logs</h3>
             <ul>
                 <li><strong>General Log</strong></li>
-                <li><a href="/todays-activities">Today's Activities</a></li>
-                <li><a href="/norm-updates">Norm Updates</a></li>
-                <li><a href="/case-decisions">Case Decisions</a></li>
+                <li><a href="/general_log">Today's Activities</a></li>
+                <li><a href="/general_log">Norm Updates</a></li>
+                <li><a href="/general_log">Case Decisions</a></li>
             </ul>
         </div>
 
@@ -31,7 +31,28 @@
             <h2>General Log</h2>
             <div id="log-sections">
                 <h3>Today's Activities</h3>
-                <div id="todays-activities"></div>
+        <div id="todays-activities"></div>
+
+        <script>
+            async function fetchLogs() {
+                try {
+                    const activitiesResponse = await fetch('/api/get_activities');
+                    const activities = await activitiesResponse.json();
+
+                    // Populate Today's Activities
+                    document.getElementById('todays-activities').innerHTML = activities.map(
+                        a => `<p>${a}</p>`
+                    ).join('');
+                } catch (error) {
+                    console.error('Error fetching logs:', error);
+                    document.getElementById('todays-activities').innerHTML =
+                        '<p>Error loading activities. Please try again later.</p>';
+                }
+            }
+
+            fetchLogs();
+        </script>
+        
                 <h3>Norm Updates</h3>
                 <div id="norm-updates"></div>
                 <h3>Case Decisions</h3>
@@ -46,15 +67,46 @@
 
     <script>
         async function fetchLogs() {
-            const activities = await (await fetch('/api/get_activities')).json();
-            const norms = await (await fetch('/api/get_norms')).json();
-            const cases = await (await fetch('/api/get_cases')).json();
+            try {
+                // Fetch today's activities
+                const activitiesResponse = await fetch('/api/get_activities');
+                const activities = await activitiesResponse.json();
 
-            document.getElementById('todays-activities').innerHTML = activities.map(a => `<p>${a}</p>`).join('');
-            document.getElementById('norm-updates').innerHTML = norms.map(n => `<p>Norm #${n.id}: ${n.text}</p>`).join('');
-            document.getElementById('case-decisions').innerHTML = cases.map(c => `<p>Case #${c.id}: ${c.decision}</p>`).join('');
+                // Fetch norms updates
+                const normsResponse = await fetch('/api/get_norms');
+                const norms = await normsResponse.json();
+
+                // Fetch case decisions
+                const casesResponse = await fetch('/api/get_cases');
+                const cases = await casesResponse.json();
+
+                // Populate Today's Activities
+                const activitiesSection = document.getElementById('todays-activities');
+                activitiesSection.innerHTML = activities.length
+                    ? activities.map(a => `<p>${a}</p>`).join('')
+                    : '<p>No activities yet.</p>';
+
+                // Populate Norm Updates
+                const normsSection = document.getElementById('norm-updates');
+                normsSection.innerHTML = norms.length
+                    ? norms.map(n => `<p>Norm #${n.id}: ${n.text} - Valid: ${n.valid}</p>`).join('')
+                    : '<p>No norms updates yet.</p>';
+
+                // Populate Case Decisions
+                const casesSection = document.getElementById('case-decisions');
+                casesSection.innerHTML = cases.length
+                    ? cases.map(c => `<p>Case #${c.id}: ${c.text} - Constitutional: ${c.constitutional}</p>`).join('')
+                    : '<p>No case decisions yet.</p>';
+            } catch (error) {
+                console.error('Error fetching logs:', error);
+                document.getElementById('log-sections').innerHTML = 
+                    '<p>Error loading logs. Please try again later.</p>';
+            }
         }
 
+        // Fetch logs on page load
+        fetchLogs();
+        // Fetch logs on page load
         fetchLogs();
     </script>
 </body>

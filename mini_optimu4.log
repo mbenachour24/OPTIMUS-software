@@ -504,3 +504,727 @@ Norm 3: Invalidated
 127.0.0.1 - - [01/Jan/2025 06:55:50] "GET /api/get_activities HTTP/1.1" 200 -
 127.0.0.1 - - [01/Jan/2025 06:55:50] "GET /api/get_norms HTTP/1.1" 200 -
 127.0.0.1 - - [01/Jan/2025 06:55:50] "GET /api/get_cases HTTP/1.1" 200 -
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+127.0.0.1 - - [01/Jan/2025 07:08:01] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:08:01] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:08:01] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:08:05] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:08:05] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:08:05] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:08:06] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:08:06] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:08:06] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:08:07] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:08:07] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:08:07] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:08:07] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:08:07] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:08:11] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:08:11] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:08:12] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:02] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:02] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:09:02] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:04] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:04] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:09:04] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:04] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:04] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:09] "[33mGET /todays-activities HTTP/1.1[0m" 404 -
+127.0.0.1 - - [01/Jan/2025 07:09:31] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:31] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:09:31] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:33] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:33] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:09:33] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 1: Initialized with complexity 5 and validity True
+127.0.0.1 - - [01/Jan/2025 07:09:35] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:36] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Initialized with complexity 9 and validity True
+127.0.0.1 - - [01/Jan/2025 07:09:38] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:39] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 3: Initialized with complexity 8 and validity True
+127.0.0.1 - - [01/Jan/2025 07:09:42] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:42] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:45] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:45] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:09:45] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 3: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:09:47] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:48] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:49] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:49] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:09:49] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:49] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:49] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:09:51] "[33mGET /case-decisions HTTP/1.1[0m" 404 -
+127.0.0.1 - - [01/Jan/2025 07:11:22] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:22] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:11:22] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:22] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:22] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:24] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:24] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:11:24] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:25] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:25] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:11:25] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:11:27] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:29] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:30] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:30] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:11:30] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:30] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:30] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:32] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:32] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:11:32] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:32] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:32] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:33] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:33] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:11:33] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:33] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:11:33] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:12:53] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:12:53] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:12:53] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:12:54] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:12:54] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:12:56] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:12:56] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:12:56] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 1: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:12:59] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:00] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:01] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:01] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:13:01] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:01] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:01] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:03] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:03] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:13:03] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:03] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:03] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:07] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:07] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:13:07] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:07] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:07] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:07] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:07] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:13:07] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:07] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:07] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:08] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:08] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:13:08] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:08] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:08] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:09] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:09] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:13:09] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:09] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:09] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:10] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:10] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:13:10] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:10] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:13:10] "GET /api/get_cases HTTP/1.1" 200 -
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+127.0.0.1 - - [01/Jan/2025 07:15:11] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:11] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:11] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:11] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:11] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:11] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:11] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:11] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:16] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:16] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:16] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:16] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:16] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:16] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:16] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:16] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:17] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:17] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:17] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:20] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:20] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:20] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 1: Initialized with complexity 6 and validity True
+127.0.0.1 - - [01/Jan/2025 07:15:22] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:23] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:24] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:24] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:24] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:26] "[33mPOST /api/mark_unconstitutional HTTP/1.1[0m" 404 -
+127.0.0.1 - - [01/Jan/2025 07:15:29] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 1: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:15:31] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:32] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:34] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:34] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:34] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:34] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:34] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:34] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:34] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:34] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:37] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:38] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:38] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:38] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:38] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:38] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:38] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:38] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:40] "[33mGET /society HTTP/1.1[0m" 404 -
+127.0.0.1 - - [01/Jan/2025 07:15:43] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:43] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:43] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:43] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:43] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:43] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:43] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:43] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:44] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:45] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:45] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:54] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:54] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:54] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:54] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:54] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:54] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:54] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:54] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:15:55] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:28] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:39] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:39] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:16:39] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Initialized with complexity 3 and validity True
+127.0.0.1 - - [01/Jan/2025 07:16:41] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:42] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:44] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:44] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:16:44] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:16:46] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:46] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:49] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:49] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:16:49] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:49] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:49] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:49] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:49] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:49] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:54] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:16:55] "GET /api/get_cases HTTP/1.1" 200 -
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/models/minioptimus.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/models/minioptimus.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/models/minioptimus.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+127.0.0.1 - - [01/Jan/2025 07:19:43] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:45] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:45] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:19:45] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:45] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:45] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:45] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:45] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:45] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:46] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:46] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:19:46] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:46] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:46] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:46] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:46] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:46] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:48] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:48] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:19:48] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 1: Initialized with complexity 9 and validity True
+127.0.0.1 - - [01/Jan/2025 07:19:50] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:50] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:52] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:52] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:19:52] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 1: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:19:54] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:54] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:55] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:55] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:19:55] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:55] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:55] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:55] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:55] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:55] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:57] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:57] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:19:57] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:57] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:57] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:57] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:57] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:57] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:58] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:58] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:19:58] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:58] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:58] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:58] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:58] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:19:58] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:20:27] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:20:28] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:20:30] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:20:33] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:20:33] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:20:33] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:20:33] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:20:33] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:20:33] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:20:33] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:20:33] "GET /api/get_cases HTTP/1.1" 200 -
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/models/minioptimus.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/models/minioptimus.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/models/minioptimus.py', reloading
+ * Restarting with stat
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+127.0.0.1 - - [01/Jan/2025 07:22:42] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:43] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:43] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:22:43] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:43] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:43] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:43] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:43] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:43] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:45] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:45] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:22:45] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 1: Initialized with complexity 1 and validity True
+127.0.0.1 - - [01/Jan/2025 07:22:47] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:48] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:50] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:50] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:22:50] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 1: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:22:53] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:54] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:55] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:55] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:22:55] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:55] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:55] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:55] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:55] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:55] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:56] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:56] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:22:56] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:56] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:56] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:56] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:56] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:56] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:58] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:58] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:22:58] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:58] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:58] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:58] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:58] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:58] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:22:59] "[33mGET /society HTTP/1.1[0m" 404 -
+127.0.0.1 - - [01/Jan/2025 07:23:01] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:01] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:23:01] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Initialized with complexity 4 and validity True
+127.0.0.1 - - [01/Jan/2025 07:23:03] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:03] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 3: Initialized with complexity 8 and validity True
+127.0.0.1 - - [01/Jan/2025 07:23:05] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:05] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 4: Initialized with complexity 2 and validity True
+127.0.0.1 - - [01/Jan/2025 07:23:06] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:06] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:07] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:07] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:23:07] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 4: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:23:09] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:10] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:11] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:11] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:23:11] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:11] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:11] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:11] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:11] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:23:11] "GET /api/get_cases HTTP/1.1" 200 -
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+127.0.0.1 - - [01/Jan/2025 07:24:40] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:40] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:24:40] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:40] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:40] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:40] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:40] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:40] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:42] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:42] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:24:42] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:42] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:42] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:42] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:42] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:42] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:44] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:44] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:24:44] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 1: Initialized with complexity 4 and validity True
+127.0.0.1 - - [01/Jan/2025 07:24:46] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:46] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Initialized with complexity 3 and validity True
+127.0.0.1 - - [01/Jan/2025 07:24:48] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:48] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 3: Initialized with complexity 10 and validity True
+127.0.0.1 - - [01/Jan/2025 07:24:49] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:50] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:52] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:52] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:24:52] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 3: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:24:53] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:54] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:55] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:55] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:24:55] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:55] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:55] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:55] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:55] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:55] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:57] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:57] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:24:57] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:57] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:57] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:57] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:57] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:24:57] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:00] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:00] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:25:00] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 3: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:25:02] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:02] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:06] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:06] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:25:06] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:06] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:06] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:06] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:06] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:06] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:07] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:08] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:25:08] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:08] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:08] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:08] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:08] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:25:08] "GET /api/get_cases HTTP/1.1" 200 -
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/models/minioptimus.py', reloading
+ * Restarting with stat
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+127.0.0.1 - - [01/Jan/2025 07:28:18] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:18] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:28:18] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:18] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:18] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:18] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:19] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:19] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:21] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:21] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:28:21] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:22] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:22] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:28:22] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 1: Initialized with complexity 4 and validity True
+127.0.0.1 - - [01/Jan/2025 07:28:24] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:24] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Initialized with complexity 8 and validity True
+127.0.0.1 - - [01/Jan/2025 07:28:25] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:25] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:26] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:26] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:28:26] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:28:28] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:28] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:29] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:29] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:28:29] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:29] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:29] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:29] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:29] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:29] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:30] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:30] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:28:30] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:30] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:30] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:30] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:30] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:28:30] "GET /api/get_cases HTTP/1.1" 200 -
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/models/minioptimus.py', reloading
+ * Restarting with stat
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+127.0.0.1 - - [01/Jan/2025 07:31:26] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:26] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:31:26] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:26] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:26] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:26] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:26] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:26] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:28] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:28] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:31:28] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 1: Initialized with complexity 5 and validity True
+127.0.0.1 - - [01/Jan/2025 07:31:30] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:31] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Initialized with complexity 7 and validity True
+127.0.0.1 - - [01/Jan/2025 07:31:32] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:32] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:34] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:34] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:31:34] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:31:36] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:36] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:37] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:37] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:31:37] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:37] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:37] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:37] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:37] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:37] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:38] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:39] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:31:39] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:39] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:39] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:39] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:39] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:39] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:40] "[33mGET /society HTTP/1.1[0m" 404 -
+127.0.0.1 - - [01/Jan/2025 07:31:43] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:43] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:31:43] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Invalidated
+127.0.0.1 - - [01/Jan/2025 07:31:45] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:45] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:49] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:49] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:31:49] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:54] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:54] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:31:54] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:55] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:31:55] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:31:55] "GET /api/get_norms HTTP/1.1" 200 -
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/app.py', reloading
+ * Restarting with stat
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+127.0.0.1 - - [01/Jan/2025 07:35:52] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:35:52] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:35:52] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:35:53] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:35:54] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:35:54] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:35:55] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:35:55] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:35:55] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 1: Initialized with complexity 8 and validity True
+127.0.0.1 - - [01/Jan/2025 07:35:56] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:35:57] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Initialized with complexity 5 and validity True
+127.0.0.1 - - [01/Jan/2025 07:35:58] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:35:59] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 3: Initialized with complexity 8 and validity True
+127.0.0.1 - - [01/Jan/2025 07:36:00] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:36:01] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:36:01] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:36:01] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:36:01] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Invalidated
+Political System Notification: Norm #2 marked as unconstitutional.
+127.0.0.1 - - [01/Jan/2025 07:36:04] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:36:07] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:36:07] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:36:07] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:36:09] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:36:09] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:36:09] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:36:10] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:36:10] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:36:10] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:36:12] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:36:12] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:36:12] "GET /api/get_norms HTTP/1.1" 200 -
+ * Detected change in '/Users/mohamedbenachour/Desktop/Coding/Backend/app.py', reloading
+ * Restarting with stat
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 129-221-551
+127.0.0.1 - - [01/Jan/2025 07:39:15] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:15] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:39:15] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:15] "GET /api/get_notifications HTTP/1.1" 200 -
+Norm 1: Initialized with complexity 1 and validity True
+127.0.0.1 - - [01/Jan/2025 07:39:19] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:19] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Initialized with complexity 3 and validity True
+127.0.0.1 - - [01/Jan/2025 07:39:21] "POST /api/create_norm HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:21] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:22] "GET /judicial HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:22] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:39:22] "GET /api/get_norms HTTP/1.1" 200 -
+Norm 2: Invalidated
+Political System Notification: Norm #2 (Law 2) marked as unconstitutional.
+127.0.0.1 - - [01/Jan/2025 07:39:24] "POST /api/mark_unconstitutional HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:26] "GET /political HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:26] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:39:26] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:26] "GET /api/get_notifications HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:29] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:29] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:39:29] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:29] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:29] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:29] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:29] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:29] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:29] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:31] "GET /general_log HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:31] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Jan/2025 07:39:31] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:31] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:31] "GET /api/get_activities HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:31] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:31] "GET /api/get_norms HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:31] "GET /api/get_cases HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jan/2025 07:39:31] "GET /api/get_cases HTTP/1.1" 200 -

@@ -15,21 +15,11 @@
             <ul>
                 <li><a href="/judicial">Judicial System</a></li>
                 <li><strong>Political System</strong></li>
-                <li>Society</li>
+                <li><a href="/society">Society</a></li>
             </ul>
             <h3>Logs</h3>
             <ul>
-                <ul>
-                    <li><a href="/judicial">Judicial System</a></li>
-                    <li><strong>Political System</strong></li>
-                    <li><a href="/general_log">Society</a></li>
-                </ul>
-                <h3>Logs</h3>
-                <ul>
-                    <li><a href="/general_log">Today's Activities</a></li> <!-- Link to General Log -->
-                    <li id="citizen-feedback">Citizen Feedback</li>
-                    <li id="norm-updates">Norm Updates</li>
-                </ul>
+                <li><a href="/general_log">Today's Activities</a></li>
                 <li id="citizen-feedback">Citizen Feedback</li>
                 <li id="norm-updates">Norm Updates</li>
             </ul>
@@ -38,17 +28,16 @@
         <!-- Main Content -->
         <div class="main-content">
             <h2>Welcome, Political System</h2>
+            <h3>Notifications</h3>
             <div id="notifications">
                 <!-- Notifications will be dynamically loaded here -->
-                <div class="notification">
-                    <strong>Notification:</strong> Judicial System flagged Norm #142 as potentially unconstitutional.
-                </div>
+                <p>No notifications yet.</p>
             </div>
+
+            <h3>Log Entries</h3>
             <div id="log-entries">
                 <!-- Logs will be dynamically loaded here -->
-                <div class="log-entry">
-                    <strong>Log Entry:</strong> Created Norm #145: Environmental Policy.
-                </div>
+                <p>No log entries yet.</p>
             </div>
 
             <!-- Interaction Area -->
@@ -64,54 +53,87 @@
     </footer>
 
     <script>
+        // Fetch notifications dynamically
+        async function fetchNotifications() {
+            try {
+                const response = await fetch('/api/get_notifications');
+                const notifications = await response.json();
+                const notificationsDiv = document.getElementById('notifications');
+                notificationsDiv.innerHTML = notifications.length
+                    ? notifications.map(n => `<p>${n}</p>`).join('')
+                    : '<p>No notifications yet.</p>';
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+                document.getElementById('notifications').innerHTML =
+                    '<p>Error loading notifications. Please try again later.</p>';
+            }
+        }
+
         // Fetch logs dynamically
         async function fetchLogs() {
-            const response = await fetch('/api/get_norms');
-            const norms = await response.json();
-            const logEntries = document.getElementById('log-entries');
-            logEntries.innerHTML = ''; // Clear existing logs
-            norms.forEach(norm => {
-                const logEntry = document.createElement('div');
-                logEntry.className = 'log-entry';
-                logEntry.innerHTML = `<strong>Norm #${norm.id}:</strong> ${norm.text} - Valid: ${norm.valid}`;
-                logEntries.appendChild(logEntry);
-            });
+            try {
+                const response = await fetch('/api/get_norms');
+                const norms = await response.json();
+                const logEntries = document.getElementById('log-entries');
+                logEntries.innerHTML = ''; // Clear existing logs
+                norms.forEach(norm => {
+                    const logEntry = document.createElement('div');
+                    logEntry.className = 'log-entry';
+                    logEntry.innerHTML = `<strong>Norm #${norm.id}:</strong> ${norm.text} - Valid: ${norm.valid}`;
+                    logEntries.appendChild(logEntry);
+                });
+            } catch (error) {
+                console.error('Error fetching norms:', error);
+                document.getElementById('log-entries').innerHTML =
+                    '<p>Error loading log entries. Please try again later.</p>';
+            }
         }
 
         // Function to create a new norm
         async function createNewNorm() {
             const normText = prompt("Enter a description for the new norm:");
             if (!normText) return; // If the user cancels
-            const response = await fetch('/api/create_norm', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: normText })
-            });
-            const norm = await response.json();
-            alert(`Created Norm #${norm.id}: ${norm.text}`);
-            fetchLogs(); // Update logs dynamically
+            try {
+                const response = await fetch('/api/create_norm', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: normText })
+                });
+                const norm = await response.json();
+                alert(`Created Norm #${norm.id}: ${norm.text}`);
+                fetchLogs(); // Update logs dynamically
+            } catch (error) {
+                console.error('Error creating norm:', error);
+                alert('An error occurred while creating the norm.');
+            }
         }
 
         // Function to review judicial feedback
         async function reviewJudicialFeedback() {
             const normId = prompt("Enter the Norm ID to review feedback:");
             if (!normId) return; // If the user cancels
-            const response = await fetch('/api/check_constitutionality', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ norm_id: parseInt(normId) })
-            });
-            const result = await response.json();
-            if (result.error) {
-                alert(`Error: ${result.error}`);
-            } else {
-                alert(`Feedback on Norm #${result.id}: Valid: ${result.valid}`);
+            try {
+                const response = await fetch('/api/check_constitutionality', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ norm_id: parseInt(normId) })
+                });
+                const result = await response.json();
+                if (result.error) {
+                    alert(`Error: ${result.error}`);
+                } else {
+                    alert(`Feedback on Norm #${result.id}: Valid: ${result.valid}`);
+                }
+                fetchLogs(); // Update logs dynamically
+            } catch (error) {
+                console.error('Error reviewing feedback:', error);
+                alert('An error occurred while reviewing feedback.');
             }
-            fetchLogs(); // Update logs dynamically
         }
 
-        // On page load, fetch logs
+        // On page load, fetch logs and notifications
         fetchLogs();
+        fetchNotifications();
     </script>
 </body>
 </html>
