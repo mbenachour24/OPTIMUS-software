@@ -4,80 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Optimus - Judicial System</title>
-    <style>
-        /* Existing Styles */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
-        }
-        header {
-            background-color: #4267b2;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            font-size: 24px;
-        }
-        .container {
-            display: flex;
-            flex-direction: row;
-            max-width: 1200px;
-            margin: 20px auto;
-        }
-        .sidebar {
-            width: 20%;
-            background-color: #ffffff;
-            border-radius: 8px;
-            padding: 10px;
-            margin-right: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .main-content {
-            flex: 1;
-            background-color: #ffffff;
-            border-radius: 8px;
-            padding: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .notification {
-            background-color: #f0f8ff;
-            border-left: 4px solid #4267b2;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 4px;
-        }
-        .log-entry {
-            background-color: #e9ecef;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-        }
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-        .action-buttons button {
-            background-color: #4267b2;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .action-buttons button:hover {
-            background-color: #365899;
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #ffffff;
-            margin-top: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+    <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
     <header>Optimus - Judicial System</header>
@@ -92,7 +19,17 @@
             </ul>
             <h3>Logs</h3>
             <ul>
-                <li id="todays-activities">Today's Activities</li>
+                <ul>
+                    <li><a href="/judicial">Judicial System</a></li>
+                    <li><strong>Political System</strong></li>
+                    <li><a href="/general_log">Society</a></li>
+                </ul>
+                <h3>Logs</h3>
+                <ul>
+                    <li><a href="/general_log">Today's Activities</a></li> <!-- Link to General Log -->
+                    <li id="citizen-feedback">Citizen Feedback</li>
+                    <li id="norm-updates">Norm Updates</li>
+                </ul>
                 <li id="norm-updates">Norm Updates</li>
                 <li id="case-decisions">Case Decisions</li>
             </ul>

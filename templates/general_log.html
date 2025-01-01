@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus - General Log</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <header>Optimus - General Log</header>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3>Systems</h3>
+            <ul>
+                <li><a href="/judicial">Judicial System</a></li>
+                <li><a href="/political">Political System</a></li>
+                <li><a href="/society">Society</a></li>
+            </ul>
+            <h3>Logs</h3>
+            <ul>
+                <li><strong>General Log</strong></li>
+                <li><a href="/todays-activities">Today's Activities</a></li>
+                <li><a href="/norm-updates">Norm Updates</a></li>
+                <li><a href="/case-decisions">Case Decisions</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>General Log</h2>
+            <div id="log-sections">
+                <h3>Today's Activities</h3>
+                <div id="todays-activities"></div>
+                <h3>Norm Updates</h3>
+                <div id="norm-updates"></div>
+                <h3>Case Decisions</h3>
+                <div id="case-decisions"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
+    </footer>
+
+    <script>
+        async function fetchLogs() {
+            const activities = await (await fetch('/api/get_activities')).json();
+            const norms = await (await fetch('/api/get_norms')).json();
+            const cases = await (await fetch('/api/get_cases')).json();
+
+            document.getElementById('todays-activities').innerHTML = activities.map(a => `<p>${a}</p>`).join('');
+            document.getElementById('norm-updates').innerHTML = norms.map(n => `<p>Norm #${n.id}: ${n.text}</p>`).join('');
+            document.getElementById('case-decisions').innerHTML = cases.map(c => `<p>Case #${c.id}: ${c.decision}</p>`).join('');
+        }
+
+        fetchLogs();
+    </script>
+</body>
+</html>
