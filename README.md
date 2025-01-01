@@ -55,6 +55,7 @@ How to Run
 4. Access the Interfaces
 	•	Political System: http://127.0.0.1:5000/political
 	•	Judicial System: http://127.0.0.1:5000/judicial
+	• 	General log : http://127.0.0.1:5000/general_log
 
 How It Works
 --
