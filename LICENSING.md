@@ -33,7 +33,7 @@ Contact Information:
 
 3. Trademarks
 
-The name “Contribution to an Algorithm for the Rule of Law” and any associated branding are trademarks of the author. Use of this name or associated branding for commercial purposes without explicit permission is prohibited.
+The name “OPTIMUS” and any associated branding are trademarks of the author. Use of this name or associated branding for commercial purposes without explicit permission is prohibited.
 
 4. Disclaimer
 
