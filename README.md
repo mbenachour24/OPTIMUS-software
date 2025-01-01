@@ -86,11 +86,23 @@ Future Improvements
 	•	Implement persistent state storage (e.g., database) for norms and cases.
 	•	Introduce more dynamic frontends with ReactJS or similar frameworks.
 
+Contributing
+--
+
+To contribute to this project:
+
+	•	Fork the repository instead of cloning it directly.
+	•	Make your changes in the forked version.
+	•	Submit a Pull Request to propose your changes to the original repository.
+
 Credits
 --
 	•	Author: Mohamed Ben Achour
 	•	Email: mbenachour24@gmail.com
 	•	Blog: Imwerdensein.wordpress.com
+
+
+Following this workflow ensures that all contributions are tracked and respects the collaborative nature of open-source work. Thank you for helping to maintain a transparent and community-driven project!
 
 Explore, expand, and contribute to Coding the State with Optimus. 🚀
 
