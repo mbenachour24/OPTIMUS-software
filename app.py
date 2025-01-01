@@ -143,13 +143,11 @@ def get_norms():
 # API Endpoint pour récupérer toutes les cases
 @app.route('/api/get_cases', methods=['GET'])
 def get_cases():
-    print("Debug: Retrieving cases from JudicialSystem")
-    print("Current Cases:", society.judicial_system.cases)
-
     cases = [
         {"id": case.id, "text": case.text, "constitutional": case.constitutional}
         for case in society.judicial_system.cases
     ]
+    print("Debug: Retrieved cases:", cases)  # Ajout d'un log pour valider les données
     return jsonify(cases)
 
 @app.route('/api/add_test_case', methods=['POST'])

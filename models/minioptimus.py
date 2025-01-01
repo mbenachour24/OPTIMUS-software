@@ -69,27 +69,32 @@ class JudicialSystem:
         log_message = f"Judicial System: Checking constitutionality of norm {norm.id} with complexity {norm.complexity}"
         logging.info(log_message)
         print(log_message)
-        
-        # Determine validity based on complexity
+
         if norm.complexity > 5:
             norm.invalidate()
-        
-        # Log the result of the check
-        log_message = f"Judicial System: Norm {norm.id} checked. Valid status: {norm.valid}"
+            # Create a case automatically for invalidated norms
+            self.create_case(norm)
+
+        log_message = f"Judicial System: Norm {norm.id} has been checked for constitutionality. Valid status: {norm.valid}"
         logging.info(log_message)
         print(log_message)
-        
-        # Create a case to document the constitutionality check
-        self.create_case(norm)
 
     def create_case(self, norm):
-        self.case_counter += 1
-        case = Case(
-            case_id=self.case_counter,
-            text=f'Case {self.case_counter} referencing Norm {norm.id}',
-            norm=norm
-        )
-        self.cases.append(case)
+        if not norm.valid:  # Only create cases for invalid norms
+            self.case_counter += 1
+            case = Case(
+                case_id=self.case_counter,
+                text=f'Case {self.case_counter} referencing {norm.text}',
+                norm=norm
+            )
+            self.cases.append(case)
+            case.log_event("Case created and added to JudicialSystem.")
+            return case
+        else:
+            log_message = f"Cannot create a case for a valid norm (Norm #{norm.id})"
+            logging.info(log_message)
+            print(log_message)
+            return None
 
         # Log case creation
         log_message = f"Case created: ID {case.id}, Text: {case.text}, Constitutional: {case.constitutional}"
