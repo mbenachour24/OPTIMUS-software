@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus - Rule of Law Backend System</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>Optimus - Rule of Law Backend System</header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3>Systems</h3>
+            <ul>
+                <li><a href="/judicial">Judicial System</a></li>
+                <li><a href="/political">Political System</a></li>
+            </ul>
+            <h3>Analytics</h3>
+            <ul>
+                <li><a href="/general_log">General Log</a></li>
+                <li><a href="/statistics">Statistics Dashboard</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <h2>Welcome to Optimus</h2>
+            
+            <!-- System Overview Section -->
+            <div class="log-section">
+                <h3>System Overview</h3>
+                <div class="overview-grid">
+                    <div class="overview-card">
+                        <h4>Political System</h4>
+                        <p>Create and manage norms through the political interface.</p>
+                        <a href="/political" class="action-button">Access Political System</a>
+                    </div>
+                    <div class="overview-card">
+                        <h4>Judicial System</h4>
+                        <p>Review cases and evaluate norm constitutionality.</p>
+                        <a href="/judicial" class="action-button">Access Judicial System</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Section -->
+            <div class="log-section">
+                <h3>Recent Activity</h3>
+                <div id="activities-log">
+                    <!-- Activities will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Quick Stats Section -->
+            <div class="log-section">
+                <h3>Quick Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>Norms</h4>
+                        <div id="norm-stats">Loading...</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Cases</h4>
+                        <div id="case-stats">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        async function fetchActivities() {
+            try {
+                const response = await fetch('/api/get_activities');
+                const activities = await response.json();
+                const activitiesLog = document.getElementById('activities-log');
+                activitiesLog.innerHTML = activities.length
+                    ? activities.map(activity => `<div class="log-entry">${activity}</div>`).join('')
+                    : '<p>No activities recorded today.</p>';
+            } catch (error) {
+                console.error('Error fetching activities:', error);
+            }
+        }
+
+        async function fetchQuickStats() {
+            try {
+                // Fetch norm stats
+                const normsResponse = await fetch('/api/get_norms');
+                const norms = await normsResponse.json();
+                document.getElementById('norm-stats').innerHTML = `
+                    <p>Total Norms: ${norms.length}</p>
+                    <p>Valid: ${norms.filter(n => n.valid).length}</p>
+                    <p>Invalid: ${norms.filter(n => !n.valid).length}</p>
+                `;
+
+                // Fetch case stats
+                const casesResponse = await fetch('/api/get_solved_cases');
+                const cases = await casesResponse.json();
+                document.getElementById('case-stats').innerHTML = `
+                    <p>Total Cases: ${cases.total_solved}</p>
+                    <p>Recently Resolved: ${cases.solved_cases.slice(-5).length}</p>
+                `;
+            } catch (error) {
+                console.error('Error fetching quick stats:', error);
+            }
+        }
+
+        // Update all data periodically
+        function updateData() {
+            fetchActivities();
+            fetchQuickStats();
+        }
+
+        // Initial load
+        updateData();
+
+        // Refresh every 30 seconds
+        setInterval(updateData, 30000);
+    </script>
+
+    <style>
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .overview-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .action-button {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .action-button:hover {
+            background: #45a049;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h4 {
+            margin-top: 0;
+            color: #333;
+        }
+    </style>
+</body>
+</html> 
