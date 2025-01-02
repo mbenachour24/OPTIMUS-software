@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus - Statistics Dashboard</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>Optimus - Statistics Dashboard</header>
+    <div class="container">
+        <!-- Sidebar for Navigation -->
+        <div class="sidebar">
+            <h3>Systems</h3>
+            <ul>
+                <li><a href="/judicial">Judicial System</a></li>
+                <li><a href="/political">Political System</a></li>
+            </ul>
+            <h3>Analytics</h3>
+            <ul>
+                <li><strong>Statistics Dashboard</strong></li>
+                <li><a href="/general_log">General Log</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>System Statistics</h2>
+            
+            <!-- Summary Cards -->
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <h3>Cases</h3>
+                    <div class="stat-numbers">
+                        <p>Pending: <span id="pending-count">0</span></p>
+                        <p>Solved: <span id="solved-count">0</span></p>
+                        <p>Total: <span id="total-cases">0</span></p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Norms</h3>
+                    <div class="stat-numbers">
+                        <p>Valid: <span id="valid-norms">0</span></p>
+                        <p>Invalid: <span id="invalid-norms">0</span></p>
+                        <p>Total: <span id="total-norms">0</span></p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>System Health</h3>
+                    <div class="stat-numbers">
+                        <p>Case Resolution Rate: <span id="resolution-rate">0%</span></p>
+                        <p>Avg Resolution Time: <span id="avg-resolution-time">0h</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h3>Cases by Type</h3>
+                    <canvas id="caseTypesChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Case Resolution Timeline</h3>
+                    <canvas id="resolutionTimelineChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Detailed Statistics -->
+            <div class="detailed-stats">
+                <h3>Recent Activity</h3>
+                <div class="activity-timeline" id="recent-activity">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    .stats-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .stat-numbers {
+        font-size: 1.2em;
+    }
+
+    .charts-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+
+    .chart-box {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .activity-timeline {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-top: 20px;
+    }
+
+    .activity-item {
+        padding: 10px;
+        border-left: 3px solid #4CAF50;
+        margin: 10px 0;
+        background: #f9f9f9;
+    }
+    </style>
+
+    <script>
+    // Function to update statistics
+    async function updateStatistics() {
+        try {
+            // Fetch cases statistics
+            const pendingResponse = await fetch('/api/get_pending_cases');
+            const solvedResponse = await fetch('/api/get_solved_cases');
+            const pendingData = await pendingResponse.json();
+            const solvedData = await solvedResponse.json();
+
+            // Update case counts
+            document.getElementById('pending-count').textContent = pendingData.total_pending;
+            document.getElementById('solved-count').textContent = solvedData.total_solved;
+            document.getElementById('total-cases').textContent = 
+                pendingData.total_pending + solvedData.total_solved;
+
+            // Calculate and update resolution rate
+            const totalCases = pendingData.total_pending + solvedData.total_solved;
+            const resolutionRate = totalCases ? 
+                ((solvedData.total_solved / totalCases) * 100).toFixed(1) : 0;
+            document.getElementById('resolution-rate').textContent = `${resolutionRate}%`;
+
+            // Fetch norms statistics
+            const normsResponse = await fetch('/api/get_norms');
+            const norms = await normsResponse.json();
+            
+            // Update norms counts
+            const validNorms = norms.filter(norm => norm.valid).length;
+            const invalidNorms = norms.filter(norm => !norm.valid).length;
+            document.getElementById('valid-norms').textContent = validNorms;
+            document.getElementById('invalid-norms').textContent = invalidNorms;
+            document.getElementById('total-norms').textContent = norms.length;
+
+            // Update charts
+            updateCaseTypesChart(pendingData.pending_cases, solvedData.solved_cases);
+            updateResolutionTimeline(solvedData.solved_cases);
+            
+        } catch (error) {
+            console.error('Error updating statistics:', error);
+        }
+    }
+
+    // Function to update the case types chart
+    function updateCaseTypesChart(pendingCases, solvedCases) {
+        const ctx = document.getElementById('caseTypesChart').getContext('2d');
+        
+        // Count cases by type
+        const caseTypes = {
+            'Environmental Concern': 0,
+            'Civil Rights Issue': 0,
+            'Labor Dispute': 0,
+            'Consumer Protection': 0,
+            'Public Safety Concern': 0
+        };
+
+        [...pendingCases, ...solvedCases].forEach(caseItem => {
+            Object.keys(caseTypes).forEach(type => {
+                if (caseItem.text.includes(type)) {
+                    caseTypes[type]++;
+                }
+            });
+        });
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(caseTypes),
+                datasets: [{
+                    data: Object.values(caseTypes),
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF'
+                    ]
+                }]
+            }
+        });
+    }
+
+    // Function to update the resolution timeline
+    function updateResolutionTimeline(solvedCases) {
+        const ctx = document.getElementById('resolutionTimelineChart').getContext('2d');
+        
+        // Group cases by date
+        const timelineData = {};
+        solvedCases.forEach(caseItem => {
+            const date = caseItem.resolved_at.split('T')[0];
+            timelineData[date] = (timelineData[date] || 0) + 1;
+        });
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Object.keys(timelineData),
+                datasets: [{
+                    label: 'Cases Resolved',
+                    data: Object.values(timelineData),
+                    borderColor: '#4CAF50',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Update statistics every 30 seconds
+    document.addEventListener('DOMContentLoaded', () => {
+        updateStatistics();
+        setInterval(updateStatistics, 30000);
+    });
+    </script>
+</body>
+</html> 
