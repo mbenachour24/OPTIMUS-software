@@ -53,11 +53,9 @@ requirements. txt
 3. Run the Flask App
 app.py
 
-4. Access the Interfaces
+4. Access the Interface
 
-Political System: http://127.0.0.1:5000/political
-Judicial System: http://127.0.0.1:5000/judicial
-General Log: http://127.0.0.1:5000/general_log
+http://127.0.0.1:5000/
 
 How It Works
 --
