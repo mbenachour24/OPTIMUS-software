@@ -60,7 +60,7 @@ notification_manager = NotificationManager()
 # Route principale
 @app.route('/')
 def home():
-    return jsonify({"message": "Welcome to the Optimus backend API!"})
+    return render_template('index.html')
 
 # Route pour le système judiciaire
 @app.route('/judicial')
