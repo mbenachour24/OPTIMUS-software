@@ -7,8 +7,20 @@ from flask import Flask, jsonify, request, render_template, abort
 from models.minioptimus import Society
 from datetime import datetime
 import json
-
+from flask_cors import CORS
+import os
 app = Flask(__name__)
+
+CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins
+
+# Ensure the data directory exists
+if not os.path.exists('data'):
+    os.makedirs('data')
+
+# Only set absolute paths if we're on PythonAnywhere
+if 'PYTHONANYWHERE_SITE' in os.environ:
+    app.template_folder = os.path.abspath('templates')
+    app.static_folder = os.path.abspath('static')
 
 # Instantiation of the system
 society = Society()
@@ -18,8 +30,7 @@ actions_completed = {"political": False, "judicial": False}
 
 # Example activities data for logs
 activities = [
-    "Created Norm #1: Tax Policy Reform",
-    "Marked Norm #2 as unconstitutional"
+
 ]
 
 # Replace the simple notifications list with a more structured system
@@ -42,14 +53,16 @@ class NotificationManager:
         
     def save_notifications(self):
         try:
-            with open('data/notifications.json', 'w') as f:
+            notifications_file = os.path.join('data', 'notifications.json')
+            with open(notifications_file, 'w') as f:
                 json.dump(self.notifications[-100:], f)  # Keep last 100 notifications
         except Exception as e:
             logging.error(f"Failed to save notifications: {e}")
             
     def load_notifications(self):
         try:
-            with open('data/notifications.json', 'r') as f:
+            notifications_file = os.path.join('data', 'notifications.json')
+            with open(notifications_file, 'r') as f:
                 self.notifications = json.load(f)
         except FileNotFoundError:
             self.notifications = []
@@ -61,6 +74,10 @@ notification_manager = NotificationManager()
 @app.route('/')
 def home():
     return render_template('index.html')
+
+@app.route('/<path:path>')
+async def index(request, path=""):
+    return json({'hello': path})
 
 # Route pour le système judiciaire
 @app.route('/judicial')
@@ -341,4 +358,4 @@ def statistics_dashboard():
     return render_template('statistics_dashboard.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True)  # Back to the original development settings

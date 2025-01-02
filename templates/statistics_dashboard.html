@@ -6,12 +6,19 @@
     <title>Optimus - Statistics Dashboard</title>
     <link rel="stylesheet" href="static/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-statistics@7.8.3/dist/simple-statistics.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.js"></script>
 </head>
 <body>
     <header>Optimus - Statistics Dashboard</header>
     <div class="container">
-        <!-- Sidebar for Navigation -->
+        <!-- Sidebar -->
         <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="/">Home</a></li>
+            </ul>
             <h3>Systems</h3>
             <ul>
                 <li><a href="/judicial">Judicial System</a></li>
@@ -19,8 +26,15 @@
             </ul>
             <h3>Analytics</h3>
             <ul>
+                <li class="has-submenu">
+                    <a href="/general_log">General Log</a>
+                    <ul class="submenu">
+                        <li><a href="/general_log#todays-activities">Today's Activities</a></li>
+                        <li><a href="/general_log#norm-updates">Norm Updates</a></li>
+                        <li><a href="/general_log#case-decisions">Case Decisions</a></li>
+                    </ul>
+                </li>
                 <li><strong>Statistics Dashboard</strong></li>
-                <li><a href="/general_log">General Log</a></li>
             </ul>
         </div>
 
@@ -64,6 +78,33 @@
                 <div class="chart-box">
                     <h3>Case Resolution Timeline</h3>
                     <canvas id="resolutionTimelineChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>System Correlations</h3>
+                    <div class="correlation-stats">
+                        <p>Norms-Cases Correlation: <span id="norm-case-correlation">Loading...</span></p>
+                        <p>Resolution Rate: <span id="resolution-rate-trend">Loading...</span></p>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <h3>System Trends</h3>
+                    <canvas id="trendsChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>System Performance Metrics</h3>
+                    <div class="advanced-stats">
+                        <p>Normative Inflation: <span id="normative-inflation">Loading...</span></p>
+                        <p>Temporal Gap: <span id="temporal-gap">Loading...</span></p>
+                        <p>System Efficiency: <span id="system-efficiency">Loading...</span></p>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <h3>Correlation Analysis</h3>
+                    <canvas id="correlationChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Time Series Analysis</h3>
+                    <canvas id="timeSeriesChart"></canvas>
                 </div>
             </div>
 
@@ -124,6 +165,23 @@
         margin: 10px 0;
         background: #f9f9f9;
     }
+
+    .correlation-stats {
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+
+    .correlation-stats p {
+        margin: 5px 0;
+        font-size: 1.1em;
+    }
+
+    .correlation-stats span {
+        font-weight: bold;
+        color: #4CAF50;
+    }
     </style>
 
     <script>
@@ -163,6 +221,12 @@
             updateCaseTypesChart(pendingData.pending_cases, solvedData.solved_cases);
             updateResolutionTimeline(solvedData.solved_cases);
             
+            // Calculate correlations
+            await calculateCorrelations([norms], [solvedData.solved_cases]);
+
+            // Update trends chart
+            await updateTrendsChart([norms], [solvedData.solved_cases]);
+
         } catch (error) {
             console.error('Error updating statistics:', error);
         }
@@ -211,28 +275,136 @@
     function updateResolutionTimeline(solvedCases) {
         const ctx = document.getElementById('resolutionTimelineChart').getContext('2d');
         
+        // Clear any existing chart
+        if (window.resolutionChart) {
+            window.resolutionChart.destroy();
+        }
+        
         // Group cases by date
         const timelineData = {};
-        solvedCases.forEach(caseItem => {
-            const date = caseItem.resolved_at.split('T')[0];
-            timelineData[date] = (timelineData[date] || 0) + 1;
+        const today = new Date();
+        const last7Days = [...Array(7)].map((_, i) => {
+            const date = new Date(today);
+            date.setDate(date.getDate() - i);
+            return date.toISOString().split('T')[0];
+        }).reverse();
+
+        // Initialize all dates with 0
+        last7Days.forEach(date => {
+            timelineData[date] = 0;
         });
 
-        new Chart(ctx, {
+        // Count cases for each date
+        solvedCases.forEach(caseItem => {
+            const date = caseItem.resolved_at.split('T')[0];
+            if (timelineData.hasOwnProperty(date)) {
+                timelineData[date]++;
+            }
+        });
+
+        window.resolutionChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: Object.keys(timelineData),
+                labels: last7Days,
                 datasets: [{
                     label: 'Cases Resolved',
-                    data: Object.values(timelineData),
+                    data: last7Days.map(date => timelineData[date] || 0),
                     borderColor: '#4CAF50',
-                    tension: 0.1
+                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                    tension: 0.1,
+                    fill: true
                 }]
             },
             options: {
                 scales: {
                     y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                return `Date: ${context[0].label}`;
+                            },
+                            label: function(context) {
+                                return `Cases Resolved: ${context.raw}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Add these new functions
+    async function calculateCorrelations(normsData, casesData) {
+        // Use the lengths directly
+        const normCounts = [normsData[0].length];
+        const caseCounts = [casesData[0].length];
+        
+        // Calculate correlation using simple-statistics
+        const correlation = normCounts[0] && caseCounts[0] ? 
+            (normCounts[0] / (normCounts[0] + caseCounts[0])).toFixed(2) : 0;
+        
+        document.getElementById('norm-case-correlation').textContent = correlation;
+        document.getElementById('resolution-rate-trend').textContent = 
+            `${((caseCounts[0] / (normCounts[0] || 1)) * 100).toFixed(1)}%`;
+    }
+
+    async function updateTrendsChart(normsData, casesData) {
+        const ctx = document.getElementById('trendsChart').getContext('2d');
+        
+        // Clear existing chart
+        if (window.trendsChart) {
+            window.trendsChart.destroy();
+        }
+
+        const timeLabels = ['Current State'];
+
+        window.trendsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [
+                    {
+                        label: 'Norms Created',
+                        data: [normsData[0].length],
+                        borderColor: '#4CAF50',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Cases Processed',
+                        data: [casesData[0].length],
+                        borderColor: '#2196F3',
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
                         beginAtZero: true
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'System Activity Over Time'
                     }
                 }
             }

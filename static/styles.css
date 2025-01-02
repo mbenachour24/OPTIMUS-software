@@ -254,3 +254,29 @@ body.dark .action-buttons button:hover {
 .d-flex { display: flex; }
 .align-center { align-items: center; }
 .justify-between { justify-content: space-between; }
+
+/* Submenu styling */
+.submenu {
+    margin-left: 20px !important;
+    display: none;
+}
+
+.has-submenu > a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.has-submenu > a::after {
+    content: '▼';
+    font-size: 0.8em;
+    margin-left: 5px;
+}
+
+.has-submenu.active > a::after {
+    content: '▲';
+}
+
+.has-submenu.active .submenu {
+    display: block;
+}

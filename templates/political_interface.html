@@ -33,19 +33,27 @@
 <body>
     <header>Optimus - Political System Interface</header>
     <div class="container">
-        <!-- Sidebar for Navigation -->
+        <!-- Sidebar -->
         <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="/">Home</a></li>
+            </ul>
             <h3>Systems</h3>
             <ul>
                 <li><a href="/judicial">Judicial System</a></li>
                 <li><strong>Political System</strong></li>
             </ul>
-            <h3>Logs</h3>
+            <h3>Analytics</h3>
             <ul>
-                <li><strong>General Log</strong></li>
-                <li><a href="/general_log">Today's Activities</a></li>
-                <li><a href="/general_log">Norm Updates</a></li>
-                <li><a href="/general_log">Case Decisions</a></li>
+                <li class="has-submenu">
+                    <a href="/general_log">General Log</a>
+                    <ul class="submenu">
+                        <li><a href="/general_log#todays-activities">Today's Activities</a></li>
+                        <li><a href="/general_log#norm-updates">Norm Updates</a></li>
+                        <li><a href="/general_log#case-decisions">Case Decisions</a></li>
+                    </ul>
+                </li>
                 <li><a href="/statistics">Statistics Dashboard</a></li>
             </ul>
         </div>
