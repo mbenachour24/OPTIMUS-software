@@ -5,6 +5,7 @@
 import asyncio
 import random
 import logging
+from datetime import datetime
 
 # Setup enhanced logging
 logging.basicConfig(level=logging.DEBUG, filename='mini_optimu4.log', filemode='a', format='%(message)s')
@@ -37,12 +38,50 @@ class Case:
         self.text = text
         self.norm = norm
         self.constitutional = norm.valid
+        self.resolved_at = None  # New field for resolution timestamp
         self.log_event("A new case is brought to the Courts")
 
     def log_event(self, message):
         log_message = f"Case {self.id}: {message}"
         logging.info(log_message)
         print(log_message)
+
+class CitizenPressure:
+    def __init__(self, judicial_system, parliament):
+        self.judicial_system = judicial_system
+        self.parliament = parliament
+        self.daily_case_count = 5
+        self.case_types = [
+            "Environmental Concern",
+            "Civil Rights Issue",
+            "Labor Dispute",
+            "Consumer Protection",
+            "Public Safety Concern"
+        ]
+
+    def generate_daily_cases(self):
+        generated_cases = []
+        for _ in range(self.daily_case_count):
+            # Get a random existing norm to challenge
+            if not self.parliament.norms:
+                # Create a norm if none exist
+                norm = self.parliament.create_norm()
+            else:
+                norm = random.choice(self.parliament.norms)
+            
+            # Force the norm to be invalid (simulating citizen challenge)
+            norm.valid = False
+            
+            # Create a case
+            case_type = random.choice(self.case_types)
+            case = self.judicial_system.create_case_from_pressure(
+                norm=norm,
+                pressure_text=f"Citizen Petition: {case_type} regarding {norm.text}"
+            )
+            if case:
+                generated_cases.append(case)
+                
+        return generated_cases
 
 class PoliticalSystem:
     def __init__(self):
@@ -63,7 +102,8 @@ class PoliticalSystem:
 class JudicialSystem:
     def __init__(self):
         self.case_counter = 0
-        self.cases = []
+        self.pending_cases = []  # New pool for pending cases
+        self.solved_cases = []   # New pool for solved cases
 
     def check_constitutionality(self, norm):
         log_message = f"Judicial System: Checking constitutionality of norm {norm.id} with complexity {norm.complexity}"
@@ -80,15 +120,15 @@ class JudicialSystem:
         print(log_message)
 
     def create_case(self, norm):
-        if not norm.valid:  # Only create cases for invalid norms
+        if not norm.valid:
             self.case_counter += 1
             case = Case(
                 case_id=self.case_counter,
                 text=f'Case {self.case_counter} referencing {norm.text}',
                 norm=norm
             )
-            self.cases.append(case)
-            case.log_event("Case created and added to JudicialSystem.")
+            self.pending_cases.append(case)  # Add to pending instead of cases
+            case.log_event("Case created and added to pending cases.")
             return case
         else:
             log_message = f"Cannot create a case for a valid norm (Norm #{norm.id})"
@@ -96,31 +136,45 @@ class JudicialSystem:
             print(log_message)
             return None
 
-        # Log case creation
-        log_message = f"Case created: ID {case.id}, Text: {case.text}, Constitutional: {case.constitutional}"
+    def create_case_from_pressure(self, norm, pressure_text):
+        """Create a case from citizen pressure, regardless of norm validity"""
+        self.case_counter += 1
+        case = Case(
+            case_id=self.case_counter,
+            text=pressure_text,
+            norm=norm
+        )
+        self.pending_cases.append(case)  # Add to pending cases
+        case.log_event("Case created from citizen pressure and added to pending cases.")
+        
+        log_message = f"Citizen Pressure Case created: ID {case.id}, Text: {case.text}"
         logging.info(log_message)
         print(log_message)
         
         return case
 
-        # Debugging: Log the case creation
-        log_message = f"Case created: ID {case.id}, Text: {case.text}, Constitutional: {case.constitutional}"
-        logging.info(log_message)
-        print(log_message)
+    def solve_case(self, case_id):
+        """Solve a pending case and move it to solved cases"""
+        # Find the case in pending cases
+        case = next((case for case in self.pending_cases if case.id == case_id), None)
+        if not case:
+            raise ValueError(f"No pending case found with ID {case_id}")
 
-        # Debugging: Log the current list of cases
-        log_message = f"Current cases: {[c.text for c in self.cases]}"
-        logging.info(log_message)
-        print(log_message)
-
-        print(f"Debug: Cases in JudicialSystem after creation: {[case.text for case in self.cases]}")
-     
+        # Remove from pending and add to solved
+        self.pending_cases.remove(case)
+        self.solved_cases.append(case)
+        
+        # Add resolution timestamp and log
+        case.resolved_at = datetime.now().isoformat()
+        case.log_event("Case has been resolved by the Judicial System")
+        
         return case
 
 class Society:
     def __init__(self):
         self.parliament = PoliticalSystem()
         self.judicial_system = JudicialSystem()
+        self.citizen_pressure = CitizenPressure(self.judicial_system, self.parliament)
         self.iteration = 0
 
     async def simulate(self):
@@ -132,8 +186,12 @@ class Society:
             norm = self.parliament.create_norm()
             print(f"Debug: Created Norm: {norm.text}, Valid: {norm.valid}")
 
-            # Judicial system checks constitutionality (and creates a case)
+            # Judicial system checks constitutionality
             self.judicial_system.check_constitutionality(norm)
+
+            # Generate citizen pressure cases
+            generated_cases = self.citizen_pressure.generate_daily_cases()
+            print(f"Debug: Generated {len(generated_cases)} citizen pressure cases")
 
             # Debugging: Log the current state of cases
             print("Debug: Current cases in JudicialSystem:")

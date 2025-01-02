@@ -9,19 +9,20 @@
     --text-color-light: #666;
     --text-color-dark: #111;
     --border-radius: 8px;
-    --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Optimized shadow for better performance */
     --highlight-color: #ffd700;
 }
 
 /* Styles généraux */
 body {
     font-family: 'Roboto', Arial, sans-serif;
-    font-size: 16px;
+    font-size: clamp(14px, 1.6vw, 18px); /* Responsive font size */
     line-height: 1.6;
     margin: 0;
     padding: 0;
     color: var(--text-color);
     background-color: var(--background-color);
+    transition: background-color 0.5s, color 0.5s; /* Smooth transitions */
 }
 
 /* En-tête */
@@ -43,6 +44,7 @@ header {
     padding: 10px;
 }
 
+/* Sidebar */
 .sidebar {
     background-color: white;
     border-radius: var(--border-radius);
@@ -54,26 +56,64 @@ header {
 .sidebar ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .sidebar ul li {
     margin: 10px 0;
-    padding: 10px;
     border-radius: var(--border-radius);
-    cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
 }
 
-.sidebar ul li:hover {
-    background-color: var(--primary-color-light);
-    color: var(--text-color-dark);
-    transform: translateX(5px);
+.sidebar ul li a {
+    display: block; /* Ensures the entire li area is clickable */
+    padding: 10px;
+    text-decoration: none;
+    color: var(--text-color);
+    border-radius: var(--border-radius);
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.sidebar ul li.active {
+.sidebar ul li:hover a {
+    background-color: var(--primary-color-light);
+    color: var(--text-color-dark);
+    transform: translateX(5px); /* Hover transform still works */
+}
+
+.sidebar ul li.active a {
     font-weight: bold;
     background-color: var(--primary-color);
     color: white;
+}
+
+/* Improved accessibility */
+.sidebar ul li a:focus {
+    outline: 2px solid var(--highlight-color);
+    outline-offset: 2px;
+}
+
+/* Collapsible Sidebar for Mobile */
+.sidebar.collapsed {
+    display: none;
+}
+
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    background: var(--primary-color);
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        display: block;
+    }
 }
 
 /* Contenu principal */
@@ -106,6 +146,7 @@ header {
     font-size: 1.2em;
 }
 
+/* Log Entries */
 .log-entry {
     background-color: #e9ecef;
     padding: 10px;
@@ -133,12 +174,24 @@ header {
     padding: 10px 15px;
     border-radius: var(--border-radius);
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+    will-change: transform, background-color;
 }
 
 .action-buttons button:hover {
     background-color: var(--primary-color-dark);
     transform: scale(1.05);
+}
+
+.action-buttons button:active {
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
+/* Focus Styles */
+button:focus, .sidebar ul li:focus {
+    outline: 2px solid var(--highlight-color);
+    outline-offset: 2px;
 }
 
 /* Pied de page */
@@ -184,3 +237,20 @@ body.dark .log-entry {
     background-color: #2a2a2a;
     color: var(--text-color);
 }
+
+body.dark .action-buttons button {
+    background-color: #555;
+    color: #ddd;
+}
+
+body.dark .action-buttons button:hover {
+    background-color: #444;
+}
+
+/* Utility Classes */
+.m-0 { margin: 0; }
+.p-0 { padding: 0; }
+.text-center { text-align: center; }
+.d-flex { display: flex; }
+.align-center { align-items: center; }
+.justify-between { justify-content: space-between; }

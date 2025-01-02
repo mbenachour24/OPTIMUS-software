@@ -7,107 +7,172 @@
     <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
+    <!-- Header -->
     <header>Optimus - General Log</header>
+
+    <!-- Main Container -->
     <div class="container">
         <!-- Sidebar -->
-        <div class="sidebar">
+        <aside class="sidebar">
             <h3>Systems</h3>
             <ul>
                 <li><a href="/judicial">Judicial System</a></li>
                 <li><a href="/political">Political System</a></li>
-                <li><a href="/society">Society</a></li>
             </ul>
             <h3>Logs</h3>
             <ul>
-                <li><strong>General Log</strong></li>
-                <li><a href="/general_log">Today's Activities</a></li>
-                <li><a href="/general_log">Norm Updates</a></li>
-                <li><a href="/general_log">Case Decisions</a></li>
+                <li class="active"><a href="/general_log">General Log</a></li>
+                <li><a href="/general_log#todays-activities">Today's Activities</a></li>
+                <li><a href="/general_log#norm-updates">Norm Updates</a></li>
+                <li><a href="/general_log#case-decisions">Case Decisions</a></li>
             </ul>
-        </div>
+        </aside>
 
         <!-- Main Content -->
-        <div class="main-content">
+        <main class="main-content">
             <h2>General Log</h2>
-            <div id="log-sections">
+            
+            <!-- Activities Section -->
+            <div class="log-section">
                 <h3>Today's Activities</h3>
-        <div id="todays-activities"></div>
-
-        <script>
-            async function fetchLogs() {
-                try {
-                    const activitiesResponse = await fetch('/api/get_activities');
-                    const activities = await activitiesResponse.json();
-
-                    // Populate Today's Activities
-                    document.getElementById('todays-activities').innerHTML = activities.map(
-                        a => `<p>${a}</p>`
-                    ).join('');
-                } catch (error) {
-                    console.error('Error fetching logs:', error);
-                    document.getElementById('todays-activities').innerHTML =
-                        '<p>Error loading activities. Please try again later.</p>';
-                }
-            }
-
-            fetchLogs();
-        </script>
-        
-                <h3>Norm Updates</h3>
-                <div id="norm-updates"></div>
-                <h3>Case Decisions</h3>
-                <div id="case-decisions"></div>
+                <div id="activities-log">
+                    <!-- Activities will be loaded here -->
+                </div>
             </div>
-        </div>
+
+            <!-- Norm Updates Section -->
+            <div class="log-section">
+                <h3>Norm Updates</h3>
+                <div id="norm-updates">
+                    <!-- Norm updates will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Case Decisions Section -->
+            <div class="log-section">
+                <h3>Case Decisions</h3>
+                <div id="case-decisions">
+                    <!-- Case decisions will be loaded here -->
+                </div>
+            </div>
+        </main>
     </div>
 
+    <!-- Footer -->
     <footer>
         © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
     </footer>
 
+    <!-- JavaScript -->
     <script>
-        async function fetchLogs() {
+        // Function to format timestamp
+        function formatDate(timestamp) {
+            return new Date(timestamp).toLocaleString();
+        }
+
+        // Fetch and display activities
+        async function fetchActivities() {
             try {
-                // Fetch today's activities
-                const activitiesResponse = await fetch('/api/get_activities');
-                const activities = await activitiesResponse.json();
-
-                // Fetch norms updates
-                const normsResponse = await fetch('/api/get_norms');
-                const norms = await normsResponse.json();
-
-                // Fetch case decisions
-                const casesResponse = await fetch('/api/get_cases');
-                const cases = await casesResponse.json();
-
-                // Populate Today's Activities
-                const activitiesSection = document.getElementById('todays-activities');
-                activitiesSection.innerHTML = activities.length
-                    ? activities.map(a => `<p>${a}</p>`).join('')
-                    : '<p>No activities yet.</p>';
-
-                // Populate Norm Updates
-                const normsSection = document.getElementById('norm-updates');
-                normsSection.innerHTML = norms.length
-                    ? norms.map(n => `<p>Norm #${n.id}: ${n.text} - Valid: ${n.valid}</p>`).join('')
-                    : '<p>No norms updates yet.</p>';
-
-                // Populate Case Decisions
-                const casesSection = document.getElementById('case-decisions');
-                casesSection.innerHTML = cases.length
-                    ? cases.map(c => `<p>Case #${c.id}: ${c.text} - Constitutional: ${c.constitutional}</p>`).join('')
-                    : '<p>No case decisions yet.</p>';
+                const response = await fetch('/api/get_activities');
+                const activities = await response.json();
+                const activitiesLog = document.getElementById('activities-log');
+                activitiesLog.innerHTML = activities.length
+                    ? activities.map(activity => `<div class="log-entry">${activity}</div>`).join('')
+                    : '<p>No activities recorded today.</p>';
             } catch (error) {
-                console.error('Error fetching logs:', error);
-                document.getElementById('log-sections').innerHTML = 
-                    '<p>Error loading logs. Please try again later.</p>';
+                console.error('Error fetching activities:', error);
             }
         }
 
-        // Fetch logs on page load
-        fetchLogs();
-        // Fetch logs on page load
-        fetchLogs();
+        // Fetch and display norm updates
+        async function fetchNormUpdates() {
+            try {
+                const response = await fetch('/api/get_norms');
+                const norms = await response.json();
+                const normUpdates = document.getElementById('norm-updates');
+                normUpdates.innerHTML = norms.length
+                    ? norms.map(norm => `
+                        <div class="log-entry ${norm.valid ? 'valid' : 'invalid'}">
+                            <strong>Norm #${norm.id}:</strong> ${norm.text}
+                            <br>
+                            <small>Status: ${norm.valid ? 'Valid' : 'Invalid'}</small>
+                        </div>
+                    `).join('')
+                    : '<p>No norm updates available.</p>';
+            } catch (error) {
+                console.error('Error fetching norm updates:', error);
+            }
+        }
+
+        // Fetch and display case decisions
+        async function fetchCaseDecisions() {
+            try {
+                const response = await fetch('/api/get_solved_cases');
+                const data = await response.json();
+                const caseDecisions = document.getElementById('case-decisions');
+                
+                if (data.solved_cases && data.solved_cases.length > 0) {
+                    caseDecisions.innerHTML = data.solved_cases.map(caseItem => `
+                        <div class="log-entry case-decision">
+                            <strong>Case #${caseItem.id}:</strong> ${caseItem.text}
+                            <br>
+                            <small>Resolved: ${formatDate(caseItem.resolved_at)}</small>
+                            <br>
+                            <small>Related to Norm #${caseItem.norm_id}</small>
+                        </div>
+                    `).join('');
+                } else {
+                    caseDecisions.innerHTML = '<p>No case decisions available.</p>';
+                }
+            } catch (error) {
+                console.error('Error fetching case decisions:', error);
+            }
+        }
+
+        // Update all logs periodically
+        function updateLogs() {
+            fetchActivities();
+            fetchNormUpdates();
+            fetchCaseDecisions();
+        }
+
+        // Initial load
+        updateLogs();
+
+        // Refresh every 30 seconds
+        setInterval(updateLogs, 30000);
     </script>
+
+    <style>
+        .log-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .log-entry {
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+            background: #f9f9f9;
+        }
+
+        .log-entry.invalid {
+            border-left-color: #dc3545;
+        }
+
+        .log-entry.case-decision {
+            border-left-color: #007bff;
+            background: #f8f9fa;
+        }
+
+        .log-entry small {
+            color: #666;
+            display: inline-block;
+            margin-top: 5px;
+        }
+    </style>
 </body>
 </html>

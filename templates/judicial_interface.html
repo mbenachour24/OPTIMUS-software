@@ -15,18 +15,14 @@
             <ul>
                 <li><strong>Judicial System</strong></li>
                 <li><a href="/political">Political System</a></li>
-                <li>Society</li>
             </ul>
-            <h3>Logs</h3>
             <ul>
                 <h3>Logs</h3>
                 <ul>
-                    <li><a href="/general_log">Today's Activities</a></li> <!-- Link to General Log -->
-                    <li id="citizen-feedback">Citizen Feedback</li>
-                    <li id="norm-updates">Norm Updates</li>
-                </ul>
-                <li id="norm-updates">Norm Updates</li>
-                <li id="case-decisions">Case Decisions</li>
+                    <li><strong>General Log</strong></li>
+                    <li><a href="/general_log">Today's Activities</a></li>
+                    <li><a href="/general_log">Norm Updates</a></li>
+                    <li><a href="/general_log">Case Decisions</a></li>
             </ul>
         </div>
 
@@ -42,6 +38,30 @@
             <div class="action-buttons">
                 <button onclick="markNormUnconstitutional()">Mark Norm as Unconstitutional</button>
                 <button onclick="requestReform()">Request Reform</button>
+            </div>
+
+            <!-- Cases Section -->
+            <div class="cases-section">
+                <div class="section-header">
+                    <h2>Case Management</h2>
+                    <button onclick="generateCitizenCases()" class="generate-button">Generate Citizen Cases</button>
+                </div>
+                
+                <div class="cases-container">
+                    <div class="pending-cases">
+                        <h3>Pending Cases</h3>
+                        <div id="pending-cases-list">
+                            <!-- Cases will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="solved-cases">
+                        <h3>Solved Cases</h3>
+                        <div id="solved-cases-list">
+                            <!-- Solved cases will be populated here -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -102,6 +122,130 @@
 
         // On page load
         fetchLogs();
+
+        function loadPendingCases() {
+            fetch('/api/get_pending_cases')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Pending cases data:', data);
+                    const casesList = document.getElementById('pending-cases-list');
+                    casesList.innerHTML = data.pending_cases.map(caseItem => `
+                        <div class="case-item">
+                            <p>Case #${caseItem.id}: ${caseItem.text}</p>
+                            <button onclick="solveCase(${caseItem.id})">Solve Case</button>
+                        </div>
+                    `).join('');
+                })
+                .catch(error => console.error('Error loading pending cases:', error));
+        }
+
+        function loadSolvedCases() {
+            fetch('/api/get_solved_cases')
+                .then(response => response.json())
+                .then(data => {
+                    const solvedList = document.getElementById('solved-cases-list');
+                    solvedList.innerHTML = data.solved_cases.map(caseItem => `
+                        <div class="case-item solved">
+                            <p>Case #${caseItem.id}: ${caseItem.text}</p>
+                            <small>Resolved at: ${caseItem.resolved_at}</small>
+                        </div>
+                    `).join('');
+                });
+        }
+
+        function solveCase(caseId) {
+            fetch(`/api/solve_case/${caseId}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    loadPendingCases();
+                    loadSolvedCases();
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Add this function to generate citizen cases
+        function generateCitizenCases() {
+            fetch('/api/generate_citizen_cases', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadPendingCases();  // Refresh the pending cases list
+                alert(`Generated ${data.cases.length} new citizen cases`);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Make sure these functions are called when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchLogs();
+            loadPendingCases();
+            loadSolvedCases();
+            
+            // Refresh cases every 30 seconds
+            setInterval(() => {
+                loadPendingCases();
+                loadSolvedCases();
+            }, 30000);
+        });
     </script>
+
+    <style>
+    .cases-section {
+        margin: 20px 0;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .generate-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .generate-button:hover {
+        background-color: #45a049;
+    }
+
+    .cases-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .case-item {
+        background: white;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .case-item.solved {
+        background-color: #f0f8f0;
+    }
+
+    .case-item button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .case-item button:hover {
+        background-color: #45a049;
+    }
+    </style>
 </body>
 </html>
