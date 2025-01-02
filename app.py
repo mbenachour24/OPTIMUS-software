@@ -75,10 +75,6 @@ notification_manager = NotificationManager()
 def home():
     return render_template('index.html')
 
-@app.route('/<path:path>')
-async def index(request, path=""):
-    return json({'hello': path})
-
 # Route pour le système judiciaire
 @app.route('/judicial')
 def judicial_interface():
