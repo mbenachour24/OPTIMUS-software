@@ -8,7 +8,7 @@ import logging
 from datetime import datetime
 
 # Setup enhanced logging
-logging.basicConfig(level=logging.DEBUG, filename='mini_optimu4.log', filemode='a', format='%(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 
 # Constants
 COMPLEXITY_MIN = 1
