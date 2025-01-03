@@ -354,4 +354,6 @@ def statistics_dashboard():
     return render_template('statistics_dashboard.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Back to the original development settings
+    port = int(os.environ.get("PORT", 5000))  # Get the port from Heroku's environment variables
+    debug_mode = os.environ.get("DEBUG", "False").lower() == "true"  # Enable debug mode only if DEBUG=true
+    app.run(host="0.0.0.0", port=port, debug=debug_mode)
