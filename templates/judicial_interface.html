@@ -178,11 +178,21 @@
             })
             .then(response => response.json())
             .then(data => {
-                loadPendingCases();  // Refresh the pending cases list
-                alert(`Generated ${data.cases.length} new citizen cases`);
+                if (data.message === "No valid norm to generate case.") {
+                    // Display the message when no valid norm is available
+                    alert(data.message);
+                    document.getElementById('latest-notification').innerText = data.message; // Update notification section
+                } else {
+                    // Display the success message and refresh pending cases
+                    alert(data.message);
+                    loadPendingCases();  // Refresh the pending cases list
+                }
             })
-            .catch(error => console.error('Error:', error));
-        }
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while generating citizen cases.');
+            });
+}
 
         // Make sure these functions are called when the page loads
         document.addEventListener('DOMContentLoaded', () => {

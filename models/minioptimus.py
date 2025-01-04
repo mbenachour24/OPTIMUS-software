@@ -64,16 +64,15 @@ class CitizenPressure:
 
     def generate_daily_cases(self):
         generated_cases = []
+        valid_norms = [norm for norm in self.parliament.norms if norm.valid]
+        
+        if not valid_norms:
+            print("No valid norm to generate case.")
+            return "No valid norm to generate case."
+
         for _ in range(self.daily_case_count):
-            # Get a random existing norm to challenge
-            if not self.parliament.norms:
-                # Create a norm if none exist
-                norm = self.parliament.create_norm()
-            else:
-                norm = random.choice(self.parliament.norms)
-            
-            # Force the norm to be invalid (simulating citizen challenge)
-            norm.valid = False
+            # Select a valid norm
+            norm = random.choice(valid_norms)
             
             # Create a case
             case_type = random.choice(self.case_types)

@@ -271,8 +271,17 @@ def init_test_cases():
 @app.route('/api/generate_citizen_cases', methods=['POST'])
 def generate_citizen_cases():
     try:
+        # Generate daily cases
         generated_cases = society.citizen_pressure.generate_daily_cases()
         
+        if generated_cases == "No valid norm to generate case.":
+            # Return the specific message if no valid norms exist
+            return jsonify({
+                "message": "No valid norm to generate case.",
+                "cases": []
+            }), 200
+        
+        # If cases are generated, prepare the case details
         case_details = [{
             "id": case.id,
             "text": case.text,
@@ -283,7 +292,8 @@ def generate_citizen_cases():
         return jsonify({
             "message": f"Generated {len(generated_cases)} citizen pressure cases",
             "cases": case_details
-        })
+        }), 200
+    
     except Exception as e:
         logging.error(f"Error generating citizen cases: {e}")
         return jsonify({"error": str(e)}), 500
