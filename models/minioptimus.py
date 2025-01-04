@@ -95,17 +95,8 @@ class CitizenPressure:
             return "No valid norm to generate case."
 
         for _ in range(self.daily_case_count):
-<<<<<<< HEAD
             # Select a valid norm
             norm = random.choice(valid_norms)
-=======
-            # Get a random existing norm to challenge
-            if not self.parliament.norms:
-                # Create a norm if none exist
-                norm = self.parliament.create_norm()
-            else:
-                norm = random.choice(self.parliament.norms)
->>>>>>> bb87d028518396bd2a6336827aadd4e9aff3de3c
             
             # Create a case
             case_type = random.choice(self.case_types)
