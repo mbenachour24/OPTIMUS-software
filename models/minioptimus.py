@@ -56,7 +56,10 @@ class CitizenPressure:
             "Civil Rights Issue",
             "Labor Dispute",
             "Consumer Protection",
-            "Public Safety Concern"
+            "Luhmann's Public Safety Concern"
+            "Mohamed got funds and it's not fair"
+            "Alien invasion"
+            "Zombie outbreak"
         ]
 
     def generate_daily_cases(self):
