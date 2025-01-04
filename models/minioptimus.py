@@ -56,7 +56,7 @@ class CitizenPressure:
             "Civil Rights Issue",
             "Labor Dispute",
             "Consumer Protection",
-            "Luhmann's Public Safety Concern",
+            "Luhmann's theory Public Safety Concern",
             "Mohamed got funds and it's not fair",
             "Alien invasion",
             "Zombie outbreak",
