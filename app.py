@@ -9,6 +9,8 @@ from datetime import datetime
 import json
 from flask_cors import CORS
 import os
+from flask_socketio import SocketIO, emit
+
 app = Flask(__name__)
 
 CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins
@@ -124,33 +126,19 @@ def check_constitutionality():
 # API Endpoint to mark a norm as unconstitutional
 @app.route('/api/mark_unconstitutional', methods=['POST'])
 def mark_unconstitutional():
-    try:
-        data = request.get_json()
-        if not data or 'norm_id' not in data:
-            return jsonify({"error": "Missing norm_id in request"}), 400
-            
-        norm_id = data['norm_id']
-        norm = next((n for n in society.parliament.norms if n.id == norm_id), None)
-        if not norm:
-            return jsonify({"error": "Norm not found"}), 404
-
-        # Invalidate the norm
+    data = request.get_json()
+    norm_id = data['norm_id']
+    norm = next((n for n in society.parliament.norms if n.id == norm_id), None)
+    
+    if norm:
         norm.invalidate()
-
-        # Create a notification
-        notification = f"Norm #{norm.id} ({norm.text}) marked as unconstitutional."
-        notification_manager.add_notification(notification, type="judicial")
-
-        return jsonify({
-            "id": norm.id,
-            "text": norm.text,
-            "valid": norm.valid,
-            "complexity": norm.complexity,
-            "message": f"Political System notified: {notification}"
+        # Emit WebSocket event
+        socketio.emit('norm_update', {
+            'norm_id': norm_id,
+            'valid': False
         })
-    except Exception as e:
-        logging.error(f"Error in mark_unconstitutional: {e}")
-        return jsonify({"error": "Internal server error"}), 500
+        return jsonify({"success": True})
+    return jsonify({"error": "Norm not found"}), 404
 
 # Update the get_notifications endpoint
 @app.route('/api/get_notifications', methods=['GET'])
@@ -363,7 +351,17 @@ def solve_case(case_id):
 def statistics_dashboard():
     return render_template('statistics_dashboard.html')
 
+@app.before_first_request
+def init_app():
+    # Clear notifications file
+    notifications_file = os.path.join('data', 'notifications.json')
+    try:
+        os.remove(notifications_file)
+        logging.info("Cleared old notifications file")
+    except FileNotFoundError:
+        logging.info("No old notifications file to clear")
+
+socketio = SocketIO(app)
+
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # Get the port from Heroku's environment variables
-    debug_mode = os.environ.get("DEBUG", "False").lower() == "true"  # Enable debug mode only if DEBUG=true
-    app.run(host="0.0.0.0", port=port, debug=debug_mode)
+    socketio.run(app, debug=True)
