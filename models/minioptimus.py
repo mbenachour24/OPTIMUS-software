@@ -6,6 +6,7 @@ import asyncio
 import random
 import logging
 from datetime import datetime
+import os
 
 # Setup enhanced logging
 logging.basicConfig(level=logging.DEBUG, format='%(message)s')
@@ -14,6 +15,23 @@ logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 COMPLEXITY_MIN = 1
 COMPLEXITY_MAX = 10
 SIMULATION_DAYS = 100
+
+class NotificationManager:
+    def __init__(self):
+        self.notifications = []
+        self.websocket = None
+        # Clear old notifications file at startup
+        try:
+            os.remove('data/notifications.json')
+            logging.info("Cleared old notifications file")
+        except FileNotFoundError:
+            logging.info("No old notifications file to clear")
+
+    async def broadcast_update(self, data):
+        if self.websocket:
+            await self.websocket.broadcast(data)
+
+notification_manager = NotificationManager()
 
 class Norm:
     def __init__(self, norm_id, text, valid=True, complexity=1):
@@ -26,6 +44,12 @@ class Norm:
     def invalidate(self):
         self.valid = False
         self.log_event("Invalidated")
+        # Broadcast the update
+        asyncio.create_task(notification_manager.broadcast_update({
+            'type': 'norm_update',
+            'norm_id': self.id,
+            'valid': self.valid
+        }))
 
     def log_event(self, message):
         log_message = f"Norm {self.id}: {message}"
@@ -69,9 +93,6 @@ class CitizenPressure:
             else:
                 norm = random.choice(self.parliament.norms)
             
-            # Force the norm to be invalid (simulating citizen challenge)
-            norm.valid = False
-            
             # Create a case
             case_type = random.choice(self.case_types)
             case = self.judicial_system.create_case_from_pressure(
@@ -110,47 +131,43 @@ class JudicialSystem:
         logging.info(log_message)
         print(log_message)
 
-        if norm.complexity > 5:
-            norm.invalidate()
-            # Create a case automatically for invalidated norms
-            self.create_case(norm)
-
         log_message = f"Judicial System: Norm {norm.id} has been checked for constitutionality. Valid status: {norm.valid}"
         logging.info(log_message)
         print(log_message)
 
     def create_case(self, norm):
-        if not norm.valid:
+        if norm.valid:
             self.case_counter += 1
             case = Case(
                 case_id=self.case_counter,
                 text=f'Case {self.case_counter} referencing {norm.text}',
                 norm=norm
             )
-            self.pending_cases.append(case)  # Add to pending instead of cases
+            self.pending_cases.append(case)
             case.log_event("Case created and added to pending cases.")
             return case
         else:
-            log_message = f"Cannot create a case for a valid norm (Norm #{norm.id})"
+            log_message = f"Cannot create a case for an invalid norm (Norm #{norm.id})"
             logging.info(log_message)
             print(log_message)
             return None
 
     def create_case_from_pressure(self, norm, pressure_text):
-        """Create a case from citizen pressure, regardless of norm validity"""
+        """Create a case from citizen pressure, only if norm is valid"""
+        if not norm.valid:
+            log_message = f"Cannot create a case for an invalid norm (Norm #{norm.id})"
+            logging.info(log_message)
+            print(log_message)
+            return None
+            
         self.case_counter += 1
         case = Case(
             case_id=self.case_counter,
             text=pressure_text,
             norm=norm
         )
-        self.pending_cases.append(case)  # Add to pending cases
+        self.pending_cases.append(case)
         case.log_event("Case created from citizen pressure and added to pending cases.")
-        
-        log_message = f"Citizen Pressure Case created: ID {case.id}, Text: {case.text}"
-        logging.info(log_message)
-        print(log_message)
-        
         return case
 
     def solve_case(self, case_id):
