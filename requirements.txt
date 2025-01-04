@@ -7,4 +7,5 @@ simple-websocket==1.1.0
 aiohttp==3.8.5
 uvloop==0.21.0
 bidict==0.23.1
-eventlet==0.33.3  # Required for Flask-SocketIO async support (if used)
+eventlet==0.33.3  
+flask_socketio==5.5.0
