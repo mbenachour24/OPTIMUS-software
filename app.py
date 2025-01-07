@@ -127,7 +127,7 @@ def check_constitutionality():
 @app.route('/api/mark_unconstitutional', methods=['POST'])
 def mark_unconstitutional():
     data = request.get_json()
-    norm_id = data['norm_id']
+    norm_id = data.get('norm_id')
     norm = next((n for n in society.parliament.norms if n.id == norm_id), None)
     
     if norm:
@@ -137,7 +137,11 @@ def mark_unconstitutional():
             'norm_id': norm_id,
             'valid': False
         })
-        return jsonify({"success": True})
+        return jsonify({
+            "success": True,
+            "id": norm_id,  # Include the norm_id in the response
+            "message": f"Norm #{norm_id} has been marked as unconstitutional."
+        })
     return jsonify({"error": "Norm not found"}), 404
 
 # Update the get_notifications endpoint

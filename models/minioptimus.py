@@ -22,6 +22,7 @@ class NotificationManager:
         self.websocket = None
         # Clear old notifications file at startup
         try:
+            os.makedirs('data', exist_ok=True)
             os.remove('data/notifications.json')
             logging.info("Cleared old notifications file")
         except FileNotFoundError:
@@ -29,8 +30,15 @@ class NotificationManager:
 
     async def broadcast_update(self, data):
         if self.websocket:
-            await self.websocket.broadcast(data)
+            try:
+                await self.websocket.broadcast(data)
+                logging.info(f"Broadcasted update: {data}")
+            except Exception as e:
+                logging.error(f"Failed to broadcast update: {e}")
+        else:
+            logging.warning("No active WebSocket to broadcast the update.")
 
+# Instantiate the notification manager globally
 notification_manager = NotificationManager()
 
 class Norm:
@@ -44,8 +52,8 @@ class Norm:
     def invalidate(self):
         self.valid = False
         self.log_event("Invalidated")
-        # Broadcast the update
-        asyncio.create_task(notification_manager.broadcast_update({
+        # Use asyncio.run to ensure the coroutine runs in a new event loop
+        asyncio.run(notification_manager.broadcast_update({
             'type': 'norm_update',
             'norm_id': self.id,
             'valid': self.valid
@@ -117,12 +125,13 @@ class PoliticalSystem:
     def create_norm(self):
         self.norm_counter += 1
         norm = Norm(
-            norm_id=self.norm_counter,
+            norm_id=self.norm_counter,  # Correctly incremented norm ID
             text=f'Law {self.norm_counter}',
             valid=True,
             complexity=random.randint(COMPLEXITY_MIN, COMPLEXITY_MAX)
         )
         self.norms.append(norm)
+        logging.info(f"Debug: Created Norm #{self.norm_counter} with ID {norm.id}")  # Add debug log
         return norm
 
 class JudicialSystem:
@@ -214,11 +223,6 @@ class Society:
             # Generate citizen pressure cases
             generated_cases = self.citizen_pressure.generate_daily_cases()
             print(f"Debug: Generated {len(generated_cases)} citizen pressure cases")
-
-            # Debugging: Log the current state of cases
-            print("Debug: Current cases in JudicialSystem:")
-            for case in self.judicial_system.cases:
-                print(f"Case ID: {case.id}, Text: {case.text}, Constitutional: {case.constitutional}")
 
             print(f"Debug: Ending Day {self.iteration}")
             await asyncio.sleep(1)
