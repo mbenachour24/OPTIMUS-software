@@ -1,0 +1,25 @@
+{
+  "name": "minioptimus",
+  "version": "2.0.0",
+  "description": "Optimus: Rule of Law Interactive System --",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbenachour24/OPTIMUS-software.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mbenachour24/OPTIMUS-software/issues"
+  },
+  "homepage": "https://github.com/mbenachour24/OPTIMUS-software#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1",
+    "uuid": "^11.0.5"
+  }
+}
