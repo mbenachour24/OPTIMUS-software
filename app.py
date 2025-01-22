@@ -4,7 +4,7 @@
 
 import logging
 from flask import Flask, jsonify, request, render_template, abort
-from models.minioptimus import Society
+from models.minioptimus.society import Society
 from datetime import datetime
 import json
 from flask_cors import CORS
@@ -355,7 +355,7 @@ def solve_case(case_id):
 def statistics_dashboard():
     return render_template('statistics_dashboard.html')
 
-@app.before_first_request
+@app.before_request
 def init_app():
     # Clear notifications file
     notifications_file = os.path.join('data', 'notifications.json')
