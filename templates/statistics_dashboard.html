@@ -23,6 +23,8 @@
             <ul>
                 <li><a href="/judicial">Judicial System</a></li>
                 <li><a href="/political">Political System</a></li>
+                <li><a href="/view_cases">View Cases</a></li>
+                <li><a href="/view_norms">View Norms</a></li>
             </ul>
             <h3>Analytics</h3>
             <ul>
@@ -49,7 +51,7 @@
                     <div class="stat-numbers">
                         <p>Pending: <span id="pending-count">0</span></p>
                         <p>Solved: <span id="solved-count">0</span></p>
-                        <p>Total: <span id="total-cases">0</span></p>
+                        <p>Total: <span id="total">0</span></p>
                     </div>
                 </div>
                 <div class="stat-card">
@@ -195,10 +197,9 @@
             const solvedData = await solvedResponse.json();
 
             // Update case counts
-            document.getElementById('pending-count').textContent = pendingData.total_pending;
-            document.getElementById('solved-count').textContent = solvedData.total_solved;
-            document.getElementById('total-cases').textContent = 
-                pendingData.total_pending + solvedData.total_solved;
+        document.getElementById('solved-count').textContent = solvedData.solved_cases.length;  
+        document.getElementById('pending-count').textContent = pendingData.pending_cases.length;
+        document.getElementById('total-cases').textContent = pendingData.total_pending + solvedData.total_solved;
 
             // Calculate and update resolution rate
             const totalCases = pendingData.total_pending + solvedData.total_solved;

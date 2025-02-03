@@ -9,3 +9,4 @@ uvloop==0.21.0
 bidict==0.23.1
 eventlet==0.33.3  
 flask_socketio==5.5.0
+Flask-SQLAlchemy==3.0.2  

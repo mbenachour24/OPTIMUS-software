@@ -45,7 +45,33 @@ class LoaderManager {
     }
 }
 
-// Créer l'instance uniquement quand le DOM est prêt
+function updateSolvedCaseCount() {
+    fetch('/api/get_solved_cases')
+        .then(response => response.json())
+        .then(data => {
+            const solvedCountElement = document.getElementById('solved-case-count');
+            if (solvedCountElement) {
+                solvedCountElement.innerText = data.total;
+                console.log("Updated solved case count:", data.total);
+            } else {
+                console.warn("Solved case count element not found.");
+            }
+        })
+        .catch(error => console.error('Error updating solved case count:', error));
+}
+
+// Refresh solved case count every 30 seconds
+setInterval(updateSolvedCaseCount, 30000);
+
+// Ensure WebSocket updates the solved case count
+if (typeof socket !== 'undefined') {
+    socket.on('case_solved', updateSolvedCaseCount);
+} else {
+    console.warn("WebSocket 'socket' is not defined. Ensure it is initialized properly.");
+}
+
+// Initialize LoaderManager when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     window.loaderManager = new LoaderManager();
-}); 
+    updateSolvedCaseCount(); // Initial update when page loads
+});

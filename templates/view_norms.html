@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus - View Norms</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <header>Optimus - Norm Management</header>
+    <div class="container">
+        <!-- Sidebar for Navigation -->
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="/">Home</a></li>
+            </ul>
+            <h3>Systems</h3>
+            <ul>
+                <li><a href="/judicial">Judicial System</a></li>
+                <li><a href="/political">Political System</a></li>
+                <li><a href="/view_cases">View Cases</a></li>
+                <li><strong>View Norms</strong></li>
+            </ul>
+            <h3>Analytics</h3>
+            <ul>
+                <li><a href="/general_log">General Log</a></li>
+                <li><a href="/statistics">Statistics Dashboard</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>Norm Management</h2>
+
+            <!-- Norm Filters -->
+            <div class="filters">
+                <button onclick="fetchNorms('all')" id="filter-all">All</button>
+                <button onclick="fetchNorms('valid')" id="filter-valid">Valid</button>
+                <button onclick="fetchNorms('invalid')" id="filter-invalid">Invalid</button>
+            </div>
+
+            <!-- Norms Table -->
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Text</th>
+                        <th>Complexity</th>
+                        <th>Valid</th>
+                    </tr>
+                </thead>
+                <tbody id="norms-list">
+                    <!-- Norms will be dynamically loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 Optimus Interface - Enhancing Rule of Law through Systems Interaction
+    </footer>
+
+    <script>
+    async function fetchNorms(filter = "all") {
+        let apiUrl;
+
+        // Determine API endpoint based on the filter
+        if (filter === "valid") {
+            apiUrl = '/api/get_valid_norms';
+        } else if (filter === "invalid") {
+            apiUrl = '/api/get_invalid_norms';
+        } else {
+            apiUrl = '/api/get_all_norms'; // Ensure this endpoint exists in app.py
+        }
+
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch norms: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const normsList = document.getElementById('norms-list');
+            const tableHeader = document.querySelector('.styled-table thead tr');
+
+            if (!normsList || !tableHeader) {
+                console.error('Error: Table elements not found in the DOM.');
+                return;
+            }
+
+            normsList.innerHTML = ''; // Clear the table content
+
+            // Handle norms if empty
+            const norms = filter === "valid"
+                ? data.valid_norms
+                : (filter === "invalid" ? data.invalid_norms : data.norms || []);
+
+            if (!norms || norms.length === 0) {
+                normsList.innerHTML = '<tr><td colspan="4">No norms found.</td></tr>';
+                return;
+            }
+
+            // Populate the table with norms
+            norms.forEach(norm => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${norm.id || 'N/A'}</td>
+                    <td>${norm.text || 'N/A'}</td>
+                    <td>${norm.complexity || 'N/A'}</td>
+                    <td>${norm.valid ? 'Yes' : 'No'}</td>
+                `;
+                normsList.appendChild(row);
+            });
+
+            // Highlight selected filter
+            document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`filter-${filter}`).classList.add('active');
+
+        } catch (error) {
+            console.error('Error fetching norms:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchNorms();
+    });
+    </script>
+
+    <style>
+        .filters {
+            margin-bottom: 20px;
+        }
+
+        .filters button {
+            padding: 10px;
+            margin: 5px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .filters button:hover {
+            background-color: var(--primary-color-dark);
+        }
+
+        .filters button.active {
+            background-color: var(--highlight-color);
+            color: black;
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+            text-align: left;
+        }
+
+        .styled-table th, .styled-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .styled-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .styled-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .styled-table tr:hover {
+            background-color: var(--secondary-color);
+        }
+    </style>
+</body>
+</html>

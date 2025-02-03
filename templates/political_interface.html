@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Optimus - Political System Interface</title>
     <link rel="stylesheet" href="static/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
     <style>
         .notification-item {
             padding: 10px;
@@ -43,6 +44,7 @@
             <ul>
                 <li><a href="/judicial">Judicial System</a></li>
                 <li><strong>Political System</strong></li>
+                <li><a href="/view_cases">View Cases</a></li>
             </ul>
             <h3>Analytics</h3>
             <ul>
@@ -52,6 +54,8 @@
                         <li><a href="/general_log#todays-activities">Today's Activities</a></li>
                         <li><a href="/general_log#norm-updates">Norm Updates</a></li>
                         <li><a href="/general_log#case-decisions">Case Decisions</a></li>
+                        <li><a href="/view_norms">View Norms</a></li>
+                        <li><a href="/view_cases">View Cases</a></li>
                     </ul>
                 </li>
                 <li><a href="/statistics">Statistics Dashboard</a></li>
@@ -86,132 +90,142 @@
     </footer>
 
     <script>
-        // Fetch notifications dynamically
-        async function fetchNotifications() {
-            try {
-                const response = await fetch('/api/get_notifications');
-                const notifications = await response.json();
-                const notificationsDiv = document.getElementById('notifications');
-                // Filter only unconstitutional notifications
-                const unconstitutionalNotifications = notifications.filter(n => 
-                    n.type === "judicial" && n.message.includes("marked as unconstitutional")
-                );
-                
-                notificationsDiv.innerHTML = unconstitutionalNotifications.length
-                    ? unconstitutionalNotifications.map(n => `
-                        <div class="notification-item ${n.type}">
-                            <p class="notification-message">${n.message}</p>
-                            <small class="notification-time">${new Date(n.timestamp).toLocaleString()}</small>
-                        </div>
-                    `).join('')
-                    : '<p>No unconstitutional norm notifications.</p>';
-            } catch (error) {
-                console.error('Error fetching notifications:', error);
-                document.getElementById('notifications').innerHTML =
-                    '<p>Error loading notifications. Please try again later.</p>';
-            }
-        }
+    // ✅ Ensure Socket.IO is loaded before using `io`
+    if (typeof io !== "undefined") {
+        const socket = io(window.location.origin);
 
-        // Fetch logs dynamically
-        async function fetchLogs() {
-            try {
-                const response = await fetch('/api/get_norms');
-                const norms = await response.json();
-                const logEntries = document.getElementById('log-entries');
-                logEntries.innerHTML = ''; // Clear existing logs
-                norms.forEach(norm => {
-                    const logEntry = document.createElement('div');
-                    logEntry.className = 'log-entry';
-                    logEntry.innerHTML = `<strong>Norm #${norm.id}:</strong> ${norm.text} - Valid: ${norm.valid}`;
-                    logEntries.appendChild(logEntry);
-                });
-            } catch (error) {
-                console.error('Error fetching norms:', error);
-                document.getElementById('log-entries').innerHTML =
-                    '<p>Error loading log entries. Please try again later.</p>';
-            }
-        }
+        socket.on('connect', () => {
+            console.log("✅ WebSocket connected successfully");
+        });
 
-        // Function to create a new norm
-        async function createNewNorm() {
-            const normText = prompt("Enter a description for the new norm:");
-            if (!normText) return; // If the user cancels
-            try {
-                const response = await fetch('/api/create_norm', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: normText })
-                });
-                const norm = await response.json();
+        socket.on('norm_created', (data) => {
+            console.log("📡 Norm created via WebSocket:", data);
+            fetchLogs(); // 🔄 Refresh logs when a new norm is created
+        });
+
+        socket.on('mark_unconstitutional', (data) => { // ✅ Corrected syntax
+            console.log(`📡 Norm marked as unconstitutional via WebSocket: ${data.norm_id}`);
+            fetchNotifications(); // ✅ Correct function
+        });
+    } else {
+        console.error("❌ Socket.IO library not loaded. Ensure it's included in the HTML.");
+    }
+
+    // ✅ Fetch norms dynamically
+    async function fetchLogs() {
+        try {
+            const response = await fetch('/api/get_norms');
+            if (!response.ok) throw new Error(`Failed to fetch norms: ${response.status}`);
+
+            const norms = await response.json();
+            const logEntries = document.getElementById('log-entries');
+            if (!logEntries) {
+                console.error("❌ Error: 'log-entries' element not found.");
+                return;
+            }
+
+            logEntries.innerHTML = ''; // Clear existing logs
+            norms.forEach(norm => {
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.innerHTML = `<strong>Norm #${norm.id}:</strong> ${norm.text} - Valid: ${norm.valid}`;
+                logEntries.appendChild(logEntry);
+            });
+        } catch (error) {
+            console.error('Error fetching norms:', error);
+        }
+    }
+
+    // ✅ Fetch notifications dynamically
+    async function fetchNotifications() {
+        try {
+            const response = await fetch('/api/get_notifications');
+            if (!response.ok) throw new Error(`Failed to fetch notifications: ${response.status}`);
+
+            const notifications = await response.json();
+            const notificationsDiv = document.getElementById('notifications');
+            if (!notificationsDiv) {
+                console.error("❌ Error: 'notifications' element not found.");
+                return;
+            }
+
+            // Filter only unconstitutional notifications
+            const unconstitutionalNotifications = notifications.filter(n =>
+                n.type === "mark_unconstitutional" && n.message.includes("marked as unconstitutional")
+            );
+
+            notificationsDiv.innerHTML = unconstitutionalNotifications.length
+                ? unconstitutionalNotifications.map(n => `
+                    <div class="notification-item ${n.type}">
+                        <p class="notification-message">${n.message}</p>
+                        <small class="notification-time">${new Date(n.timestamp).toLocaleString()}</small>
+                    </div>
+                `).join('')
+                : '<p>No unconstitutional norm notifications.</p>';
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+        }
+    }
+
+    // ✅ Function to create a new norm
+    async function createNewNorm() {
+        const normText = prompt("Enter a description for the new norm:");
+        if (!normText) return;
+
+        try {
+            const response = await fetch('/api/create_norm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: normText })
+            });
+
+            const norm = await response.json();
+            if (norm.error) {
+                alert(`Error: ${norm.error}`);
+            } else {
                 alert(`Created Norm #${norm.id}: ${norm.text}`);
-                fetchLogs(); // Update logs dynamically
-            } catch (error) {
-                console.error('Error creating norm:', error);
-                alert('An error occurred while creating the norm.');
+                fetchLogs();
             }
+        } catch (error) {
+            console.error('Error creating norm:', error);
+            alert('An error occurred while creating the norm.');
         }
+    }
 
-        // Function to review judicial feedback
-        async function reviewJudicialFeedback() {
-            const normId = prompt("Enter the Norm ID to review feedback:");
-            if (!normId) return; // If the user cancels
-            try {
-                const response = await fetch('/api/check_constitutionality', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ norm_id: parseInt(normId) })
-                });
-                const result = await response.json();
-                if (result.error) {
-                    alert(`Error: ${result.error}`);
-                } else {
-                    alert(`Feedback on Norm #${result.id}: Valid: ${result.valid}`);
-                }
-                fetchLogs(); // Update logs dynamically
-            } catch (error) {
-                console.error('Error reviewing feedback:', error);
-                alert('An error occurred while reviewing feedback.');
+    // ✅ Function to review judicial feedback
+    async function reviewJudicialFeedback() {
+        const normId = prompt("Enter the Norm ID to review feedback:");
+        if (!normId) return;
+
+        try {
+            const response = await fetch('/api/check_constitutionality', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ norm_id: parseInt(normId) })
+            });
+
+            const result = await response.json();
+            if (result.error) {
+                alert(`Error: ${result.error}`);
+            } else {
+                alert(`Feedback on Norm #${result.id}: Valid: ${result.valid}`);
             }
+            fetchLogs();
+        } catch (error) {
+            console.error('Error reviewing feedback:', error);
+            alert('An error occurred while reviewing feedback.');
         }
+    }
 
-        // On page load, fetch logs and notifications
+    // ✅ On page load, fetch data and set up intervals
+    document.addEventListener('DOMContentLoaded', () => {
         fetchLogs();
         fetchNotifications();
+        setInterval(fetchLogs, 30000);
+        setInterval(fetchNotifications, 30000);
+    });
 
-        function checkNotifications() {
-            fetch('/api/get_notifications')
-                .then(response => response.json())
-                .then(notifications => {
-                    const notificationArea = document.getElementById('latest-notification');
-                    // Filter and get the latest unconstitutional notification
-                    const unconstitutionalNotifications = notifications.filter(n => 
-                        n.type === "judicial" && n.message.includes("unconstitutional")
-                    );
-                    const latestNotification = unconstitutionalNotifications[unconstitutionalNotifications.length - 1];
-                    if (latestNotification) {
-                        notificationArea.textContent = latestNotification.message;
-                    } else {
-                        notificationArea.textContent = 'No unconstitutional norm notifications';
-                    }
-                })
-                .catch(error => console.error('Error checking notifications:', error));
-        }
-
-        // Add this to see the full notification data for debugging
-        function displayAllNotifications() {
-            fetch('/api/get_notifications')
-                .then(response => response.json())
-                .then(notifications => {
-                    console.log('All notifications:', notifications);
-                });
-        }
-
-        // Check notifications on load and every 30 seconds
-        document.addEventListener('DOMContentLoaded', () => {
-            checkNotifications();
-            displayAllNotifications(); // For debugging
-            setInterval(checkNotifications, 30000);
-        });
     </script>
+    
 </body>
 </html>
