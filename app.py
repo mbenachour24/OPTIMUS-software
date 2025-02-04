@@ -7,7 +7,7 @@ import logging
 from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 from flask_socketio import SocketIO, emit
 import json
 from datetime import datetime
@@ -28,11 +28,32 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
     os.getenv("RENDER_DATABASE_URL") or  # 🔄 Sur Render
     os.getenv("DATABASE_URL") or  # 🔄 Peut être utilisé sur d'autres plateformes
     os.getenv("SUPABASE_DATABASE_URL") or  # 🔄 Si tu reviens à Supabase
-    "sqlite:///data/optimus.db"  # 🔄 Fallback pour éviter une erreur si rien n'est trouvé
+    "sqlite:///data/optimus.db"  # 🔄 Fallback pour éviter une erreur
 )
 
 # ✅ Assurez-vous que SQLAlchemy ne spamme pas les logs
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db_url = os.getenv("DATABASE_URL")
+
+# 🛠️ Forcer SSL si nécessaire
+if db_url and "sslmode" not in db_url:
+    db_url += "?sslmode=require"
+
+app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# ⚠️ Solution : Limiter le nombre de connexions SQLAlchemy
+app.config["SQLALCHEMY_POOL_SIZE"] = 10  # Nombre max de connexions ouvertes
+app.config["SQLALCHEMY_POOL_TIMEOUT"] = 10  # Temps max d'attente pour une connexion libre
+app.config["SQLALCHEMY_POOL_RECYCLE"] = 1800  # Fermer les connexions inactives après 30 min
+
+db = SQLAlchemy(app)
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_size": 10,
+    "pool_recycle": 1800,
+    "pool_pre_ping": True,
+}
 
 # ✅ Import db AFTER setting config
 from models import db
@@ -43,10 +64,17 @@ migrate = Migrate(app, db)  # ✅ Initialize Flask-Migrate after db
 # ✅ Ensure tables exist at startup
 with app.app_context():
     try:
-        db.create_all()  # Crée les tables si elles n'existent pas
+        # Vérifie si la connexion est OK avant de créer les tables
+        db.session.execute('SELECT 1')  
+        print("✅ Connexion DB réussie.")
+
+        upgrade()  # Crée les tables si elles n'existent pas
+        db.session.commit()  # S'assure que tout est bien écrit dans la DB
         print("✅ Base de données PostgreSQL initialisée avec succès !")
+
     except Exception as e:
         print(f"❌ Erreur lors de l'initialisation de la base PostgreSQL : {e}")
+
 print("DEBUG: SQLALCHEMY_DATABASE_URI =", app.config["SQLALCHEMY_DATABASE_URI"])
 
 # ✅ Import models AFTER initializing db to prevent circular imports
@@ -492,6 +520,10 @@ def get_normative_inflation():
     model = NormativeInflationModel()
     model.update_metrics()
     return jsonify(model.to_dict())
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db.session.remove()
 
 @app.before_request
 def init_app():

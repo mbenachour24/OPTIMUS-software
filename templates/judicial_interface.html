@@ -126,6 +126,11 @@
             loadSolvedCases();  // Refresh the solved cases list
         });
     
+        setInterval(() => {
+            if (socket && socket.connected) {
+                socket.emit('ping');
+            }
+        }, 25000); // Ping toutes les 25s pour éviter la déconnexion
     } else {
         console.error("❌ Socket.IO library not loaded. Ensure it's included in the HTML.");
     }

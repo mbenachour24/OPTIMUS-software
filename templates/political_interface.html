@@ -109,6 +109,12 @@
             console.log(`📡 Norm marked as unconstitutional via WebSocket: ${data.norm_id}`);
             fetchNotifications(); // ✅ Correct function
         });
+
+        setInterval(() => {
+            if (socket && socket.connected) {
+                socket.emit('ping');
+            }
+        }, 25000); // Ping toutes les 25s pour éviter la déconnexion
     } else {
         console.error("❌ Socket.IO library not loaded. Ensure it's included in the HTML.");
     }
