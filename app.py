@@ -21,11 +21,18 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # ✅ Set database configuration BEFORE initializing db
 os.makedirs("data", exist_ok=True)
 
-load_dotenv()  # Charge les variables d'environnement
+load_dotenv()  # ✅ Charge .env
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("RENDER_DATABASE_URL")
+# ✅ Essaye plusieurs noms de variables d'env pour être sûr qu'elle est trouvée
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    os.getenv("RENDER_DATABASE_URL") or  # 🔄 Sur Render
+    os.getenv("DATABASE_URL") or  # 🔄 Peut être utilisé sur d'autres plateformes
+    os.getenv("SUPABASE_DATABASE_URL") or  # 🔄 Si tu reviens à Supabase
+    "sqlite:///data/optimus.db"  # 🔄 Fallback pour éviter une erreur si rien n'est trouvé
+)
+
+# ✅ Assurez-vous que SQLAlchemy ne spamme pas les logs
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 
 # ✅ Import db AFTER setting config
 from models import db
@@ -40,6 +47,7 @@ with app.app_context():
         print("✅ Base de données PostgreSQL initialisée avec succès !")
     except Exception as e:
         print(f"❌ Erreur lors de l'initialisation de la base PostgreSQL : {e}")
+print("DEBUG: SQLALCHEMY_DATABASE_URI =", app.config["SQLALCHEMY_DATABASE_URI"])
 
 # ✅ Import models AFTER initializing db to prevent circular imports
 from models.norm import Norm
