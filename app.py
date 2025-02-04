@@ -13,6 +13,8 @@ import json
 from datetime import datetime
 from dotenv import load_dotenv
 
+logging.basicConfig(level=logging.DEBUG)
+
 app = Flask(__name__)  # ✅ Define Flask app first
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -22,6 +24,7 @@ os.makedirs("data", exist_ok=True)
 load_dotenv()  # Charge les variables d'environnement
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("RENDER_DATABASE_URL")
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 # ✅ Import db AFTER setting config
