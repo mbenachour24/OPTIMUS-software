@@ -54,13 +54,8 @@ app.config["SQLALCHEMY_POOL_RECYCLE"] = 1800  # Fermer les connexions inactives 
 
 db = SQLAlchemy(app)
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "pool_size": 10,
-    "pool_recycle": 1800,
-    "pool_pre_ping": True,
     "poolclass": NullPool,  # Désactive le pooling si Render pose problème
-    "pool_timeout": 15,  # Attente max pour une connexion avant erreur
-    "max_overflow": 5,   # Permet d'ouvrir plus de connexions si nécessaire    
-}
+  
 
 # ✅ Import db AFTER setting config
 from models import db
