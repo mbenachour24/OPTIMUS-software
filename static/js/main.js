@@ -55,3 +55,14 @@ socket.on('case_solved', () => {
     console.log("📡 Live update: Fetching solved cases...");
     fetchSolvedCases();
 });
+
+socket.on('disconnect', () => {
+    console.warn("🔴 WebSocket déconnecté, tentative de reconnexion...");
+    setTimeout(() => {
+        location.reload();  // Recharge la page après 5s pour restaurer la connexion
+    }, 5000);
+});
+
+document.querySelector('.sidebar-toggle').addEventListener('click', () => {
+    document.querySelector('.sidebar').classList.toggle('collapsed');
+});

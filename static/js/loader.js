@@ -63,6 +63,12 @@ function updateSolvedCaseCount() {
 // Refresh solved case count every 30 seconds
 setInterval(updateSolvedCaseCount, 30000);
 
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.socket) {
+        window.socket.on('case_solved', updateSolvedCaseCount);
+    }
+});
+
 // Ensure WebSocket updates the solved case count
 if (typeof socket !== 'undefined') {
     socket.on('case_solved', updateSolvedCaseCount);

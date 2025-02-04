@@ -11,14 +11,18 @@ from flask_migrate import Migrate
 from flask_socketio import SocketIO, emit
 import json
 from datetime import datetime
+from dotenv import load_dotenv
 
 app = Flask(__name__)  # ✅ Define Flask app first
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # ✅ Set database configuration BEFORE initializing db
 os.makedirs("data", exist_ok=True)
-app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{os.path.abspath('data/optimus.db')}"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+load_dotenv()  # Charge les variables d'environnement
+
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("RENDER_DATABASE_URL")
+
 
 # ✅ Import db AFTER setting config
 from models import db
@@ -28,7 +32,11 @@ migrate = Migrate(app, db)  # ✅ Initialize Flask-Migrate after db
 
 # ✅ Ensure tables exist at startup
 with app.app_context():
-    db.create_all()
+    try:
+        db.create_all()  # Crée les tables si elles n'existent pas
+        print("✅ Base de données PostgreSQL initialisée avec succès !")
+    except Exception as e:
+        print(f"❌ Erreur lors de l'initialisation de la base PostgreSQL : {e}")
 
 # ✅ Import models AFTER initializing db to prevent circular imports
 from models.norm import Norm
