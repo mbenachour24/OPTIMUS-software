@@ -34,6 +34,7 @@ with app.app_context():
 from models.norm import Norm
 from models.case import Case
 from models.society import Society
+from models.analysis import Counter, NormativeInflationModel
 
 # Notification System
 class NotificationManager:
@@ -290,6 +291,7 @@ def get_pending_cases():
             formatted_cases = [{
                 "id": case.id,
                 "text": case.text,
+                "norm_id": case.norm.id,
                 "norm": case.norm.to_dict() if case.norm else None,  # ✅ Ensure norm is serialized
                 "constitutional": case.constitutional,
                 "resolved_at": "Pending"
@@ -312,8 +314,7 @@ def get_solved_cases():
             "text": case.text,
             "norm_id": case.norm.id,
             "constitutional": case.constitutional,
-            "resolved_at": case.resolved_at.isoformat()
-            if case.resolved_at else None
+            "resolved_at": case.resolved_at.strftime("%Y-%m-%d") if case.resolved_at else None            if case.resolved_at else None
         } for case in solved_cases]
         return jsonify({
             "total": len(formatted_cases),
@@ -461,6 +462,17 @@ def get_invalid_norms():
             for norm in norms
         ]
     })
+@app.route('/api/get_statistics', methods=['GET'])
+def fetch_statistics():
+    counter = Counter()
+    counter.update_counts()
+    return jsonify(counter.to_dict())
+
+@app.route('/api/get_normative_inflation', methods=['GET'])
+def get_normative_inflation():
+    model = NormativeInflationModel()
+    model.update_metrics()
+    return jsonify(model.to_dict())
 
 @app.before_request
 def init_app():

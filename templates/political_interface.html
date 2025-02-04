@@ -45,6 +45,7 @@
                 <li><a href="/judicial">Judicial System</a></li>
                 <li><strong>Political System</strong></li>
                 <li><a href="/view_cases">View Cases</a></li>
+                <li><a href="/view_norms">View Norms</a></li>
             </ul>
             <h3>Analytics</h3>
             <ul>
@@ -54,8 +55,8 @@
                         <li><a href="/general_log#todays-activities">Today's Activities</a></li>
                         <li><a href="/general_log#norm-updates">Norm Updates</a></li>
                         <li><a href="/general_log#case-decisions">Case Decisions</a></li>
-                        <li><a href="/view_norms">View Norms</a></li>
                         <li><a href="/view_cases">View Cases</a></li>
+                        <li><a href="/view_norms">View Norms</a> </li>
                     </ul>
                 </li>
                 <li><a href="/statistics">Statistics Dashboard</a></li>
@@ -66,13 +67,13 @@
         <div class="main-content">
             <h2>Welcome, Political System</h2>
             <h3>Notifications</h3>
-            <div id="notifications">
+            <div id="notifications" class="scrollable-section">
                 <!-- Notifications will be dynamically loaded here -->
                 <p>No notifications yet.</p>
             </div>
 
             <h3>Log Entries</h3>
-            <div id="log-entries">
+            <div id="log-entries" class="scrollable-section">
                 <!-- Logs will be dynamically loaded here -->
                 <p>No log entries yet.</p>
             </div>
@@ -226,6 +227,43 @@
     });
 
     </script>
-    
+
+<style>
+    .scrollable-section {
+        max-height: 300px; /* Adjust height as needed */
+        overflow-y: auto;  /* Enable vertical scrolling */
+        border: 1px solid #ccc; /* Optional: Add a border for visibility */
+        padding: 10px;
+        margin: 10px 0;
+        background-color: #fff;
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for aesthetic */
+    }
+
+    /* Style for notifications */
+    .notification-item {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        background-color: #f8f9fa;
+        border-left: 4px solid #ccc;
+    }
+
+    .notification-item.judicial {
+        border-left-color: #dc3545;
+        background-color: #fff3f3;
+    }
+
+    .notification-message {
+        margin: 0;
+        font-size: 1.1em;
+    }
+
+    .notification-time {
+        color: #666;
+        font-size: 0.9em;
+    }
+</style>
+
 </body>
 </html>

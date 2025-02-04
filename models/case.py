@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 from models import db  # Import shared db instance from models/__init__.py
+from sqlalchemy.sql import func
 
 logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 
@@ -12,6 +13,7 @@ class Case(db.Model):
     norm_id = db.Column(db.Integer, db.ForeignKey("norms.id"), nullable=False)
     constitutional = db.Column(db.Boolean, nullable=False, default=True)
     status = db.Column(db.String(20), nullable=False, default="pending")
+    created_at = db.Column(db.DateTime, default=func.now())  # ✅ Auto-add timestamp on creation
     resolved_at = db.Column(db.DateTime, nullable=True)
 
     def __init__(self, text, norm_id, constitutional=True):
@@ -26,6 +28,7 @@ class Case(db.Model):
             "text": self.text,
             "norm_id": self.norm_id,
             "constitutional": self.constitutional,
+            "created_at": self.created_at.isoformat(),
             "resolved_at": self.resolved_at.isoformat() if self.resolved_at else None,
             "status": self.status,  # ✅ Include status in serialization
         }
