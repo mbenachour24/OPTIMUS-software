@@ -22,6 +22,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 os.makedirs("data", exist_ok=True)
 
 load_dotenv()  # ✅ Charge .env
+print("DEBUG: Render DATABASE_URL =", os.getenv("DATABASE_URL"))
 
 # ✅ Essaye plusieurs noms de variables d'env pour être sûr qu'elle est trouvée
 app.config["SQLALCHEMY_DATABASE_URI"] = (
@@ -30,6 +31,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
     os.getenv("SUPABASE_DATABASE_URL") or  # 🔄 Si tu reviens à Supabase
     "sqlite:///data/optimus.db"  # 🔄 Fallback pour éviter une erreur
 )
+print("DEBUG: Final SQLALCHEMY_DATABASE_URI =", app.config["SQLALCHEMY_DATABASE_URI"])
+
 
 # ✅ Assurez-vous que SQLAlchemy ne spamme pas les logs
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
