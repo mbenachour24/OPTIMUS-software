@@ -7,6 +7,8 @@ import logging
 from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
+from sqlalchemy.pool import NullPool
 from flask_migrate import Migrate, upgrade
 from flask_socketio import SocketIO, emit
 import json
@@ -33,7 +35,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 )
 print("DEBUG: Final SQLALCHEMY_DATABASE_URI =", app.config["SQLALCHEMY_DATABASE_URI"])
 
-
 # ✅ Assurez-vous que SQLAlchemy ne spamme pas les logs
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -56,6 +57,9 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_size": 10,
     "pool_recycle": 1800,
     "pool_pre_ping": True,
+    "poolclass": NullPool,  # Désactive le pooling si Render pose problème
+    "pool_timeout": 15,  # Attente max pour une connexion avant erreur
+    "max_overflow": 5,   # Permet d'ouvrir plus de connexions si nécessaire    
 }
 
 # ✅ Import db AFTER setting config
@@ -68,7 +72,7 @@ migrate = Migrate(app, db)  # ✅ Initialize Flask-Migrate after db
 with app.app_context():
     try:
         # Vérifie si la connexion est OK avant de créer les tables
-        db.session.execute('SELECT 1')  
+        db.session.execute(text('SELECT 1'))  
         print("✅ Connexion DB réussie.")
 
         upgrade()  # Crée les tables si elles n'existent pas
@@ -531,13 +535,17 @@ def shutdown_session(exception=None):
 @app.before_request
 def init_app():
     with app.app_context():
-        cases = Case.query.all()
-        for case in cases:
-            if case.resolved_at:
-                case.status = 'solved'
-            else:
-                case.status = 'pending'
-        db.session.commit()
+        try:
+            cases = db.session.query(Case).all()
+            for case in cases:
+                case.status = 'solved' if case.resolved_at else 'pending'
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            logging.error(f"❌ Error initializing cases: {e}")
+        finally:
+            db.session.close()  # Ferme proprement la session après utilisation
+
 
     # Clear notifications file
     notifications_file = os.path.join('data', 'notifications.json')
@@ -548,4 +556,5 @@ def init_app():
         logging.info("No old notifications file to clear")
 
 if __name__ == "__main__":
-    socketio.run(app, host="0.0.0.0", port=5000, debug=True)
+    port = int(os.getenv("PORT", 10000))  # Port par défaut : 10000
+    socketio.run(app, host="0.0.0.0", port=port, debug=True)
