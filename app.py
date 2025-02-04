@@ -54,7 +54,8 @@ app.config["SQLALCHEMY_POOL_RECYCLE"] = 1800  # Fermer les connexions inactives 
 
 db = SQLAlchemy(app)
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "poolclass": NullPool  # Désactive le pooling si Render pose problème
+    "poolclass": NullPool,
+    "pool_pre_ping": True  # ✅ Vérifie si la connexion est encore active avant de l'utiliser
 }
 
 # ✅ Import db AFTER setting config
@@ -128,7 +129,7 @@ class NotificationManager:
             logging.warning("⚠️ No active WebSocket! Storing event for later.")
             self.pending_websocket_events.append((event, data))
 
-socketio = SocketIO(app, cors_allowed_origins="*")  # Allow CORS
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")  # Allow CORS
 
 notification_manager = NotificationManager()
 
