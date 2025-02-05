@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus - Statistics Dashboard</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+    
+        <!--  MathJax Configuration -->
+    <script>
+        window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        svg: {
+            fontCache: 'global'
+            }
+        };
+    </script>
+    
+        <!-- Load MathJax -->
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+    
+<body>
+    <header>Optimus - Statistics Dashboard</header>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/judicial">Judicial System</a></li>
+                <li><a href="/political">Political System</a></li>
+                <li><a href="/view_cases">View Cases</a></li>
+                <li><a href="/view_norms">View Norms</a></li>
+            </ul>
+            <h3>Analytics</h3>
+            <ul>
+                <li class="has-submenu">
+                    <a href="/general_log">General Log</a>
+                    <ul class="submenu">
+                        <li><a href="/general_log#todays-activities">Today's Activities</a></li>
+                        <li><a href="/general_log#norm-updates">Norm Updates</a></li>
+                        <li><a href="/general_log#case-decisions">Case Decisions</a></li>
+                    </ul>
+                </li>
+                <li><span class="current-page">Statistics Dashboard</span></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>System Statistics</h2>
+
+            <!-- Summary Cards -->
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <h3>Cases</h3>
+                    <div class="stat-numbers">
+                        <p>Pending: <span id="pending-count">0</span></p>
+                        <p>Solved: <span id="solved-count">0</span></p>
+                        <p>Total: <span id="total-cases">0</span></p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Norms</h3>
+                    <div class="stat-numbers">
+                        <p>Valid: <span id="valid-norms">0</span></p>
+                        <p>Invalid: <span id="invalid-norms">0</span></p>
+                        <p>Total: <span id="total-norms">0</span></p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>System Health</h3>
+                    <div class="stat-numbers">
+                        <p>Resolution Rate: <span id="resolution-rate">0%</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <h3>Normative Inflation</h3>
+                    <button onclick="openDialog()" class="info-button" aria-label="More Info">ℹ️</button>
+                    <div class="stat-numbers">
+                        <p>Normative Density: <span id="normative-density">0</span></p>
+                        <p>Processing Rate: <span id="processing-rate">0</span></p>
+                        <p>Backlog: <span id="backlog">0</span></p>
+                        <p>Temporal Gap: <span id="temporal-gap">0</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden Dialog for Statistical Explanation -->
+            <div id="math-dialog" class="dialog" role="dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+                <div class="dialog-content">
+                    <span class="close-button" onclick="closeDialog()" aria-label="Close">&times;</span>
+                    <h2 id="dialog-title">Understanding Normative Inflation</h2>
+                    <p id="dialog-description">
+                        Normative Inflation refers to the gap between norm creation and judicial processing. If the Normative Density (ND) exceeds the Processing Rate (PR), the Temporal Gap (TG) increases, leading to a judicial overloa, i.e., a backlog of unprocessed norms.
+                    </p>
+                    <h3>1. Normative Density (ND)</h3>
+                    <p>
+                        The total number of norms created:
+                    </p>
+                    <p>
+                        \[
+                        ND = \sum_{i=1}^{N} 1(i \in \text{Norms})
+                        \]
+                    </p>
+
+                    <h3>2. Processing Rate (PR)</h3>
+                    <p>
+                        The total number of norms processed by the judiciary:
+                    </p>
+                    <p>
+                        \[
+                        PR = \sum_{j=1}^{M} 1(j \in \text{Cases} \land \text{status}(j) = \text{'solved'})
+                        \]
+                    </p>
+
+                    <h3>3. Backlog (B_t)</h3>
+                    <p>
+                        The number of norms that remain unprocessed:
+                    </p>
+                    <p>
+                        \[
+                        B_t = \max(0, ND - PR)
+                        \]
+                    </p>
+
+                    <h3>4. Temporal Gap (TG)</h3>
+                    <p>
+                        The average delay between norm creation and judicial processing:
+                    </p>
+                    <p>
+                        \[
+                        TG = \frac{\sum_{k=1}^{P} (\text{resolved\_at}(k) - \text{created\_at}(k))}{P}
+                        \]
+                    </p>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h3>Cases Chart</h3>
+                    <canvas id="caseTypesChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Case Resolution Timeline</h3>
+                    <canvas id="resolutionTimelineChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>System Trends</h3>
+                    <canvas id="trendsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
+    </footer>
+
+    <script>
+    async function fetchStatistics() {
+        try {
+            const response = await fetch('/api/get_statistics');
+            const data = await response.json();
+    
+            document.getElementById('pending-count').textContent = data.cases.pending || 0;
+            document.getElementById('solved-count').textContent = data.cases.solved || 0;
+            document.getElementById('total-cases').textContent = data.cases.total || 0;
+            document.getElementById('valid-norms').textContent = data.norms.valid || 0;
+            document.getElementById('invalid-norms').textContent = data.norms.invalid || 0;
+            document.getElementById('total-norms').textContent = data.norms.total || 0;
+    
+            const resolutionRate = data.cases.total
+                ? Math.round((data.cases.solved / data.cases.total) * 100)
+                : 0;
+            document.getElementById('resolution-rate').textContent = `${resolutionRate}%`;
+    
+            const solvedResponse = await fetch('/api/get_solved_cases');
+            const solvedData = await solvedResponse.json();
+    
+            updateResolutionTimeline(solvedData.solved_cases || []);
+            updateTrendsChart(data.cases.total, data.cases.solved, data.cases.pending);
+            updateCaseTypesChart(data.cases.pending, data.cases.solved);
+        } catch (error) {
+            console.error('Error fetching statistics:', error);
+        }
+    }
+    
+    async function fetchNormativeInflation() {
+        try {
+            const response = await fetch('/api/get_normative_inflation');
+            const data = await response.json();
+    
+            document.getElementById('normative-density').textContent = data.inflation_data.normative_density || 0;
+            document.getElementById('processing-rate').textContent = data.inflation_data.processing_rate || 0;
+            document.getElementById('backlog').textContent = data.inflation_data.backlog || 0;
+            document.getElementById('temporal-gap').textContent = data.inflation_data.temporal_gap || "N/A";
+    
+        } catch (error) {
+            console.error('Error fetching normative inflation metrics:', error);
+        }
+    }
+    
+    function updateCaseTypesChart(pending, solved) {
+        const ctx = document.getElementById('caseTypesChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Pending Cases', 'Solved Cases'],
+                datasets: [{
+                    data: [pending, solved],
+                    backgroundColor: ['#FFCE56', '#36A2EB']
+                }]
+            }
+        });
+    }
+    
+    function updateResolutionTimeline(solvedCases) {
+        const ctx = document.getElementById('resolutionTimelineChart').getContext('2d');
+    
+        if (!Array.isArray(solvedCases) || solvedCases.length === 0) {
+            console.warn("No solved cases data available for timeline.");
+            return;
+        }
+    
+        const resolutionData = {};
+        solvedCases.forEach(caseItem => {
+            if (caseItem.resolved_at) {
+                const date = caseItem.resolved_at.split('T')[0];
+                console.log("Processed date:", date);
+                resolutionData[date] = (resolutionData[date] || 0) + 1;
+            }
+        });
+        console.log("Resolution data:", resolutionData);
+        const sortedDates = Object.keys(resolutionData).sort();
+        const resolvedCounts = sortedDates.map(date => resolutionData[date]);
+    
+        if (window.resolutionChart) {
+            window.resolutionChart.destroy();
+        }
+        console.log("Chart data:", sortedDates, resolvedCounts); 
+        window.resolutionChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: sortedDates,
+                datasets: [{
+                    label: 'Cases Resolved Over Time',
+                    data: resolvedCounts,
+                    borderColor: '#4CAF50',
+                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                    tension: 0.1,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    },
+                    x: {
+                        title: { display: true, text: 'Date' }
+                    }
+                },
+                plugins: {
+                    legend: { display: true, position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            title: context => `Date: ${context[0].label}`,
+                            label: context => `Cases Resolved: ${context.raw}`
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    let trendsChartInstance;
+    
+    function updateTrendsChart(totalCases, solvedCases, pendingCases) {
+        const ctx = document.getElementById('trendsChart').getContext('2d');
+    
+        if (trendsChartInstance) {
+            trendsChartInstance.destroy();
+        }
+    
+        trendsChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Cases Overview'],
+                datasets: [
+                    {
+                        label: 'Total Cases',
+                        data: [totalCases],
+                        backgroundColor: '#FF6384'
+                    },
+                    {
+                        label: 'Solved Cases',
+                        data: [solvedCases],
+                        backgroundColor: '#36A2EB'
+                    },
+                    {
+                        label: 'Pending Cases',
+                        data: [pendingCases],
+                        backgroundColor: '#FFCE56'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+    
+    function openDialog() {
+        const dialog = document.getElementById('math-dialog');
+        dialog.style.display = 'block';
+    
+        if (window.MathJax) {
+            MathJax.typesetPromise();
+        }
+    }
+    
+    function closeDialog() {
+        document.getElementById('math-dialog').style.display = 'none';
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchStatistics();
+        fetchNormativeInflation();
+    });
+    
+    setInterval(fetchStatistics, 30000);
+    setInterval(fetchNormativeInflation, 30000);
+    </script>
+
+    <style>
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .chart-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+    /* ✅ Make the dialog scrollable, resizable, and properly positioned */
+    .dialog {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        width: 50%;
+        max-width: 600px;
+        max-height: 80vh; /* ✅ Limit height so it's not too big */
+        overflow-y: auto; /* ✅ Enable scrolling */
+    }
+
+    /* ✅ Ensure the dialog content is readable */
+    .dialog-content {
+        text-align: left;
+        padding: 10px;
+    }
+
+    /* ✅ Make the close button visible */
+    .close-button {
+        float: right;
+        font-size: 24px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .close-button:hover {
+        color: red;
+    }
+
+    /* ✅ Allow clicking outside the dialog to close it */
+    .dialog-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* ✅ Semi-transparent background */
+        z-index: 999;
+    }
+        
+    </style>
+</body>
+</html>

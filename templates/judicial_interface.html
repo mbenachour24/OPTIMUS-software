@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus - Judicial System Interface</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+    <style>
+        .cases-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .scrollable-section {
+            max-height: 300px; /* Adjust as needed */
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+
+        .cases-container > div {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>Optimus - Judicial System Interface</header>
+    <div class="container">
+        <!-- Sidebar for Navigation -->
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="/">Home</a></li>
+            </ul>
+            <h3>Systems</h3>
+            <ul>
+                <li><strong>Judicial System</strong></li>
+                <li><a href="/political">Political System</a></li>
+                <li><a href="/view_cases">View Cases</a></li>
+                <li><a href="/view_norms">View Norms</a></li>
+            </ul>
+            <h3>Analytics</h3>
+            <ul>
+                <li class="has-submenu">
+                    <a href="/general_log">General Log</a>
+                    <ul class="submenu">
+                        <li><a href="/general_log#todays-activities">Today's Activities</a></li>
+                        <li><a href="/general_log#norm-updates">Norm Updates</a></li>
+                        <li><a href="/general_log#case-decisions">Case Decisions</a></li>
+                    </ul>
+                </li>
+                <li><a href="/statistics">Statistics Dashboard</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>Welcome, Judicial System</h2>
+            <div class="notification">
+                <strong>Notification:</strong> 
+                <span id="latest-notification">No notifications yet.</span>
+            </div>
+            
+            <!-- Log Entries Section -->
+            <div>
+                <h3>Log Entries</h3>
+                <div id="log-entries" class="scrollable-section">
+                    <!-- Logs will be dynamically populated here -->
+                </div>
+            </div>
+
+            <!-- Interaction Area -->
+            <div class="action-buttons">
+                <button onclick="markNormUnconstitutional()">Mark Norm as Unconstitutional</button>
+                <button onclick="requestReform()">Request Reform</button>
+            </div>
+
+            <!-- Cases Section -->
+            <div class="cases-section">
+                <div class="section-header">
+                    <h2>Case Management</h2>
+                    <button onclick="generateCitizenCases()" class="generate-button">Generate Citizen Cases</button>
+                </div>
+                
+                <div class="cases-container">
+                    <!-- Pending Cases -->
+                    <div>
+                        <h3>Pending Cases</h3>
+                        <div class="scrollable-section" id="pending-cases-list">
+                            <!-- Pending cases will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Solved Cases -->
+                    <div>
+                        <h3>Solved Cases</h3>
+                        <div class="scrollable-section" id="solved-cases-list">
+                            <!-- Solved cases will be dynamically populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+    <footer>
+        © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
+    </footer>
+    <script>
+    // Check if Socket.IO is loaded
+    let socket;
+    
+    function connectWebSocket() {
+        socket = new WebSocket("ws://localhost:8000/ws");
+
+        socket.onopen = () => {
+            console.log("✅ WebSocket connected.");
+        };
+
+        socket.onmessage = (event) => {
+            try {
+                let data = JSON.parse(event.data);
+                if (data.event === "case_solved") {
+                    console.log(`📡 Case #${data.data.case_id} solved.`);
+                    loadSolvedCases();  // ✅ Refresh solved cases
+                }
+            } catch (error) {
+                console.error("❌ WebSocket message error:", error);
+            }
+        };
+
+        socket.onclose = (event) => {
+            console.warn("⚠️ WebSocket disconnected. Attempting to reconnect in 5s...");
+            setTimeout(connectWebSocket, 5000);
+        };
+
+        socket.onerror = (error) => {
+            console.error("❌ WebSocket encountered an error:", error);
+        };
+    }
+
+    // ✅ Start WebSocket Connection
+    connectWebSocket();
+
+    // Fetch norms from the backend and populate the logs
+    async function fetchLogs() {
+    try {
+        const response = await fetch('/api/get_norms');
+        if (!response.ok) throw new Error(`Failed to fetch norms: ${response.status}`);
+
+        const norms = await response.json();
+        const logEntries = document.getElementById('log-entries');
+        
+        if (!logEntries) {
+            console.error("❌ Error: 'log-entries' element not found.");
+            return; // Exit function if element doesn't exist
+        }
+
+        logEntries.innerHTML = ''; // Clear existing logs
+        norms.forEach(norm => {
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.innerHTML = `<strong>Norm #${norm.id}:</strong> ${norm.text} - Valid: ${norm.valid}`;
+            logEntries.appendChild(logEntry);
+        });
+
+    } catch (error) {
+        console.error('❌ Error fetching norms:', error);
+    }
+}
+    async function markNormUnconstitutional() {
+                const normId = prompt("Enter the Norm ID to mark as unconstitutional:");
+            if (!normId) return;
+
+            try {
+                const response = await fetch('/api/mark_unconstitutional', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ norm_id: parseInt(normId) })
+                });
+                const result = await response.json();
+
+                if (result.error) {
+                    alert(`Error: ${result.error}`);
+                } else {
+                    alert(`Notification sent to Political System: Norm #${normId} is unconstitutional.`);
+                    document.getElementById('latest-notification').innerText =
+                        `Political System notified about Norm #${normId}: unconstitutional.`;
+                }
+            } catch (error) {
+                console.error('Error marking norm as unconstitutional:', error);
+                alert('An error occurred while marking the norm as unconstitutional.');
+            }
+        }
+
+    async function solveCase(caseId) {
+            try {
+                const response = await fetch(`/api/solve_case/${caseId}`, { method: 'POST' });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.detail}`);
+                    return;
+                }
+
+                const result = await response.json();
+                alert(result.message);
+
+                // Refresh the pending cases list
+                loadPendingCases();
+            } catch (error) {
+                console.error('❌ Error solving case:', error);
+                alert('An error occurred while solving the case.');
+            }
+        }
+
+    // Function to load solved cases
+    async function loadSolvedCases() {
+        try {
+            const response = await fetch('/api/get_solved_cases');
+            const data = await response.json();
+            const solvedList = document.getElementById('solved-cases-list');
+    
+            if (!solvedList) {
+                console.error("❌ Solved cases list element not found!");
+                return;
+            }
+    
+            solvedList.innerHTML = data.solved_cases.map(caseItem => `
+                <div class="case-item solved">
+                    <p>Case #${caseItem.id}: ${caseItem.text}</p>
+                    <small>Resolved at: ${caseItem.resolved_at ? caseItem.resolved_at : "Unknown Time"}</small>
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('❌ Error fetching solved cases:', error);
+        }
+    }
+    
+    // Function to load pending cases
+    async function loadPendingCases() {
+        try {
+            const response = await fetch('/api/get_pending_cases');
+            const data = await response.json();
+
+            console.log("📌 Pending cases API response:", data);
+
+            const casesList = document.getElementById('pending-cases-list');
+            if (!casesList) {
+                console.error("❌ Pending cases list element not found!");
+                return;
+            }
+
+            // ✅ Ensure data contains pending_cases
+            if (!data.pending_cases || !Array.isArray(data.pending_cases)) {
+                console.error("❌ API response is missing 'pending_cases' or is not an array.");
+                casesList.innerHTML = "<p>No pending cases found.</p>";
+                return;
+            }
+
+            casesList.innerHTML = data.pending_cases.map(caseItem => {
+                if (!caseItem.id) return '';  // ✅ Ignore invalid cases
+                return `
+                    <div class="case-item">
+                        <p>Case #${caseItem.id}: ${caseItem.text}</p>
+                        <button onclick="solveCase(${caseItem.id})">Solve Case</button>
+                    </div>
+                `;
+            }).join('');
+        } catch (error) {
+            console.error('❌ Error loading pending cases:', error);
+        }
+    }
+
+    // Function to solve a case
+    async function loadSolvedCases() {
+        try {
+            const response = await fetch('/api/get_solved_cases');
+            const data = await response.json();
+
+            console.log("📌 Solved cases API response:", data);
+
+            const solvedList = document.getElementById('solved-cases-list');
+            if (!solvedList) {
+                console.error("❌ Solved cases list element not found!");
+                return;
+            }
+
+            // ✅ Ensure data contains solved_cases
+            if (!data.solved_cases || !Array.isArray(data.solved_cases)) {
+                console.error("❌ API response is missing 'solved_cases' or is not an array.");
+                solvedList.innerHTML = "<p>No solved cases found.</p>";
+                return;
+            }
+
+            solvedList.innerHTML = data.solved_cases.map(caseItem => `
+                <div class="case-item solved">
+                    <p>Case #${caseItem.id}: ${caseItem.text}</p>
+                    <small>Resolved at: ${caseItem.resolved_at ? caseItem.resolved_at : "Unknown Time"}</small>
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('❌ Error fetching solved cases:', error);
+        }
+    }
+
+    // Function to generate citizen cases
+    async function generateCitizenCases() {
+        try {
+            const response = await fetch('/api/generate_citizen_cases', { method: 'POST' });
+            const data = await response.json();
+
+            console.log("📌 API Response:", data); // ✅ Debugging log
+
+            alert(data.message);
+
+            // ✅ Ensure `data.cases` exists before accessing `length`
+            if (Array.isArray(data.cases) && data.cases.length > 0) {
+                loadPendingCases(); // ✅ Refresh pending cases
+            } else {
+                console.warn("⚠️ No cases returned from API.");
+            }
+        } catch (error) {
+            console.error('❌ Error generating citizen cases:', error);
+            alert('An error occurred while generating citizen cases.');
+        }
+    }
+
+    // Ensure functions run on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchLogs();
+        loadPendingCases();
+        loadSolvedCases();
+    
+        // Refresh cases every 30 seconds
+        setInterval(() => {
+            loadPendingCases();
+            loadSolvedCases();
+        }, 30000);
+    });    
+    </script>
+
+    <style>
+    .cases-section {
+        margin: 20px 0;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .generate-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .generate-button:hover {
+        background-color: #45a049;
+    }
+
+    .cases-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .case-item {
+        background: white;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .case-item.solved {
+        background-color: #f0f8f0;
+    }
+
+    .case-item button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .case-item button:hover {
+        background-color: #45a049;
+    }
+        /*  Make notifications, pending cases, and solved cases scrollable */
+    .scrollable-section {
+        max-height: 300px; /* Adjust height as needed */
+        overflow-y: auto;  /* Enable vertical scrolling */
+        border: 1px solid #ccc; /* Optional: Add a border for visibility */
+        padding: 10px;
+        margin: 10px 0;
+        background-color: #fff; /* Ensure background is clear */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for aesthetic */
+    }
+
+    /* ✅ Improve the scrollbar for a clean look */
+    .scrollable-section::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .scrollable-section::-webkit-scrollbar-thumb {
+        background-color: #007BFF;
+        border-radius: 4px;
+    }
+
+    .scrollable-section::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+        /* Parent container for side-by-side layout */
+    .side-by-side-container {
+        display: flex; /* Use flexbox for horizontal alignment */
+        gap: 20px; /* Add space between the sections */
+    }
+
+    /* Ensure each card takes up equal space */
+    .side-by-side-container .card {
+        flex: 1; /* Make each card grow to fill available space */
+        max-width: 50%; /* Optional: Limit the width */
+    }
+
+    </style>
+</body>
+</html>

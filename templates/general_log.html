@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus - General Log</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+
+</head>
+<body>
+    <!-- Header -->
+    <header>Optimus - General Log</header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="/">Home</a></li>
+            </ul>
+            <h3>Systems</h3>
+            <ul>
+                <li><a href="/judicial">Judicial System</a></li>
+                <li><a href="/political">Political System</a></li>
+                <li><a href="/view_cases">View Cases</a></li>
+                <li><a href="/view_norms">View Norms</a> </li>
+            </ul>
+            <h3>Logs</h3>
+            <ul>
+                <li class="active"><a href="/general_log">General Log</a></li>
+                <li><a href="/general_log#todays-activities">Today's Activities</a></li>
+                <li><a href="/general_log#norm-updates">Norm Updates</a></li>
+                <li><a href="/general_log#case-decisions">Case Decisions</a></li>
+                <li><a href="/statistics">Statistics Dashboard</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <h2>General Log</h2>
+            
+            <!-- Activities Section -->
+            <div class="log-section">
+                <h3>Today's Activities</h3>
+                <div id="activities-log">
+                    <!-- Activities will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Norm Updates Section -->
+            <div class="log-section">
+                <h3>Norm Updates</h3>
+                <div id="norm-updates">
+                    <!-- Norm updates will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Case Decisions Section -->
+            <div class="log-section">
+                <h3>Case Decisions</h3>
+                <div id="case-decisions">
+                    <!-- Case decisions will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Function to format timestamp
+        function formatDate(timestamp) {
+            return new Date(timestamp).toLocaleString();
+        }
+
+        // Fetch and display activities
+        async function fetchActivities() {
+            try {
+                const response = await fetch('/api/get_activities');
+                const activities = await response.json();
+                const activitiesLog = document.getElementById('activities-log');
+                activitiesLog.innerHTML = activities.length
+                    ? activities.map(activity => `<div class="log-entry">${activity}</div>`).join('')
+                    : '<p>No activities recorded today.</p>';
+            } catch (error) {
+                console.error('Error fetching activities:', error);
+            }
+        }
+
+        // Fetch and display norm updates
+        async function fetchNormUpdates() {
+            try {
+                const response = await fetch('/api/get_norms');
+                const norms = await response.json();
+                const normUpdates = document.getElementById('norm-updates');
+                normUpdates.innerHTML = norms.length
+                    ? norms.map(norm => `
+                        <div class="log-entry ${norm.valid ? 'valid' : 'invalid'}">
+                            <strong>Norm #${norm.id}:</strong> ${norm.text}
+                            <br>
+                            <small>Status: ${norm.valid ? 'Valid' : 'Invalid'}</small>
+                        </div>
+                    `).join('')
+                    : '<p>No norm updates available.</p>';
+            } catch (error) {
+                console.error('Error fetching norm updates:', error);
+            }
+        }
+
+        // Fetch and display case decisions
+        async function fetchCaseDecisions() {
+            try {
+                const response = await fetch('/api/get_solved_cases');
+                const data = await response.json();
+                const caseDecisions = document.getElementById('case-decisions');
+                
+                if (data.solved_cases && data.solved_cases.length > 0) {
+                    caseDecisions.innerHTML = data.solved_cases.map(caseItem => `
+                        <div class="log-entry case-decision">
+                            <strong>Case #${caseItem.id}:</strong> ${caseItem.text}
+                            <br>
+                            <small>Resolved: ${formatDate(caseItem.resolved_at)}</small>
+                            <br>
+                            <small>Related to Norm #${caseItem.norm_id}</small>
+                        </div>
+                    `).join('');
+                } else {
+                    caseDecisions.innerHTML = '<p>No case decisions available.</p>';
+                }
+            } catch (error) {
+                console.error('Error fetching case decisions:', error);
+            }
+        }
+
+        // Update all logs periodically
+        function updateLogs() {
+            fetchActivities();
+            fetchNormUpdates();
+            fetchCaseDecisions();
+        }
+
+        // Initial load
+        updateLogs();
+
+        // Refresh every 30 seconds
+        setInterval(updateLogs, 30000);
+    </script>
+
+    <style>
+        .log-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .log-entry {
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+            background: #f9f9f9;
+        }
+
+        .log-entry.invalid {
+            border-left-color: #dc3545;
+        }
+
+        .log-entry.case-decision {
+            border-left-color: #007bff;
+            background: #f8f9fa;
+        }
+
+        .log-entry small {
+            color: #666;
+            display: inline-block;
+            margin-top: 5px;
+        }
+    </style>
+</body>
+</html>

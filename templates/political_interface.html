@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus - Political System Interface</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+    <style>
+        .notification-item {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #ccc;
+        }
+
+        .notification-item.judicial {
+            border-left-color: #dc3545;
+            background-color: #fff3f3;
+        }
+
+        .notification-message {
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .notification-time {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <header>Optimus - Political System Interface</header>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="/">Home</a></li>
+            </ul>
+            <h3>Systems</h3>
+            <ul>
+                <li><a href="/judicial">Judicial System</a></li>
+                <li><strong>Political System</strong></li>
+                <li><a href="/view_cases">View Cases</a></li>
+                <li><a href="/view_norms">View Norms</a></li>
+            </ul>
+            <h3>Analytics</h3>
+            <ul>
+                <li class="has-submenu">
+                    <a href="/general_log">General Log</a>
+                    <ul class="submenu">
+                        <li><a href="/general_log#todays-activities">Today's Activities</a></li>
+                        <li><a href="/general_log#norm-updates">Norm Updates</a></li>
+                        <li><a href="/general_log#case-decisions">Case Decisions</a></li>
+                        <li><a href="/view_cases">View Cases</a></li>
+                        <li><a href="/view_norms">View Norms</a> </li>
+                    </ul>
+                </li>
+                <li><a href="/statistics">Statistics Dashboard</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>Welcome, Political System</h2>
+            <h3>Notifications</h3>
+            <div id="notifications" class="scrollable-section">
+                <!-- Notifications will be dynamically loaded here -->
+                <p>No notifications yet.</p>
+            </div>
+
+            <h3>Log Entries</h3>
+            <div id="log-entries" class="scrollable-section">
+                <!-- Logs will be dynamically loaded here -->
+                <p>No log entries yet.</p>
+            </div>
+
+            <!-- Interaction Area -->
+            <div class="action-buttons">
+                <button onclick="createNewNorm()">Create New Norm</button>
+                <button onclick="reviewJudicialFeedback()">Review Judicial Feedback</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
+    </footer>
+
+    <script>
+    let socket;
+
+    function connectWebSocket() {
+        socket = new WebSocket("ws://localhost:8000/ws");
+
+        socket.onopen = () => {
+            console.log("✅ WebSocket connected successfully.");
+        };
+
+        socket.onmessage = (event) => {
+            try {
+                let data = JSON.parse(event.data);
+
+                if (data.event === "norm_created") {
+                    console.log("📡 Norm created via WebSocket:", data);
+                    fetchLogs(); // 🔄 Refresh logs when a new norm is created
+                }
+
+                if (data.event === "mark_unconstitutional") {
+                    console.log(`📡 Norm marked as unconstitutional via WebSocket: ${data.data.norm_id}`);
+                    fetchNotifications(); // ✅ Refresh notifications
+                }
+            } catch (error) {
+                console.error("❌ WebSocket message error:", error);
+            }
+        };
+
+        socket.onclose = (event) => {
+            console.warn(`⚠️ WebSocket disconnected. Reconnecting in 5s...`);
+            setTimeout(connectWebSocket, 5000);
+        };
+
+        socket.onerror = (error) => {
+            console.error("❌ WebSocket encountered an error:", error);
+        };
+    }
+
+    // ✅ Start WebSocket Connection
+    connectWebSocket();
+
+    // ✅ Fetch norms dynamically
+    async function fetchLogs() {
+        try {
+            const response = await fetch('/api/get_norms');
+            if (!response.ok) throw new Error(`Failed to fetch norms: ${response.status}`);
+
+            const norms = await response.json();
+            const logEntries = document.getElementById('log-entries');
+            if (!logEntries) {
+                console.error("❌ Error: 'log-entries' element not found.");
+                return;
+            }
+
+            logEntries.innerHTML = ''; // Clear existing logs
+            norms.forEach(norm => {
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.innerHTML = `<strong>Norm #${norm.id}:</strong> ${norm.text} - Valid: ${norm.valid}`;
+                logEntries.appendChild(logEntry);
+            });
+        } catch (error) {
+            console.error('Error fetching norms:', error);
+        }
+    }
+
+    // ✅ Fetch notifications dynamically
+    async function fetchNotifications() {
+        try {
+            const response = await fetch('/api/get_notifications');
+            if (!response.ok) throw new Error(`Failed to fetch notifications: ${response.status}`);
+
+            const notifications = await response.json();
+            const notificationsDiv = document.getElementById('notifications');
+            if (!notificationsDiv) {
+                console.error("❌ Error: 'notifications' element not found.");
+                return;
+            }
+
+            // Filter only unconstitutional notifications
+            const unconstitutionalNotifications = notifications.filter(n =>
+                n.type === "mark_unconstitutional" && n.message.includes("marked as unconstitutional")
+            );
+
+            notificationsDiv.innerHTML = unconstitutionalNotifications.length
+                ? unconstitutionalNotifications.map(n => `
+                    <div class="notification-item ${n.type}">
+                        <p class="notification-message">${n.message}</p>
+                        <small class="notification-time">${new Date(n.timestamp).toLocaleString()}</small>
+                    </div>
+                `).join('')
+                : '<p>No unconstitutional norm notifications.</p>';
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+        }
+    }
+
+    // ✅ On page load, fetch data and set up intervals
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchLogs();
+        fetchNotifications();
+        setInterval(fetchLogs, 30000);
+        setInterval(fetchNotifications, 30000);
+    });
+
+    // ✅ Function to create a new norm
+    async function createNewNorm() {
+        const normText = prompt("Enter a description for the new norm:");
+        if (!normText) return;
+
+        try {
+            const response = await fetch('/api/create_norm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: normText })
+            });
+
+            const norm = await response.json();
+            if (norm.error) {
+                alert(`Error: ${norm.error}`);
+            } else {
+                alert(`Created Norm #${norm.id}: ${norm.text}`);
+                fetchLogs();
+            }
+        } catch (error) {
+            console.error('Error creating norm:', error);
+            alert('An error occurred while creating the norm.');
+        }
+    }
+
+    // ✅ Function to review judicial feedback
+    async function reviewJudicialFeedback() {
+        const normId = prompt("Enter the Norm ID to review feedback:");
+        if (!normId) return;
+
+        try {
+            const response = await fetch('/api/check_constitutionality', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ norm_id: parseInt(normId) })
+            });
+
+            const result = await response.json();
+            if (result.error) {
+                alert(`Error: ${result.error}`);
+            } else {
+                alert(`Feedback on Norm #${result.id}: Valid: ${result.valid}`);
+            }
+            fetchLogs();
+        } catch (error) {
+            console.error('Error reviewing feedback:', error);
+            alert('An error occurred while reviewing feedback.');
+        }
+    }
+
+    // ✅ On page load, fetch data and set up intervals
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchLogs();
+        fetchNotifications();
+        setInterval(fetchLogs, 30000);
+        setInterval(fetchNotifications, 30000);
+    });
+
+    </script>
+
+<style>
+    .scrollable-section {
+        max-height: 300px; /* Adjust height as needed */
+        overflow-y: auto;  /* Enable vertical scrolling */
+        border: 1px solid #ccc; /* Optional: Add a border for visibility */
+        padding: 10px;
+        margin: 10px 0;
+        background-color: #fff;
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for aesthetic */
+    }
+
+    /* Style for notifications */
+    .notification-item {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        background-color: #f8f9fa;
+        border-left: 4px solid #ccc;
+    }
+
+    .notification-item.judicial {
+        border-left-color: #dc3545;
+        background-color: #fff3f3;
+    }
+
+    .notification-message {
+        margin: 0;
+        font-size: 1.1em;
+    }
+
+    .notification-time {
+        color: #666;
+        font-size: 0.9em;
+    }
+</style>
+
+</body>
+</html>
