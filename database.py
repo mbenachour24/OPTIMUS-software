@@ -9,7 +9,7 @@ from models import Base, register_models  # Import the register_models function
 load_dotenv()
 
 # Retrieve database URL
-DATABASE_URL = os.getenv("RENDER_DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
     raise ValueError("❌ DATABASE_URL is not set! Check your .env file or environment variables.")
