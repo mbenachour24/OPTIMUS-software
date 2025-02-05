@@ -16,7 +16,6 @@ if not DATABASE_URL:
 
 print(f"DEBUG: DATABASE_URL = {DATABASE_URL}")
 
-# Use asyncpg instead of psycopg2 for async connection
 engine = create_async_engine(DATABASE_URL, echo=True, future=True)
 
 # Register models so Alembic knows about them
