@@ -1,111 +1,119 @@
-Optimus: Rule of Law Interactive System
---
+# Optimus: Rule of Law Interactive System
 
-Optimus is a computational model designed to simulate the institutional logic of the State and the Rule of Law. This project builds on the principles of systems theory, legal philosophy, and agent-based modeling (ABM) to demonstrate how political and judicial systems interact while maintaining coherence through structured decision-making.
+## Overview
 
-This Repository Includes:
+Optimus is a computational model designed to simulate and analyze the interaction between political and judicial systems. It translates theoretical concepts of the Rule of Law into a dynamic, iterative software framework, leveraging system theory and agent-based modeling. The project is built upon an "algorithm of the Rule of Law" based on Niklas Luhmann's systems theory into legal informatics.
 
-- A Flask backend to manage state progression and interactions between the political and judicial systems.
-- A dynamic day progression system, ensuring both systems complete their tasks before advancing to the next day.
-- Fully integrated HTML frontends for the political and judicial systems.
+## Features
 
-Project Highlights
---
-Key Features
+- **Norm Creation & Evaluation**: The political system generates legal norms, which are then assessed by the judicial system for validity and constitutionality.
+- **Case Management**: The judicial system processes legal cases, referencing norms and making constitutional decisions.
+- **Normative Inflation Analysis**: Tracks the creation of norms and the backlog of unresolved cases, using quantitative legal analysis.
+- **Citizen Pressure Modeling**: Simulates public influence on legal cases, introducing real-world complexity into the judicial process.
+- **Web Interface**: Provides interactive dashboards for monitoring judicial and political activities.
+- **WebSocket Support**: Enables real-time updates and notifications.
 
-- Day Progression Logic: Days only advance when both systems have completed their actions, mirroring decision-based games like Werewolf (Loup-Garou).
+## The Four Rules of the Optimus Method
 
-- Political System:
-  	- Create norms (laws).
-	- Send norms to the judicial system for review.
-
-- Judicial System:
-	- Mark norms as unconstitutional.
-	- Provide feedback to the political system.
-
-- Dynamic Notifications and Logs: Real-time updates on actions taken by each system.
-
-The Four Rules of the Optimus Method
---
 This project adheres to Mohamed Ben Achour’s Optimus Framework:
 
-1. Functional Differentiation: Political and judicial systems operate autonomously with their own logic.
-Autopoiesis: Each system self-regulates based on binary distinctions (valid/invalid, constitutional/unconstitutional).
-3. Structural Coupling: Systems interact through stable, interdependent feedback loops.
-4. Societal Orchestration: A central orchestrator (Flask backend) manages iterations and ensures proper synchronization.
+- **Functional Differentiation**: Political and judicial systems operate autonomously with their own logic. 
+- **Autopoiesis**: Each system self-regulates based on binary distinctions (valid/invalid, constitutional/unconstitutional).
+- **Structural Coupling**: Systems interact through stable, interdependent feedback loops.
+- **Societal Orchestration**: A central orchestrator (Flask backend) manages iterations and ensures proper synchronization.
 
-Architecture
---
+## Installation
 
-- Backend: Flask
-- Frontend: HTML/CSS (basic UI for Political and Judicial systems)
-- Simulation: Agent-based model with Python classes for norms, cases, and systems.
-- State Management: Simple in-memory tracking for day progression and completed actions.
+### Prerequisites
 
-How to Run
---
-1. Clone the Repository
+- Python 3.9+
+- PostgreSQL (or SQLite for local testing)
+- FastAPI
+- SQLAlchemy (async support)
+- Jinja2 for templating
 
-2. Set Up the Environment
-Install Python dependencies:
-requirements. txt
+### Setup
 
-3. Run the Flask App
-app.py
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/mbenachour24/OPTIMUS-software.git
+   cd optimus
+   ```
+2. Install dependencies:
+   ```sh
+   pip install -r requirements.txt
+   ```
+3. Configure environment variables:
+   - Copy `.env.example` to `.env` and update database settings.
+4. Initialize the database:
+   ```sh
+   python database.py
+   ```
+5. Start the server:
+   ```sh
+   uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+   ```
 
-4. Access the Interface
+## Project Structure
 
-http://127.0.0.1:5000/
+```
+.
+├── app.py (Main FastAPI application)
+├── database.py (Database connection and initialization)
+├── models
+│   ├── norm.py (Norm model)
+│   ├── case.py (Case model)
+│   ├── political_system.py (Political system logic)
+│   ├── judicial_system.py (Judicial system logic)
+│   ├── citizen_pressure.py (Citizen influence modeling)
+│   └── society.py (Central coordinator)
+├── templates
+│   ├── index.html (Main UI)
+│   ├── judicial_interface.html (Judicial system interface)
+│   ├── political_interface.html (Political system interface)
+│   ├── view_norms.html (Norms management UI)
+│   ├── cases_view.html (Cases management UI)
+│   ├── statistics_dashboard.html (Analytics UI)
+│   ├── general_log.html (System logs UI)
+│   └── judicial_interface.html (Judicial management UI)
+└── static (Frontend assets)
+```
 
-How It Works
---
 
-Day Progression
-1. The political system creates a norm.
-2. The judicial system evaluates the norm:
-Marks it as constitutional/unconstitutional.
-Sends feedback to the political system.
-3. Once both systems have completed their actions, the day progresses.
 
-Endpoints Backend API
---
+The UI provides users with an interactive dashboard where they can:
 
-/api/create_norm - Creates a new norm (Political System).
-/api/check_constitutionality - Marks a norm as constitutional/unconstitutional (Judicial System).
-/api/simulate_day - Advances the day when both systems have completed actions.
-/api/get_norms - Retrieves all norms created so far.
-/api/get_cases - Retrieves all cases reviewed by the judicial system.
+- **Manage Norms**: Users can view, create, and assess the validity of norms within the system.
+- **Track Cases**: The judicial system interface allows users to see pending and resolved cases, as well as make constitutional assessments.
+- **View Real-Time Data**: The statistics dashboard provides insights into normative inflation, case resolution rates, and overall system health. Normative inflation refers to the increasing volume of legal norms relative to the system’s capacity to process and enforce them. The dashboard tracks this phenomenon by analyzing the rate of norm creation versus judicial resolution, identifying backlogs, and assessing systemic efficiency. Users can monitor trends over time, evaluate the impact of new legal norms, and predict potential legal bottlenecks.
+- **Receive Notifications**: Users get real-time updates on norm modifications, judicial decisions, and system events via WebSockets.
+- **Interact with Systems**: The political and judicial interfaces allow respective actions, such as creating norms, generating and solving cases.
+- **Log System Events**: The general log captures all system interactions, providing a chronological record of changes and activities.
 
-Frontend Pages
---
-Political System: Allows users to create norms and review feedback.
-Judicial System: Allows users to evaluate norms and send notifications.
+## API Endpoints
 
-Future Improvements
---
-Expand the society orchestration to simulate more complex systems and feedback loops.
-Add user authentication for role-based access (e.g., Political or Judicial actors).
-Implement persistent state storage (e.g., database) for norms and cases.
-Introduce more dynamic frontends with ReactJS or similar frameworks.
+### Norm Management
 
-Contributing
---
-To contribute to this project:
-- Fork the repository instead of cloning it directly.
-- Make your changes in the forked version.
-- Submit a Pull Request to propose your changes to the original repository.
+- **Create a norm**: `POST /api/create_norm`
+- **Fetch all norms**: `GET /api/get_norms`
+- **Validate a norm's constitutionality**: `POST /api/check_constitutionality`
+- **Mark norm as unconstitutional**: `POST /api/mark_unconstitutional`
 
-Credits
---
-	- Author: Mohamed Ben Achour
-	- Email: mbenachour24@gmail.com	
- 	- Blog: Imwerdensein.wordpress.com
+### Case Management
 
-Following this workflow ensures that all contributions are tracked and respects the collaborative nature of open-source work. Thank you for helping to maintain a transparent and community-driven project!
+- **Fetch all cases**: `GET /api/get_all_cases`
+- **Generate citizen cases**: `POST /api/generate_citizen_cases`
+- **Solve a case**: `POST /api/solve_case/{case_id}`
 
-Explore, expand, and contribute to Coding the State with Optimus. 🚀
+### Analytics
 
-License
---
-This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).
-Non-commercial use only. For commercial licensing inquiries, contact mbenachour24@gmail.com
+- **Get system statistics**: `GET /api/get_statistics`
+- **Retrieve normative inflation metrics**: `GET /api/get_normative_inflation`
+
+## License
+
+This project is licensed under **CC BY-NC 4.0** (Non-Commercial Use Only). See `LICENSE` for details.
+
+## Contact
+
+For inquiries, reach out to the project author at [mbenachour24@gmail.com](mailto\:mbenachour24@gmail.com)
