@@ -2,10 +2,7 @@
 __pycache__/
 *.py[cod]
 .vercel
-<<<<<<< HEAD
-=======
 echo ".env" >> .gitignore
 postgre.md
 .env
 .venv/
->>>>>>> FastAPIversion
