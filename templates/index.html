@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Optimus - Rule of Law Interactive System</title>
     <link rel="stylesheet" href="static/styles.css">
+<<<<<<< HEAD
+=======
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+
+>>>>>>> FastAPIversion
 </head>
 <body>
     <!-- Header -->
@@ -22,6 +27,11 @@
             <ul>
                 <li><a href="/judicial">Judicial System</a></li>
                 <li><a href="/political">Political System</a></li>
+<<<<<<< HEAD
+=======
+                <li><a href="/view_cases">View Cases</a></li>
+                <li><a href="/view_norms">View Norms</a> </li>
+>>>>>>> FastAPIversion
             </ul>
             <h3>Analytics</h3>
             <ul>
@@ -115,11 +125,26 @@
                 `;
 
                 // Fetch case stats
+<<<<<<< HEAD
                 const casesResponse = await fetch('/api/get_solved_cases');
                 const cases = await casesResponse.json();
                 document.getElementById('case-stats').innerHTML = `
                     <p>Total Cases: ${cases.total_solved}</p>
                     <p>Recently Resolved: ${cases.solved_cases.slice(-5).length}</p>
+=======
+                // Fetch all cases from a relevant endpoint (if such an endpoint exists)
+                const allCasesResponse = await fetch('/api/get_all_cases');
+                const allCases = await allCasesResponse.json(); // This should return an array of all cases
+
+                // Fetch solved cases
+                const solvedCasesResponse = await fetch('/api/get_solved_cases');
+                const solvedCases = await solvedCasesResponse.json(); // Assumes "solved_cases" is an array
+
+                // Populate stats in the DOM
+                document.getElementById('case-stats').innerHTML = `
+                    <p>Total Cases: ${allCases.total}</p>
+                    <p>Recently Resolved: ${solvedCases.solved_cases.slice(-5).length}</p>
+>>>>>>> FastAPIversion
                 `;
             } catch (error) {
                 console.error('Error fetching quick stats:', error);

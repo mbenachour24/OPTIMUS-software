@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus - View Cases</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+
+</head>
+<body>
+    <header>Optimus - Case Management</header>
+    <div class="container">
+        <!-- Sidebar for Navigation -->
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="/">Home</a></li>
+            </ul>
+            <h3>Systems</h3>
+            <ul>
+                <li><a href="/judicial">Judicial System</a></li>
+                <li><a href="/political">Political System</a></li>
+                <li><a href="/view_norms">View Norms</a></li>
+                <li><strong>View Cases</strong></li>
+            </ul>
+            <h3>Analytics</h3>
+            <ul>
+                <li><a href="/general_log">General Log</a></li>
+                <li><a href="/statistics">Statistics Dashboard</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>Case Management</h2>
+
+            <!-- Case Filters -->
+            <div class="filters">
+                <button onclick="fetchCases('all')" id="filter-all" class="active">All</button>
+                <button onclick="fetchCases('pending')" id="filter-pending">Pending</button>
+                <button onclick="fetchCases('solved')" id="filter-solved">Solved</button>
+            </div>
+
+            <!-- Cases Table -->
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Text</th>
+                        <th>Norm ID</th>
+                        <th>Constitutional</th>
+                        <th>Status</th>
+                        <th>Resolved At</th>
+                    </tr>
+                </thead>
+                <tbody id="cases-list">
+                    <!-- Cases will be dynamically loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
+    </footer>
+
+    <script>
+    async function fetchCases(filter = "all") {
+        let apiUrl;
+
+        // Déterminer l'URL de l'API en fonction du filtre
+        if (filter === "pending") {
+            apiUrl = '/api/get_pending_cases';
+        } else if (filter === "solved") {
+            apiUrl = '/api/get_solved_cases';
+        } else {
+            apiUrl = '/api/get_all_cases';
+        }
+
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch cases: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const casesList = document.getElementById('cases-list');
+            const tableHeader = document.querySelector('.styled-table thead tr');
+
+            if (!casesList || !tableHeader) {
+                console.error('Error: Table elements not found in the DOM.');
+                return;
+            }
+
+            // Clear the table content
+            casesList.innerHTML = '';
+
+            // Dynamically adjust the table header based on the filter
+            if (filter === "all") {
+                tableHeader.innerHTML = `
+                    <th>ID</th>
+                    <th>Text</th>
+                    <th>Norm ID</th>
+                    <th>Constitutional</th>
+                    <th>Status</th>
+                    <th>Resolved At</th>
+                `;
+            } else {
+                tableHeader.innerHTML = `
+                    <th>ID</th>
+                    <th>Text</th>
+                    <th>Norm ID</th>
+                    <th>Constitutional</th>
+                    <th>Resolved At</th>
+                `;
+            }
+
+            // Sélectionner les cas basés sur le filtre
+            const cases = filter === "pending"
+                ? data.pending_cases
+                : (filter === "solved" ? data.solved_cases : data.cases || []);
+
+            if (!cases || cases.length === 0) {
+                casesList.innerHTML = '<tr><td colspan="6">No cases found.</td></tr>';
+                return;
+            }
+
+            // Populate the table with cases
+            cases.forEach(caseItem => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${caseItem.id || 'N/A'}</td>
+                    <td>${caseItem.text || 'N/A'}</td>
+                    <td>${caseItem.norm_id || 'N/A'}</td>
+                    <td>${caseItem.constitutional ? 'Yes' : 'No'}</td>
+                    ${
+                        filter === "all"
+                            ? `<td>${caseItem.status || 'N/A'}</td><td>${caseItem.resolved_at || 'Pending'}</td>`
+                            : `<td>${caseItem.resolved_at || 'Pending'}</td>`
+                    }
+                `;
+                casesList.appendChild(row);
+            });
+
+            // Highlight selected filter
+            document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`filter-${filter}`).classList.add('active');
+
+        } catch (error) {
+            console.error('Error fetching cases:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchCases('all'); // Fetch all cases by default
+    });
+    </script>
+
+    <style>
+        .filters {
+            margin-bottom: 20px;
+        }
+
+        .filters button {
+            padding: 10px;
+            margin: 5px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .filters button:hover {
+            background-color: var(--primary-color-dark);
+        }
+
+        .filters button.active {
+            background-color: var(--highlight-color);
+            color: black;
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+            text-align: left;
+        }
+
+        .styled-table th, .styled-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .styled-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .styled-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .styled-table tr:hover {
+            background-color: var(--secondary-color);
+        }
+    </style>
+</body>
+</html>
