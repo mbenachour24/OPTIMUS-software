@@ -6,12 +6,6 @@
     <title>Optimus - Statistics Dashboard</title>
     <link rel="stylesheet" href="static/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<<<<<<< HEAD
-    <script src="https://cdn.jsdelivr.net/npm/simple-statistics@7.8.3/dist/simple-statistics.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.js"></script>
-</head>
-=======
     <link rel="icon" href="static/favicon.ico" type="image/x-icon">
     
         <!--  MathJax Configuration -->
@@ -30,7 +24,6 @@
     <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
     
->>>>>>> FastAPIversion
 <body>
     <header>Optimus - Statistics Dashboard</header>
     <div class="container">
@@ -39,18 +32,10 @@
             <h3>Navigation</h3>
             <ul>
                 <li><a href="/">Home</a></li>
-<<<<<<< HEAD
-            </ul>
-            <h3>Systems</h3>
-            <ul>
-                <li><a href="/judicial">Judicial System</a></li>
-                <li><a href="/political">Political System</a></li>
-=======
                 <li><a href="/judicial">Judicial System</a></li>
                 <li><a href="/political">Political System</a></li>
                 <li><a href="/view_cases">View Cases</a></li>
                 <li><a href="/view_norms">View Norms</a></li>
->>>>>>> FastAPIversion
             </ul>
             <h3>Analytics</h3>
             <ul>
@@ -62,22 +47,13 @@
                         <li><a href="/general_log#case-decisions">Case Decisions</a></li>
                     </ul>
                 </li>
-<<<<<<< HEAD
-                <li><strong>Statistics Dashboard</strong></li>
-=======
                 <li><span class="current-page">Statistics Dashboard</span></li>
->>>>>>> FastAPIversion
             </ul>
         </div>
 
         <!-- Main Content -->
         <div class="main-content">
             <h2>System Statistics</h2>
-<<<<<<< HEAD
-            
-=======
-
->>>>>>> FastAPIversion
             <!-- Summary Cards -->
             <div class="stats-summary">
                 <div class="stat-card">
@@ -99,22 +75,11 @@
                 <div class="stat-card">
                     <h3>System Health</h3>
                     <div class="stat-numbers">
-<<<<<<< HEAD
-                        <p>Case Resolution Rate: <span id="resolution-rate">0%</span></p>
-                        <p>Avg Resolution Time: <span id="avg-resolution-time">0h</span></p>
-=======
                         <p>Resolution Rate: <span id="resolution-rate">0%</span></p>
->>>>>>> FastAPIversion
                     </div>
                 </div>
             </div>
 
-<<<<<<< HEAD
-            <!-- Charts Section -->
-            <div class="charts-container">
-                <div class="chart-box">
-                    <h3>Cases by Type</h3>
-=======
             <div class="stats-summary">
                 <div class="stat-card">
                     <h3>Normative Inflation</h3>
@@ -182,7 +147,6 @@
             <div class="charts-container">
                 <div class="chart-box">
                     <h3>Cases Chart</h3>
->>>>>>> FastAPIversion
                     <canvas id="caseTypesChart"></canvas>
                 </div>
                 <div class="chart-box">
@@ -190,200 +154,13 @@
                     <canvas id="resolutionTimelineChart"></canvas>
                 </div>
                 <div class="chart-box">
-<<<<<<< HEAD
-                    <h3>System Correlations</h3>
-                    <div class="correlation-stats">
-                        <p>Norms-Cases Correlation: <span id="norm-case-correlation">Loading...</span></p>
-                        <p>Resolution Rate: <span id="resolution-rate-trend">Loading...</span></p>
-                    </div>
-                </div>
-                <div class="chart-box">
                     <h3>System Trends</h3>
                     <canvas id="trendsChart"></canvas>
                 </div>
-                <div class="chart-box">
-                    <h3>System Performance Metrics</h3>
-                    <div class="advanced-stats">
-                        <p>Normative Inflation: <span id="normative-inflation">Loading...</span></p>
-                        <p>Temporal Gap: <span id="temporal-gap">Loading...</span></p>
-                        <p>System Efficiency: <span id="system-efficiency">Loading...</span></p>
-                    </div>
-                </div>
-                <div class="chart-box">
-                    <h3>Correlation Analysis</h3>
-                    <canvas id="correlationChart"></canvas>
-                </div>
-                <div class="chart-box">
-                    <h3>Time Series Analysis</h3>
-                    <canvas id="timeSeriesChart"></canvas>
-                </div>
-            </div>
-
-            <!-- Detailed Statistics -->
-            <div class="detailed-stats">
-                <h3>Recent Activity</h3>
-                <div class="activity-timeline" id="recent-activity">
-                    <!-- Will be populated by JavaScript -->
-                </div>
-=======
-                    <h3>System Trends</h3>
-                    <canvas id="trendsChart"></canvas>
-                </div>
->>>>>>> FastAPIversion
             </div>
         </div>
     </div>
 
-<<<<<<< HEAD
-    <style>
-    .stats-summary {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin: 20px 0;
-    }
-
-    .stat-card {
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .stat-numbers {
-        font-size: 1.2em;
-    }
-
-    .charts-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        gap: 20px;
-        margin: 20px 0;
-    }
-
-    .chart-box {
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .activity-timeline {
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin-top: 20px;
-    }
-
-    .activity-item {
-        padding: 10px;
-        border-left: 3px solid #4CAF50;
-        margin: 10px 0;
-        background: #f9f9f9;
-    }
-
-    .correlation-stats {
-        padding: 15px;
-        background: #f8f9fa;
-        border-radius: 8px;
-        margin-top: 10px;
-    }
-
-    .correlation-stats p {
-        margin: 5px 0;
-        font-size: 1.1em;
-    }
-
-    .correlation-stats span {
-        font-weight: bold;
-        color: #4CAF50;
-    }
-    </style>
-
-    <script>
-    // Function to update statistics
-    async function updateStatistics() {
-        try {
-            // Fetch cases statistics
-            const pendingResponse = await fetch('/api/get_pending_cases');
-            const solvedResponse = await fetch('/api/get_solved_cases');
-            const pendingData = await pendingResponse.json();
-            const solvedData = await solvedResponse.json();
-
-            // Update case counts
-            document.getElementById('pending-count').textContent = pendingData.total_pending;
-            document.getElementById('solved-count').textContent = solvedData.total_solved;
-            document.getElementById('total-cases').textContent = 
-                pendingData.total_pending + solvedData.total_solved;
-
-            // Calculate and update resolution rate
-            const totalCases = pendingData.total_pending + solvedData.total_solved;
-            const resolutionRate = totalCases ? 
-                ((solvedData.total_solved / totalCases) * 100).toFixed(1) : 0;
-            document.getElementById('resolution-rate').textContent = `${resolutionRate}%`;
-
-            // Fetch norms statistics
-            const normsResponse = await fetch('/api/get_norms');
-            const norms = await normsResponse.json();
-            
-            // Update norms counts
-            const validNorms = norms.filter(norm => norm.valid).length;
-            const invalidNorms = norms.filter(norm => !norm.valid).length;
-            document.getElementById('valid-norms').textContent = validNorms;
-            document.getElementById('invalid-norms').textContent = invalidNorms;
-            document.getElementById('total-norms').textContent = norms.length;
-
-            // Update charts
-            updateCaseTypesChart(pendingData.pending_cases, solvedData.solved_cases);
-            updateResolutionTimeline(solvedData.solved_cases);
-            
-            // Calculate correlations
-            await calculateCorrelations([norms], [solvedData.solved_cases]);
-
-            // Update trends chart
-            await updateTrendsChart([norms], [solvedData.solved_cases]);
-
-        } catch (error) {
-            console.error('Error updating statistics:', error);
-        }
-    }
-
-    // Function to update the case types chart
-    function updateCaseTypesChart(pendingCases, solvedCases) {
-        const ctx = document.getElementById('caseTypesChart').getContext('2d');
-        
-        // Count cases by type
-        const caseTypes = {
-            'Environmental Concern': 0,
-            'Civil Rights Issue': 0,
-            'Labor Dispute': 0,
-            'Consumer Protection': 0,
-            'Public Safety Concern': 0
-        };
-
-        [...pendingCases, ...solvedCases].forEach(caseItem => {
-            Object.keys(caseTypes).forEach(type => {
-                if (caseItem.text.includes(type)) {
-                    caseTypes[type]++;
-                }
-            });
-        });
-
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: Object.keys(caseTypes),
-                datasets: [{
-                    data: Object.values(caseTypes),
-                    backgroundColor: [
-                        '#FF6384',
-                        '#36A2EB',
-                        '#FFCE56',
-                        '#4BC0C0',
-                        '#9966FF'
-                    ]
-=======
     <footer>
         © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
     </footer>
@@ -441,52 +218,10 @@
                 datasets: [{
                     data: [pending, solved],
                     backgroundColor: ['#FFCE56', '#36A2EB']
->>>>>>> FastAPIversion
                 }]
             }
         });
     }
-<<<<<<< HEAD
-
-    // Function to update the resolution timeline
-    function updateResolutionTimeline(solvedCases) {
-        const ctx = document.getElementById('resolutionTimelineChart').getContext('2d');
-        
-        // Clear any existing chart
-        if (window.resolutionChart) {
-            window.resolutionChart.destroy();
-        }
-        
-        // Group cases by date
-        const timelineData = {};
-        const today = new Date();
-        const last7Days = [...Array(7)].map((_, i) => {
-            const date = new Date(today);
-            date.setDate(date.getDate() - i);
-            return date.toISOString().split('T')[0];
-        }).reverse();
-
-        // Initialize all dates with 0
-        last7Days.forEach(date => {
-            timelineData[date] = 0;
-        });
-
-        // Count cases for each date
-        solvedCases.forEach(caseItem => {
-            const date = caseItem.resolved_at.split('T')[0];
-            if (timelineData.hasOwnProperty(date)) {
-                timelineData[date]++;
-            }
-        });
-
-        window.resolutionChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: last7Days,
-                datasets: [{
-                    label: 'Cases Resolved',
-                    data: last7Days.map(date => timelineData[date] || 0),
-=======
     
     function updateResolutionTimeline(solvedCases) {
         const ctx = document.getElementById('resolutionTimelineChart').getContext('2d');
@@ -519,7 +254,6 @@
                 datasets: [{
                     label: 'Cases Resolved Over Time',
                     data: resolvedCounts,
->>>>>>> FastAPIversion
                     borderColor: '#4CAF50',
                     backgroundColor: 'rgba(76, 175, 80, 0.1)',
                     tension: 0.1,
@@ -527,35 +261,6 @@
                 }]
             },
             options: {
-<<<<<<< HEAD
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            title: function(context) {
-                                return `Date: ${context[0].label}`;
-                            },
-                            label: function(context) {
-                                return `Cases Resolved: ${context.raw}`;
-                            }
-=======
                 responsive: true,
                 scales: {
                     y: {
@@ -572,57 +277,12 @@
                         callbacks: {
                             title: context => `Date: ${context[0].label}`,
                             label: context => `Cases Resolved: ${context.raw}`
->>>>>>> FastAPIversion
                         }
                     }
                 }
             }
         });
     }
-<<<<<<< HEAD
-
-    // Add these new functions
-    async function calculateCorrelations(normsData, casesData) {
-        // Use the lengths directly
-        const normCounts = [normsData[0].length];
-        const caseCounts = [casesData[0].length];
-        
-        // Calculate correlation using simple-statistics
-        const correlation = normCounts[0] && caseCounts[0] ? 
-            (normCounts[0] / (normCounts[0] + caseCounts[0])).toFixed(2) : 0;
-        
-        document.getElementById('norm-case-correlation').textContent = correlation;
-        document.getElementById('resolution-rate-trend').textContent = 
-            `${((caseCounts[0] / (normCounts[0] || 1)) * 100).toFixed(1)}%`;
-    }
-
-    async function updateTrendsChart(normsData, casesData) {
-        const ctx = document.getElementById('trendsChart').getContext('2d');
-        
-        // Clear existing chart
-        if (window.trendsChart) {
-            window.trendsChart.destroy();
-        }
-
-        const timeLabels = ['Current State'];
-
-        window.trendsChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: timeLabels,
-                datasets: [
-                    {
-                        label: 'Norms Created',
-                        data: [normsData[0].length],
-                        borderColor: '#4CAF50',
-                        tension: 0.1
-                    },
-                    {
-                        label: 'Cases Processed',
-                        data: [casesData[0].length],
-                        borderColor: '#2196F3',
-                        tension: 0.1
-=======
     
     let trendsChartInstance;
     
@@ -652,7 +312,6 @@
                         label: 'Pending Cases',
                         data: [pendingCases],
                         backgroundColor: '#FFCE56'
->>>>>>> FastAPIversion
                     }
                 ]
             },
@@ -662,30 +321,10 @@
                     y: {
                         beginAtZero: true
                     }
-<<<<<<< HEAD
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'System Activity Over Time'
-                    }
-=======
->>>>>>> FastAPIversion
                 }
             }
         });
     }
-<<<<<<< HEAD
-
-    // Update statistics every 30 seconds
-    document.addEventListener('DOMContentLoaded', () => {
-        updateStatistics();
-        setInterval(updateStatistics, 30000);
-    });
-    </script>
-</body>
-</html> 
-=======
     
     function openDialog() {
         const dialog = document.getElementById('math-dialog');
@@ -789,4 +428,3 @@
     </style>
 </body>
 </html>
->>>>>>> FastAPIversion

@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Optimus - Judicial System Interface</title>
     <link rel="stylesheet" href="static/styles.css">
-<<<<<<< HEAD
-=======
     <link rel="icon" href="static/favicon.ico" type="image/x-icon">
     <style>
         .cases-container {
@@ -27,7 +25,6 @@
             flex: 1;
         }
     </style>
->>>>>>> FastAPIversion
 </head>
 <body>
     <header>Optimus - Judicial System Interface</header>
@@ -42,11 +39,8 @@
             <ul>
                 <li><strong>Judicial System</strong></li>
                 <li><a href="/political">Political System</a></li>
-<<<<<<< HEAD
-=======
                 <li><a href="/view_cases">View Cases</a></li>
                 <li><a href="/view_norms">View Norms</a></li>
->>>>>>> FastAPIversion
             </ul>
             <h3>Analytics</h3>
             <ul>
@@ -66,11 +60,6 @@
         <div class="main-content">
             <h2>Welcome, Judicial System</h2>
             <div class="notification">
-<<<<<<< HEAD
-                <strong>Notification:</strong> <span id="latest-notification">No notifications yet.</span>
-            </div>
-            <div id="log-entries"></div>
-=======
                 <strong>Notification:</strong> 
                 <span id="latest-notification">No notifications yet.</span>
             </div>
@@ -82,7 +71,6 @@
                     <!-- Logs will be dynamically populated here -->
                 </div>
             </div>
->>>>>>> FastAPIversion
 
             <!-- Interaction Area -->
             <div class="action-buttons">
@@ -98,19 +86,6 @@
                 </div>
                 
                 <div class="cases-container">
-<<<<<<< HEAD
-                    <div class="pending-cases">
-                        <h3>Pending Cases</h3>
-                        <div id="pending-cases-list">
-                            <!-- Cases will be populated here -->
-                        </div>
-                    </div>
-
-                    <div class="solved-cases">
-                        <h3>Solved Cases</h3>
-                        <div id="solved-cases-list">
-                            <!-- Solved cases will be populated here -->
-=======
                     <!-- Pending Cases -->
                     <div>
                         <h3>Pending Cases</h3>
@@ -124,152 +99,17 @@
                         <h3>Solved Cases</h3>
                         <div class="scrollable-section" id="solved-cases-list">
                             <!-- Solved cases will be dynamically populated here -->
->>>>>>> FastAPIversion
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-=======
 </body>
->>>>>>> FastAPIversion
 
     <footer>
         © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
     </footer>
-<<<<<<< HEAD
-
-    <script>
-        // Fetch norms from the backend and populate the logs
-        async function fetchLogs() {
-            try {
-                const response = await fetch('/api/get_norms');
-                const norms = await response.json();
-                const logEntries = document.getElementById('log-entries');
-                logEntries.innerHTML = ''; // Clear existing logs
-                norms.forEach(norm => {
-                    const logEntry = document.createElement('div');
-                    logEntry.className = 'log-entry';
-                    logEntry.innerHTML = `<strong>Norm #${norm.id}:</strong> ${norm.text} - Valid: ${norm.valid}`;
-                    logEntries.appendChild(logEntry);
-                });
-            } catch (error) {
-                console.error('Error fetching logs:', error);
-            }
-        }
-
-        // Mark norm as unconstitutional
-        async function markNormUnconstitutional() {
-            const normId = prompt("Enter the Norm ID to mark as unconstitutional:");
-        if (!normId) return;
-
-        try {
-            const response = await fetch('/api/mark_unconstitutional', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ norm_id: parseInt(normId) })
-            });
-            const result = await response.json();
-
-            if (result.error) {
-                alert(`Error: ${result.error}`);
-            } else {
-                alert(`Notification sent to Political System: Norm #${result.id} is unconstitutional.`);
-                document.getElementById('latest-notification').innerText =
-                    `Political System notified about Norm #${result.id}: unconstitutional.`;
-            }
-        } catch (error) {
-            console.error('Error marking norm as unconstitutional:', error);
-            alert('An error occurred while marking the norm as unconstitutional.');
-        }
-    }
-
-        // Request reform (placeholder)
-        function requestReform() {
-            alert("Reform requested. This feature is under construction.");
-        }
-
-        // On page load
-        fetchLogs();
-
-        function loadPendingCases() {
-            fetch('/api/get_pending_cases')
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Pending cases data:', data);
-                    const casesList = document.getElementById('pending-cases-list');
-                    casesList.innerHTML = data.pending_cases.map(caseItem => `
-                        <div class="case-item">
-                            <p>Case #${caseItem.id}: ${caseItem.text}</p>
-                            <button onclick="solveCase(${caseItem.id})">Solve Case</button>
-                        </div>
-                    `).join('');
-                })
-                .catch(error => console.error('Error loading pending cases:', error));
-        }
-
-        function loadSolvedCases() {
-            fetch('/api/get_solved_cases')
-                .then(response => response.json())
-                .then(data => {
-                    const solvedList = document.getElementById('solved-cases-list');
-                    solvedList.innerHTML = data.solved_cases.map(caseItem => `
-                        <div class="case-item solved">
-                            <p>Case #${caseItem.id}: ${caseItem.text}</p>
-                            <small>Resolved at: ${caseItem.resolved_at}</small>
-                        </div>
-                    `).join('');
-                });
-        }
-
-        function solveCase(caseId) {
-            fetch(`/api/solve_case/${caseId}`, { method: 'POST' })
-                .then(response => response.json())
-                .then(data => {
-                    loadPendingCases();
-                    loadSolvedCases();
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        // Add this function to generate citizen cases
-        function generateCitizenCases() {
-            fetch('/api/generate_citizen_cases', {
-                method: 'POST'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message === "No valid norm to generate case.") {
-                    // Display the message when no valid norm is available
-                    alert(data.message);
-                    document.getElementById('latest-notification').innerText = data.message; // Update notification section
-                } else {
-                    // Display the success message and refresh pending cases
-                    alert(data.message);
-                    loadPendingCases();  // Refresh the pending cases list
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while generating citizen cases.');
-            });
-}
-
-        // Make sure these functions are called when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchLogs();
-            loadPendingCases();
-            loadSolvedCases();
-            
-            // Refresh cases every 30 seconds
-            setInterval(() => {
-                loadPendingCases();
-                loadSolvedCases();
-            }, 30000);
-        });
-=======
     <script>
     // Check if Socket.IO is loaded
     let socket;
@@ -502,7 +342,6 @@
             loadSolvedCases();
         }, 30000);
     });    
->>>>>>> FastAPIversion
     </script>
 
     <style>
@@ -561,8 +400,6 @@
     .case-item button:hover {
         background-color: #45a049;
     }
-<<<<<<< HEAD
-=======
         /*  Make notifications, pending cases, and solved cases scrollable */
     .scrollable-section {
         max-height: 300px; /* Adjust height as needed */
@@ -600,7 +437,6 @@
         max-width: 50%; /* Optional: Limit the width */
     }
 
->>>>>>> FastAPIversion
     </style>
 </body>
 </html>
