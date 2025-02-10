@@ -32,6 +32,9 @@ from fastapi_socketio import SocketManager
 class NormCreate(BaseModel):
     text: Optional[str] = None
 
+class NormIdRequest(BaseModel):
+    norm_id: int
+
 class NormResponse(BaseModel):
     id: int
     text: str
@@ -352,26 +355,26 @@ async def get_norms(db: AsyncSession = Depends(get_db)):
         logging.error(f"Error fetching norms: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve norms.")
 
+
 @app.post("/api/check_constitutionality")
-async def check_constitutionality(norm_id: int, db: AsyncSession = Depends(get_db)):
+async def check_constitutionality(request: NormIdRequest, db: AsyncSession = Depends(get_db)):
     try:
-        result = await db.execute(select(Norm).where(Norm.id == norm_id))  # ✅ Correct async query
-        norm = result.scalars().first()  # ✅ Extract the norm object
+        result = await db.execute(select(Norm).where(Norm.id == request.norm_id))
+        norm = result.scalars().first()
 
         if not norm:
-            raise HTTPException(status_code=404, detail=f"Norm with ID {norm_id} not found")
-        
+            raise HTTPException(status_code=404, detail=f"Norm with ID {request.norm_id} not found")
+
         return {
             "id": norm.id,
             "text": norm.text,
             "valid": norm.valid,
-            "complexity": norm.complexity,
-            "constitutional": norm.constitutional
+            "complexity": norm.complexity
         }
     except Exception as e:
         logging.error(f"Error checking constitutionality: {e}")
         raise HTTPException(status_code=500, detail="Failed to check constitutionality.")
-    
+
 @app.post("/api/simulate_day")
 async def simulate_day():
     try:
