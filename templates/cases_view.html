@@ -216,7 +216,7 @@
                     <th>ID</th>
                     <th>Text</th>
                     <th>Norm ID</th>
-                    <th>Constitutional</th>
+                    <th>Created At</th>
                     <th>Status</th>
                     <th>Resolved At</th>
                 </tr>
@@ -268,7 +268,7 @@
                         <th>ID</th>
                         <th>Text</th>
                         <th>Norm ID</th>
-                        <th>Constitutional</th>
+                        <th>Created At</th>
                         <th>Status</th>
                         <th>Resolved At</th>
                     `;
@@ -277,7 +277,7 @@
                         <th>ID</th>
                         <th>Text</th>
                         <th>Norm ID</th>
-                        <th>Constitutional</th>
+                        <th>Created At</th>
                         <th>Resolved At</th>
                     `;
                 }
@@ -299,7 +299,8 @@
                         <td>${caseItem.id || 'N/A'}</td>
                         <td>${caseItem.text || 'N/A'}</td>
                         <td>${caseItem.norm_id || 'N/A'}</td>
-                        <td>${caseItem.constitutional ? 'Yes' : 'No'}</td>
+                        <td>${caseItem.created_at ? new Date(caseItem.created_at).toLocaleString() : 'N/A'}</td>  
+
                         ${
                             filter === "all"
                                 ? `<td>${caseItem.status || 'N/A'}</td><td>${caseItem.resolved_at || 'Pending'}</td>`

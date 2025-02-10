@@ -7,7 +7,7 @@ import os
 import random
 import logging
 import asyncio
-from fastapi import FastAPI, HTTPException, WebSocket, Request
+from fastapi import FastAPI, HTTPException, WebSocket, Request, Query
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -456,6 +456,7 @@ async def get_all_cases(db: AsyncSession = Depends(get_db)):
             "norm_id": case.norm.id if case.norm else None,
             "constitutional": case.constitutional,
             "status": case.status,
+            "created_at": case.created_at.isoformat() if case.created_at else None,
             "resolved_at": case.resolved_at.isoformat() if case.resolved_at else None
         } for case in cases]
         
@@ -546,7 +547,7 @@ async def mark_unconstitutional(request: NormIDRequest, db: AsyncSession = Depen
         raise HTTPException(status_code=500, detail="Failed to mark norm as unconstitutional.")
 
 @app.post("/api/solve_case/{case_id}")
-async def solve_case(case_id: int, db: AsyncSession = Depends(get_db)):
+async def solve_case(case_id: int,decision: str = Query(..., regex="^(Accepted|Rejected)$"), db: AsyncSession = Depends(get_db)):
     try:
         # ✅ Use select() instead of db.get() for async compatibility
         result = await db.execute(select(Case).where(Case.id == case_id))
@@ -558,6 +559,8 @@ async def solve_case(case_id: int, db: AsyncSession = Depends(get_db)):
         # ✅ Update and commit changes
         case.status = "solved"
         case.resolved_at = datetime.utcnow()  # ✅ Use UTC timestamp
+        case.decision = decision
+
         await db.commit()
         await db.refresh(case)  # ✅ Ensure session is updated
 
@@ -573,9 +576,9 @@ async def solve_case(case_id: int, db: AsyncSession = Depends(get_db)):
         # ✅ Ensure socket manager exists before emitting event
         socket_manager = globals().get("socket_manager")
         if socket_manager:
-            await socket_manager.emit('case_solved', {'case_id': case.id})
+            await socket_manager.emit('case_solved', {'case_id': case.id, 'decision': decision})
 
-        return {"message": f"Case with ID {case_id} solved"}
+        return {"message": f"Case {case_id} solved as {decision}"}
     except Exception as e:
         try:
             await db.rollback()  # ✅ Prevent partial commits

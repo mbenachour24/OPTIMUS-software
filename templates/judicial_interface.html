@@ -387,9 +387,9 @@
             }
         }
 
-        async function solveCase(caseId) {
+        async function solveCase(caseId, decision) {
             try {
-                const response = await fetch(`/api/solve_case/${caseId}`, { method: 'POST' });
+                const response = await fetch(`/api/solve_case/${caseId}?decision=${decision}`, { method: 'POST' });
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -399,8 +399,8 @@
 
                 const result = await response.json();
                 alert(result.message);
-
-                loadPendingCases();
+                loadPendingCases(); // Refresh pending cases
+                loadSolvedCases();  // Refresh solved cases
             } catch (error) {
                 console.error('❌ Error solving case:', error);
                 alert('An error occurred while solving the case.');
@@ -419,10 +419,11 @@
                 }
 
                 solvedList.innerHTML = data.solved_cases.map(caseItem => `
-                    <div class="case-item solved">
-                        <p>Case #${caseItem.id}: ${caseItem.text}</p>
-                        <small>Resolved at: ${caseItem.resolved_at ? caseItem.resolved_at : "Unknown Time"}</small>
-                    </div>
+                <div class="case-item solved">
+                    <p>Case #${caseItem.id}: ${caseItem.text}</p>
+                    <small>Resolved at: ${caseItem.resolved_at ? caseItem.resolved_at : "Unknown Time"}</small>
+                    <strong>Decision: ${caseItem.decision || "N/A"}</strong>
+                </div>
                 `).join('');
             } catch (error) {
                 console.error('❌ Error fetching solved cases:', error);
@@ -451,7 +452,8 @@
                     return `
                         <div class="case-item">
                             <p>Case #${caseItem.id}: ${caseItem.text}</p>
-                            <button onclick="solveCase(${caseItem.id})">Solve Case</button>
+                            <button onclick="solveCase(${caseItem.id}, 'Accepted')" class="accept-button">Accept</button>
+                            <button onclick="solveCase(${caseItem.id}, 'Rejected')" class="reject-button">Reject</button>
                         </div>
                     `;
                 }).join('');
