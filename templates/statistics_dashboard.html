@@ -280,30 +280,70 @@
 
         <!-- Hidden Dialog for Statistical Explanation -->
         <div id="math-dialog" class="dialog" role="dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
-            <div class="dialog-content">
+            <div class="dialog-content" style="text-align: justify; line-height: 1.6;">
                 <span class="close-button" onclick="closeDialog()" aria-label="Close">&times;</span>
                 <h2 id="dialog-title">Understanding Normative Inflation</h2>
                 <p id="dialog-description">
-                    Normative Inflation refers to the gap between norm creation and judicial processing. If the Normative Density (ND) exceeds the Processing Rate (PR), the Temporal Gap (TG) increases, leading to a judicial overload, i.e., a backlog of unprocessed norms.
+                    Normative Inflation describes the accumulation of legal norms that remain unprocessed within the judicial system.
+                    It results from an imbalance between the rate at which norms are created and the rate at which they are reviewed and resolved by judicial institutions.
+                    If the <strong>Normative Density (ND)</strong> (norms introduced per day) exceeds the <strong>Processing Rate (PR)</strong> (norms resolved per day),
+                    the <strong>Backlog (Bₜ)</strong> grows over time, leading to systemic delays. The <strong>Temporal Gap (TG)</strong> measures the average time it
+                    takes for a norm to be processed, reflecting judicial efficiency.
                 </p>
-                <h3>1. Normative Density (ND)</h3>
-                <p>The total number of norms created:</p>
-                <p>\[ ND = \sum_{i=1}^{N} 1(i \in \text{Norms}) \]</p>
-
-                <h3>2. Processing Rate (PR)</h3>
-                <p>The total number of norms processed by the judiciary:</p>
-                <p>\[ PR = \sum_{j=1}^{M} 1(j \in \text{Cases} \land \text{status}(j) = \text{'solved'}) \]</p>
-
-                <h3>3. Backlog (B_t)</h3>
-                <p>The number of norms that remain unprocessed:</p>
-                <p>\[ B_t = \max(0, ND - PR) \]</p>
-
-                <h3>4. Temporal Gap (TG)</h3>
-                <p>The average delay between norm creation and judicial processing:</p>
-                <p>\[ TG = \frac{\sum_{k=1}^{P} (\text{resolved\_at}(k) - \text{created\_at}(k))}{P} \]</p>
+        
+                <h3 style="margin-top: 20px;">1. Normative Density (ND)</h3>
+                <p>
+                    The number of norms introduced into the legal system per day:
+                </p>
+                <p style="text-align: center;">
+                    \[
+                    ND_t = \frac{\text{Number of new norms on day } t}{1 \text{ day}}
+                    \]
+                </p>
+        
+                <h3 style="margin-top: 20px;">2. Processing Rate (PR)</h3>
+                <p>
+                    The number of norms resolved by the judiciary per day:
+                </p>
+                <p style="text-align: center;">
+                    \[
+                    PR_t = \frac{\text{Number of norms processed on day } t}{1 \text{ day}}
+                    \]
+                </p>
+        
+                <h3 style="margin-top: 20px;">3. Backlog (Bₜ)</h3>
+                <p>
+                    The accumulation of norms that remain unprocessed:
+                </p>
+                <p style="text-align: center;">
+                    \[
+                    B_t = B_{t-1} + (ND_t - PR_t)
+                    \]
+                </p>
+                <p>
+                    Where \( B_0 = 0 \), meaning there is no initial backlog.
+                </p>
+        
+                <h3 style="margin-top: 20px;">4. Temporal Gap (TG)</h3>
+                <p>
+                    The average time delay between norm introduction and its judicial resolution:
+                </p>
+                <p style="text-align: center;">
+                    \[
+                    TG = \frac{\sum_{i=1}^{N_p} (\text{Resolved Time}_i - \text{Created Time}_i)}{N_p}
+                    \]
+                </p>
+                <p>
+                    Where \( N_p \) is the number of norms that have been processed.
+                </p>
+        
+                <p style="margin-top: 20px;">
+                    By continuously tracking these indicators, the system enables real-time assessment of judicial efficiency
+                    and helps identify potential bottlenecks in legal norm processing.
+                </p>
             </div>
         </div>
-
+        
         <!-- Charts Section -->
         <div class="charts-container">
             <div class="chart-box">

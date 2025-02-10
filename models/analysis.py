@@ -1,11 +1,11 @@
-#analysis.py
-
 import logging
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.sql import extract
 from sqlalchemy import func
 from models.case import Case
 from models.norm import Norm
+from datetime import datetime
 
 logging.basicConfig(level=logging.DEBUG, format="%(message)s")
 
@@ -45,51 +45,91 @@ class Counter:
 
 class NormativeInflationModel:
     def __init__(self):
-        """Initialize the model with default values."""
-        self.normative_density = 0  # Number of new norms per cycle
-        self.processing_rate = 0    # Number of norms processed by the judiciary per cycle
-        self.temporal_gap = 0       # Average delay (in cycles) between norm creation & judicial interpretation
-        self.backlog = 0            # Number of norms waiting for judicial processing
+        """Initialize the refined model with additional parameters."""
+        self.normative_density = 0  # Number of new norms per day
+        self.processing_rate = 0    # Number of norms processed per day
+        self.backlog = 0            # Accumulated unprocessed norms
+        self.temporal_gap = 0       # Average delay between norm creation & judicial processing
+
+    async def calculate_daily_metrics(self, session: AsyncSession):
+        """Calculate daily metrics for norms and cases."""
+        async with session.begin():
+            # Count norms created per day
+            norms_per_day = await session.execute(
+                select(extract("day", Norm.created_at), func.count(Norm.id))
+                .filter(Norm.valid == True)
+                .group_by(extract("day", Norm.created_at))
+            )
+            norms_per_day = dict(norms_per_day.fetchall())
+
+            # Count cases resolved per day
+            cases_per_day = await session.execute(
+                select(extract("day", Case.resolved_at), func.count(Case.id))
+                .filter(Case.status == "solved")
+                .group_by(extract("day", Case.resolved_at))
+            )
+            cases_per_day = dict(cases_per_day.fetchall())
+
+            return norms_per_day, cases_per_day
 
     async def update_metrics(self, session: AsyncSession):
-        """Fetch and compute the real-time normative inflation metrics from the database asynchronously."""
-        async with session.begin():
-            # ✅ Normative Density (ND): Count new norms created
-            self.normative_density = await session.scalar(select(func.count(Norm.id)))
+        """Fetch and compute the refined normative inflation metrics safely."""
+        norms_per_day, cases_per_day = await self.calculate_daily_metrics(session)
 
-            # ✅ Processing Rate (PR): Count norms processed by the judiciary
-            self.processing_rate = await session.scalar(select(func.count(Case.id)).filter(Case.status == "solved"))
+        # Remove None values from keys before computing max()
+        valid_days = {day for day in norms_per_day.keys() | cases_per_day.keys() if day is not None}
 
-            # ✅ Backlog (B_t): Compute unprocessed norms (ND - PR)
-            self.backlog = max(0, self.normative_density - self.processing_rate)
+        if valid_days:
+            latest_day = max(valid_days)  # Ensure only valid days are considered
+            self.normative_density = norms_per_day.get(latest_day, 0)
+            self.processing_rate = cases_per_day.get(latest_day, 0)
+        else:
+            self.normative_density = 0
+            self.processing_rate = 0
 
-            # ✅ Temporal Gap (TG) in HOURS instead of DAYS
-            result = await session.execute(select(Case).filter(Case.status == "solved"))
-            processed_cases = result.scalars().all()
+        # Update backlog: B_t = B_{t-1} + (ND_t - PR_t)
+        self.backlog = max(0, self.backlog + (self.normative_density - self.processing_rate))
 
-            valid_cases = [
-                case for case in processed_cases 
-                if case.resolved_at and case.created_at  # ✅ Ensure both timestamps exist
-            ]
+        # Compute Temporal Gap safely
+        result = await session.execute(select(Case).filter(Case.status == "solved"))
+        processed_cases = result.scalars().all()
 
-            if valid_cases:
-                total_waiting_time = sum(
-                    (case.resolved_at - case.created_at).total_seconds() / 3600 for case in valid_cases  # ✅ Convert to hours
-                )
-                self.temporal_gap = round(total_waiting_time / len(valid_cases), 2)  # ✅ Rounded for readability
-            else:
-                self.temporal_gap = 0  # No valid cases means no delay
+        valid_cases = [case for case in processed_cases if case.resolved_at and case.created_at]
+
+        if valid_cases:
+            total_waiting_time = sum(
+                (case.resolved_at - case.created_at).total_seconds() / 3600 for case in valid_cases
+            )
+            self.temporal_gap = round(total_waiting_time / len(valid_cases), 2)
+        else:
+            self.temporal_gap = 0
 
     async def calculate_inflation(self, session: AsyncSession):
-        """Calculate and return inflation metrics."""
-        await self.update_metrics(session)  # Reuse the existing logic
-        return self.to_dict()  # Return the results as a dictionary
+        """Calculate and return inflation metrics with default values in case of failure."""
+        try:
+            await self.update_metrics(session)  # Refresh computations
+            result = self.to_dict()
+
+            # Ensure the API always returns a structured response
+            if not result or not isinstance(result, dict):
+                raise ValueError("Invalid result from to_dict() in NormativeInflationModel.")
+
+            return result
+        
+        except Exception as e:
+            logging.error(f"Error calculating normative inflation: {e}", exc_info=True)
+            return {
+                "normative_density": 0,
+                "processing_rate": 0,
+                "backlog": 0,
+                "temporal_gap": "N/A"
+            }
 
     def to_dict(self):
-        """Return the metrics in a dictionary format for the API."""
+        """Return the refined metrics in a dictionary format for API responses."""
         return {
-            "normative_density": self.normative_density,
-            "processing_rate": self.processing_rate,
-            "backlog": self.backlog,
-            "temporal_gap": f"{self.temporal_gap} hours"  # ✅ Updated to show hours
+            "normative_density": round(self.normative_density, 2),
+            "processing_rate": round(self.processing_rate, 2),
+            "backlog": round(self.backlog, 2),
+            "temporal_gap": f"{self.temporal_gap} hours"
         }

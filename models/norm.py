@@ -1,9 +1,9 @@
-#norm.py
-
 import logging
-from sqlalchemy import Column, Integer, String, Boolean, select
+import datetime
+from sqlalchemy import Column, Integer, String, Boolean, select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import relationship
+from sqlalchemy.types import DateTime  # Import DateTime from SQLAlchemy
 from models import Base
 from .notification_manager import NotificationManager
 
@@ -17,6 +17,7 @@ class Norm(Base):
     valid = Column(Boolean, default=True)
     complexity = Column(Integer, nullable=False, default=1)
     constitutional = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=func.now())  # Use DateTime from SQLAlchemy
 
     # Define relationship before Case references it
     cases = relationship("Case", back_populates="norm", lazy="selectin")
