@@ -263,6 +263,10 @@ async def home(request: Request, db: AsyncSession = Depends(get_db)):
     # Pass stats to the template
     return templates.TemplateResponse("index.html", {"request": request, **stats})
 
+@app.get("/about", response_class=HTMLResponse)
+async def about_page(request: Request):
+    return templates.TemplateResponse("about.html", {"request": request})
+
 @app.get("/judicial", response_class=HTMLResponse)
 async def judicial_interface(request: Request):
     return templates.TemplateResponse("judicial_interface.html", {"request": request})
