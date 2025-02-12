@@ -348,13 +348,12 @@ async def create_norm(norm_data: NormCreate, db: AsyncSession = Depends(get_db))
 @app.get("/api/get_norms", response_model=List[NormResponse])
 async def get_norms(db: AsyncSession = Depends(get_db)):
     try:
-        result = await db.execute(select(Norm))  # ✅ Correct async query
-        norms = result.scalars().all()  # ✅ Extract actual Norm objects
+        result = await db.execute(select(Norm).order_by(Norm.created_at))  # ✅ Trier par date de création
+        norms = result.scalars().all()  # ✅ Extraire les objets Norm
         return norms
     except Exception as e:
         logging.error(f"Error fetching norms: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve norms.")
-
 
 @app.post("/api/check_constitutionality")
 async def check_constitutionality(request: NormIdRequest, db: AsyncSession = Depends(get_db)):

@@ -231,7 +231,7 @@
         </ul>
         <h3>Systems</h3>
         <ul>
-            <li><strong>Judicial System</strong></li>
+            <li><a href="/judicial" class="active-link">Judicial System</a></li>
             <li><a href="/political">Political System</a></li>
             <li><a href="/view_norms">View Norms</a></li>
             <li><a href="/view_cases">View Cases</a></li>
@@ -248,7 +248,7 @@
             </li>
             <li><a href="/statistics">Statistics Dashboard</a></li>
         </ul>
-    </aside>
+    </aside>    
 
     <main class="main-content">
         <h2>Welcome, Judicial System</h2>
@@ -417,6 +417,8 @@
                     console.error("❌ Solved cases list element not found!");
                     return;
                 }
+                 // Sort solved cases from most recent to oldest
+                data.solved_cases.sort((a, b) => b.id - a.id);
 
                 solvedList.innerHTML = data.solved_cases.map(caseItem => `
                 <div class="case-item solved">
@@ -446,6 +448,9 @@
                     casesList.innerHTML = "<p>No pending cases found.</p>";
                     return;
                 }
+
+                // Sort cases from most recent to oldest
+                data.pending_cases.sort((a, b) => b.id - a.id);
 
                 casesList.innerHTML = data.pending_cases.map(caseItem => {
                     if (!caseItem.id) return '';

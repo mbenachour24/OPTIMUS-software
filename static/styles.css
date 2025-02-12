@@ -280,3 +280,11 @@ body.dark .action-buttons button:hover {
 .has-submenu.active .submenu {
     display: block;
 }
+
+.sidebar a.active-link {
+    border: 2px solid #1E3A8A; /* Bleu foncé */
+    background: #1E3A8A; /* Fond bleu foncé */
+    color: white;
+    border-radius: 4px;
+    padding: 0.5rem;
+}

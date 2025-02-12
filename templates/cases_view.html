@@ -190,15 +190,22 @@
             <li><a href="/judicial">Judicial System</a></li>
             <li><a href="/political">Political System</a></li>
             <li><a href="/view_norms">View Norms</a></li>
-            <li><strong>View Cases</strong></li>
+            <li><a href="/view_cases" class="active-link">View Cases</a></li>
         </ul>
         <h3>Analytics</h3>
         <ul>
-            <li><a href="/general_log">General Log</a></li>
+            <li class="has-submenu">
+                <a href="/general_log">General Log</a>
+                <ul class="submenu">
+                    <li><a href="/general_log#todays-activities">Today's Activities</a></li>
+                    <li><a href="/general_log#norm-updates">Norm Updates</a></li>
+                    <li><a href="/general_log#case-decisions">Case Decisions</a></li>
+                </ul>
+            </li>
             <li><a href="/statistics">Statistics Dashboard</a></li>
         </ul>
     </aside>
-
+    
     <main class="main-content">
         <h2>Case Management</h2>
 
@@ -291,6 +298,8 @@
                     casesList.innerHTML = '<tr><td colspan="6">No cases found.</td></tr>';
                     return;
                 }
+                
+                cases.sort((a, b) => b.id - a.id);
 
                 // Populate the table with cases
                 cases.forEach(caseItem => {

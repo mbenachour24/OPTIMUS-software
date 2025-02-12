@@ -196,7 +196,7 @@
         <h3>Systems</h3>
         <ul>
             <li><a href="/judicial">Judicial System</a></li>
-            <li><strong>Political System</strong></li>
+            <li><a href="/political" class="active-link">Political System</a></li>
             <li><a href="/view_norms">View Norms</a></li>
             <li><a href="/view_cases">View Cases</a></li>
         </ul>
@@ -215,7 +215,7 @@
             <li><a href="/statistics">Statistics Dashboard</a></li>
         </ul>
     </aside>
-
+    
     <main class="main-content">
         <h2>Welcome, Political System</h2>
         <h3>Notifications</h3>
@@ -293,7 +293,10 @@
                     return;
                 }
 
-                logEntries.innerHTML = ''; // Clear existing logs
+                logEntries.innerHTML = '';
+                // Trier du plus récent au plus ancien
+                norms.sort((a, b) => b.id - a.id); 
+
                 norms.forEach(norm => {
                     const logEntry = document.createElement('div');
                     logEntry.className = 'log-entry';
