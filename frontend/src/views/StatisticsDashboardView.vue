@@ -1,0 +1,530 @@
+<template>
+    <div>
+      <header>
+        <h1>Optimus - Statistics Dashboard</h1>
+      </header>
+  
+      <aside class="sidebar">
+        <h3>Navigation</h3>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/judicial">Judicial System</a></li>
+          <li><a href="/political">Political System</a></li>
+          <li><a href="/cases">View Cases</a></li>
+          <li><a href="/norms">View Norms</a></li>
+        </ul>
+        <h3>Analytics</h3>
+        <ul>
+          <li class="has-submenu">
+            <a href="/general_log">General Log</a>
+            <ul class="submenu">
+              <li><a href="/general_log#todays-activities">Today's Activities</a></li>
+              <li><a href="/general_log#norm-updates">Norm Updates</a></li>
+              <li><a href="/general_log#case-decisions">Case Decisions</a></li>
+            </ul>
+          </li>
+          <li><a href="/statistics" class="active-link">Statistics Dashboard</a></li>
+        </ul>
+      </aside>
+  
+      <main class="main-content">
+        <h2>System Statistics</h2>
+        <!-- Summary Cards -->
+        <div class="stats-summary">
+          <div class="stat-card">
+            <h3>Cases</h3>
+            <div class="stat-numbers">
+              <p>Pending: <span id="pending-count">0</span></p>
+              <p>Solved: <span id="solved-count">0</span></p>
+              <p>Total: <span id="total-cases">0</span></p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <h3>Norms</h3>
+            <div class="stat-numbers">
+              <p>Valid: <span id="valid-norms">0</span></p>
+              <p>Invalid: <span id="invalid-norms">0</span></p>
+              <p>Total: <span id="total-norms">0</span></p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <h3>System Health</h3>
+            <div class="stat-numbers">
+              <p>Resolution Rate: <span id="resolution-rate">0%</span></p>
+            </div>
+          </div>
+        </div>
+  
+        <div class="stats-summary">
+          <div class="stat-card">
+            <h3>Normative Inflation</h3>
+            <button @click="openDialog" class="info-button" aria-label="More Info">ℹ️</button>
+            <div class="stat-numbers">
+              <p>Normative Density: <span id="normative-density">0</span></p>
+              <p>Processing Rate: <span id="processing-rate">0</span></p>
+              <p>Backlog: <span id="backlog">0</span></p>
+              <p>Temporal Gap: <span id="temporal-gap">0</span></p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Hidden Dialog for Statistical Explanation -->
+        <div id="math-dialog" class="dialog" role="dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+          <div class="dialog-content" style="text-align: justify; line-height: 1.6;">
+            <span class="close-button" @click="closeDialog" aria-label="Close">&times;</span>
+            <h2 id="dialog-title">Understanding Normative Inflation</h2>
+            <p id="dialog-description">
+              Normative Inflation describes the accumulation of legal norms that remain unprocessed within the judicial system.
+              It results from an imbalance between the rate at which norms are created and the rate at which they are reviewed and resolved by judicial institutions.
+              If the <strong>Normative Density (ND)</strong> (norms introduced per day) exceeds the <strong>Processing Rate (PR)</strong> (norms resolved per day),
+              the <strong>Backlog (Bₜ)</strong> grows over time, leading to systemic delays. The <strong>Temporal Gap (TG)</strong> measures the average time it
+              takes for a norm to be processed, reflecting judicial efficiency.
+            </p>
+  
+            <h3 style="margin-top: 20px;">1. Normative Density (ND)</h3>
+            <p>
+              The number of norms introduced into the legal system per day:
+            </p>
+            <p style="text-align: center;">
+              \[
+              ND_t = \frac{\text{Number of new norms on day } t}{1 \text{ day}}
+              \]
+            </p>
+  
+            <h3 style="margin-top: 20px;">2. Processing Rate (PR)</h3>
+            <p>
+              The number of norms resolved by the judiciary per day:
+            </p>
+            <p style="text-align: center;">
+              \[
+              PR_t = \frac{\text{Number of norms processed on day } t}{1 \text{ day}}
+              \]
+            </p>
+  
+            <h3 style="margin-top: 20px;">3. Backlog (Bₜ)</h3>
+            <p>
+              The accumulation of norms that remain unprocessed:
+            </p>
+            <p style="text-align: center;">
+              \[
+              B_t = B_{t-1} + (ND_t - PR_t)
+              \]
+            </p>
+            <p>
+              Where \( B_0 = 0 \), meaning there is no initial backlog.
+            </p>
+  
+            <h3 style="margin-top: 20px;">4. Temporal Gap (TG)</h3>
+            <p>
+              The average time delay between norm introduction and its judicial resolution:
+            </p>
+            <p style="text-align: center;">
+              \[
+              TG = \frac{\sum_{i=1}^{N_p} (\text{Resolved Time}_i - \text{Created Time}_i)}{N_p}
+              \]
+            </p>
+            <p>
+              Where \( N_p \) is the number of norms that have been processed.
+            </p>
+  
+            <p style="margin-top: 20px;">
+              By continuously tracking these indicators, the system enables real-time assessment of judicial efficiency
+              and helps identify potential bottlenecks in legal norm processing.
+            </p>
+          </div>
+        </div>
+  
+        <!-- Charts Section -->
+        <div class="charts-container">
+          <div class="chart-box">
+            <h3>Cases Chart</h3>
+            <canvas id="caseTypesChart"></canvas>
+          </div>
+          <div class="chart-box">
+            <h3>Case Resolution Timeline</h3>
+            <canvas id="resolutionTimelineChart"></canvas>
+          </div>
+          <div class="chart-box">
+            <h3>System Trends</h3>
+            <canvas id="trendsChart"></canvas>
+          </div>
+        </div>
+      </main>
+  
+      <footer>
+        © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
+      </footer>
+    </div>
+  </template>
+  
+  <script>
+  import { Chart } from 'chart.js';
+  
+  export default {
+    name: 'StatisticsDashboard',
+    mounted() {
+      this.fetchStatistics();
+      this.fetchNormativeInflation();
+      setInterval(this.fetchStatistics, 30000);
+      setInterval(this.fetchNormativeInflation, 30000);
+    },
+    methods: {
+      async fetchStatistics() {
+        try {
+          const response = await fetch('/api/get_statistics');
+          const data = await response.json();
+  
+          document.getElementById('pending-count').textContent = data.cases.pending || 0;
+          document.getElementById('solved-count').textContent = data.cases.solved || 0;
+          document.getElementById('total-cases').textContent = data.cases.total || 0;
+          document.getElementById('valid-norms').textContent = data.norms.valid || 0;
+          document.getElementById('invalid-norms').textContent = data.norms.invalid || 0;
+          document.getElementById('total-norms').textContent = data.norms.total || 0;
+  
+          const resolutionRate = data.cases.total
+            ? Math.round((data.cases.solved / data.cases.total) * 100)
+            : 0;
+          document.getElementById('resolution-rate').textContent = `${resolutionRate}%`;
+  
+          const solvedResponse = await fetch('/api/get_solved_cases');
+          const solvedData = await solvedResponse.json();
+  
+          this.updateResolutionTimeline(solvedData.solved_cases || []);
+          this.updateTrendsChart(data.cases.total, data.cases.solved, data.cases.pending);
+          this.updateCaseTypesChart(data.cases.pending, data.cases.solved);
+        } catch (error) {
+          console.error('Error fetching statistics:', error);
+        }
+      },
+      async fetchNormativeInflation() {
+        try {
+          const response = await fetch('/api/get_normative_inflation');
+          const data = await response.json();
+  
+          document.getElementById('normative-density').textContent = data.inflation_data.normative_density || 0;
+          document.getElementById('processing-rate').textContent = data.inflation_data.processing_rate || 0;
+          document.getElementById('backlog').textContent = data.inflation_data.backlog || 0;
+          document.getElementById('temporal-gap').textContent = data.inflation_data.temporal_gap || "N/A";
+  
+        } catch (error) {
+          console.error('Error fetching normative inflation metrics:', error);
+        }
+      },
+      updateCaseTypesChart(pending, solved) {
+        const ctx = document.getElementById('caseTypesChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: ['Pending Cases', 'Solved Cases'],
+            datasets: [{
+              data: [pending, solved],
+              backgroundColor: ['#FFCE56', '#36A2EB']
+            }]
+          }
+        });
+      },
+      updateResolutionTimeline(solvedCases) {
+        const ctx = document.getElementById('resolutionTimelineChart').getContext('2d');
+  
+        if (!Array.isArray(solvedCases) || solvedCases.length === 0) {
+          console.warn("No solved cases data available for timeline.");
+          return;
+        }
+  
+        const resolutionData = {};
+        solvedCases.forEach(caseItem => {
+          if (caseItem.resolved_at) {
+            const date = caseItem.resolved_at.split('T')[0];
+            resolutionData[date] = (resolutionData[date] || 0) + 1;
+          }
+        });
+  
+        const sortedDates = Object.keys(resolutionData).sort();
+        const resolvedCounts = sortedDates.map(date => resolutionData[date]);
+  
+        if (window.resolutionChart) {
+          window.resolutionChart.destroy();
+        }
+  
+        window.resolutionChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: sortedDates,
+            datasets: [{
+              label: 'Cases Resolved Over Time',
+              data: resolvedCounts,
+              borderColor: '#4CAF50',
+              backgroundColor: 'rgba(76, 175, 80, 0.1)',
+              tension: 0.1,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: { stepSize: 1 }
+              },
+              x: {
+                title: { display: true, text: 'Date' }
+              }
+            },
+            plugins: {
+              legend: { display: true, position: 'top' },
+              tooltip: {
+                callbacks: {
+                  title: context => `Date: ${context[0].label}`,
+                  label: context => `Cases Resolved: ${context.raw}`
+                }
+              }
+            }
+          }
+        });
+      },
+      updateTrendsChart(totalCases, solvedCases, pendingCases) {
+        const ctx = document.getElementById('trendsChart').getContext('2d');
+  
+        if (this.trendsChartInstance) {
+          this.trendsChartInstance.destroy();
+        }
+  
+        this.trendsChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Cases Overview'],
+            datasets: [
+              {
+                label: 'Total Cases',
+                data: [totalCases],
+                backgroundColor: '#FF6384'
+              },
+              {
+                label: 'Solved Cases',
+                data: [solvedCases],
+                backgroundColor: '#36A2EB'
+              },
+              {
+                label: 'Pending Cases',
+                data: [pendingCases],
+                backgroundColor: '#FFCE56'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      },
+      openDialog() {
+        const dialog = document.getElementById('math-dialog');
+        dialog.style.display = 'block';
+  
+        if (window.MathJax) {
+          MathJax.typesetPromise();
+        }
+      },
+      closeDialog() {
+        document.getElementById('math-dialog').style.display = 'none';
+      }
+    }
+  };
+  </script>
+  
+  <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  :root {
+    --primary: #2563eb;
+    --sidebar-width: 280px;
+    --header-height: 60px;
+  }
+  
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #f9fafb;
+  }
+  
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background: white;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb;
+    z-index: 20;
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: var(--sidebar-width);
+    height: calc(100vh - var(--header-height));
+    background: white;
+    border-right: 1px solid #e5e7eb;
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
+  
+  .sidebar h3 {
+    color: #6b7280;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 1.5rem 0 0.75rem;
+  }
+  
+  .sidebar h3:first-child {
+    margin-top: 0;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    margin-bottom: 1rem;
+  }
+  
+  .sidebar li {
+    margin: 0.5rem 0;
+  }
+  
+  .sidebar a {
+    color: #374151;
+    text-decoration: none;
+    display: block;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+  }
+  
+  .sidebar a:hover {
+    background: #f3f4f6;
+    color: var(--primary);
+  }
+  
+  .submenu {
+    margin-left: 1rem;
+    font-size: 0.875rem;
+    display: none;
+  }
+  
+  .has-submenu:hover .submenu {
+    display: block;
+  }
+  
+  .main-content {
+    margin-left: var(--sidebar-width);
+    margin-top: var(--header-height);
+    padding: 2rem;
+  }
+  
+  .stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+  }
+  
+  .stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+  }
+  
+  .chart-box {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .dialog {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    width: 50%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  .dialog-content {
+    text-align: left;
+    padding: 10px;
+  }
+  
+  .close-button {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .close-button:hover {
+    color: red;
+  }
+  
+  .dialog-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+  
+  footer {
+    margin-left: var(--sidebar-width);
+    padding: 1.5rem;
+    text-align: center;
+    color: #6b7280;
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  @media (max-width: 1024px) {
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+    }
+  
+    .sidebar.active {
+      transform: translateX(0);
+    }
+  
+    .main-content, footer {
+      margin-left: 0;
+    }
+  }
+  </style>
+  

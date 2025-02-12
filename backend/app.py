@@ -55,6 +55,9 @@ logging.basicConfig(level=logging.DEBUG)
 app = FastAPI()  # Create FastAPI app
 socket_manager = SocketManager(app=app)
 
+# Servir les fichiers statiques de Vue.js
+app.mount("/frontend", StaticFiles(directory="frontend/dist", html=True), name="frontend")
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
