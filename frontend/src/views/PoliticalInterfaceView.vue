@@ -25,8 +25,8 @@
               <li><a href="/general_log#todays-activities">Today's Activities</a></li>
               <li><a href="/general_log#norm-updates">Norm Updates</a></li>
               <li><a href="/general_log#case-decisions">Case Decisions</a></li>
-              <li><a href="/view_norms">View Norms</a></li>
-              <li><a href="/view_cases">View Cases</a></li>
+              <li><a href="/norms">View Norms</a></li>
+              <li><a href="/cases">View Cases</a></li>
             </ul>
           </li>
           <li><a href="/statistics">Statistics Dashboard</a></li>

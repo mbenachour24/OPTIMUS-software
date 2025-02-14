@@ -309,7 +309,7 @@ async def general_log(request: Request):
 
 @app.get("/statistics", response_class=HTMLResponse)
 async def statistics_dashboard(request: Request):
-    return templates.TemplateResponse("statistics_dashboard.html", {"request": request})
+    return templates.TemplateResponse("StatisticsDashboardView.vue", {"request": request})
 
 # API Endpoints
 @app.post("/api/create_norm", response_model=NormResponse)
