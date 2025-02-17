@@ -4,8 +4,8 @@ import logging
 import random
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from models.norm import Norm
-from models import Base
+from backend.models.norm import Norm
+from backend.models import Base
 
 logging.basicConfig(level=logging.DEBUG, format="%(message)s")
 

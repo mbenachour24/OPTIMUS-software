@@ -1,10 +1,12 @@
+#models/analysis.py
+
 import logging
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.sql import extract
 from sqlalchemy import func
-from models.case import Case
-from models.norm import Norm
+from backend.models.case import Case
+from backend.models.norm import Norm
 from datetime import datetime
 
 logging.basicConfig(level=logging.DEBUG, format="%(message)s")

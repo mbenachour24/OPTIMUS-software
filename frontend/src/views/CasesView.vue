@@ -1,3 +1,5 @@
+// CasesView.vue
+
 <template>
     <div>
       <header>
@@ -66,6 +68,8 @@
   </template>
   
   <script>
+  import { API_BASE_URL } from '../config.js';
+  
   export default {
     name: 'ViewCases',
     mounted() {
@@ -75,16 +79,17 @@
       async fetchCases(filter = "all") {
         let apiUrl;
   
-        // Determine the API URL based on the filter
+        // Déterminer l'URL API en fonction du filtre
         if (filter === "pending") {
-          apiUrl = '/api/get_pending_cases';
+          apiUrl = `${API_BASE_URL}/api/get_pending_cases`;
         } else if (filter === "solved") {
-          apiUrl = '/api/get_solved_cases';
+          apiUrl = `${API_BASE_URL}/api/get_solved_cases`;
         } else {
-          apiUrl = '/api/get_all_cases';
+          apiUrl = `${API_BASE_URL}/api/get_all_cases`;
         }
   
         try {
+          console.log(`Fetching cases from: ${apiUrl}`);
           const response = await fetch(apiUrl);
           if (!response.ok) {
             throw new Error(`Failed to fetch cases: ${response.status}`);
@@ -99,10 +104,10 @@
             return;
           }
   
-          // Clear the table content
+          // Vider le contenu de la table
           casesList.innerHTML = '';
   
-          // Dynamically adjust the table header based on the filter
+          // Ajuster dynamiquement l'en-tête du tableau en fonction du filtre
           if (filter === "all") {
             tableHeader.innerHTML = `
               <th>ID</th>
@@ -122,7 +127,7 @@
             `;
           }
   
-          // Select cases based on the filter
+          // Sélectionner les cases en fonction du filtre
           const cases = filter === "pending"
             ? data.pending_cases
             : (filter === "solved" ? data.solved_cases : data.cases || []);
@@ -134,7 +139,7 @@
   
           cases.sort((a, b) => b.id - a.id);
   
-          // Populate the table with cases
+          // Remplir le tableau avec les cases
           cases.forEach(caseItem => {
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -151,9 +156,10 @@
             casesList.appendChild(row);
           });
   
-          // Highlight selected filter
+          // Mettre en surbrillance le filtre sélectionné
           document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
-          document.getElementById(`filter-${filter}`).classList.add('active');
+          const activeFilter = document.getElementById(`filter-${filter}`);
+          if (activeFilter) activeFilter.classList.add('active');
   
         } catch (error) {
           console.error('Error fetching cases:', error);
@@ -161,7 +167,7 @@
       }
     }
   };
-  </script>
+  </script>  
   
   <style>
   * {

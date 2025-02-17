@@ -8,13 +8,14 @@ import asyncio
 Base = declarative_base()
 
 def register_models(engine):
-    from models.norm import Norm
-    from models.case import Case
-    from models.judicial_system import JudicialSystem
-    from models.political_system import PoliticalSystem
-    from models.citizen_pressure import CitizenPressure
-    from models.society import Society
-    from models.analysis import Counter, NormativeInflationModel
+    from backend.models.norm import Norm
+    from backend.models.case import Case
+    from backend.models.judicial_system import JudicialSystem
+    from backend.models.political_system import PoliticalSystem
+    from backend.models.citizen_pressure import CitizenPressure
+    from backend.models.society import Society
+    from backend.models.analysis import Counter, NormativeInflationModel
+    from backend.models.activity import Activity
 
     # Ensure models are added to Base.metadata
     if isinstance(engine, AsyncEngine):

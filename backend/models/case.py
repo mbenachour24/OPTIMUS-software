@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, s
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from models import Base
+from backend.models import Base
 from sqlalchemy import Enum as SQLAEnum
 from enum import Enum
 

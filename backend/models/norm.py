@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String, Boolean, select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import relationship
 from sqlalchemy.types import DateTime  # Import DateTime from SQLAlchemy
-from models import Base
+from backend.models import Base
 from .notification_manager import NotificationManager
 
 logging.basicConfig(level=logging.DEBUG, format="%(message)s")

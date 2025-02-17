@@ -1,6 +1,3 @@
-Voici la traduction du code HTML en un fichier `.vue` :
-
-```vue
 <template>
   <div>
     <header>
@@ -66,7 +63,12 @@ Voici la traduction du code HTML en un fichier `.vue` :
           <!-- Pending Cases -->
           <div>
             <h3>Pending Cases</h3>
-            <div class="scrollable-section" id="pending-cases-list">
+            <div class="scrollable-section">
+              <div v-for="caseItem in pendingCases" :key="caseItem.id" class="case-item">
+                <p>Case #{{ caseItem.id }}: {{ caseItem.text }}</p>
+                <button @click="() => solveCase(caseItem.id, 'Accepted')">Accept</button>
+                <button @click="() => solveCase(caseItem.id, 'Rejected')">Reject</button>
+              </div>
               <!-- Pending cases will be populated here -->
             </div>
           </div>
@@ -75,6 +77,9 @@ Voici la traduction du code HTML en un fichier `.vue` :
           <div>
             <h3>Solved Cases</h3>
             <div class="scrollable-section" id="solved-cases-list">
+              <div v-for="caseItem in solvedCases" :key="caseItem.id" class="case-item solved">
+                <p>Case #{{ caseItem.id }}: {{ caseItem.text }}</p>
+              </div>
               <!-- Solved cases will be dynamically populated here -->
             </div>
           </div>
@@ -89,11 +94,18 @@ Voici la traduction du code HTML en un fichier `.vue` :
 </template>
 
 <script>
+import { API_BASE_URL } from '../config.js';
+
+// Deduce the WebSocket URL from API_BASE_URL
+const WS_URL = API_BASE_URL.replace(/^http/, 'ws') + '/ws';
+
 export default {
   name: 'JudicialSystem',
   data() {
     return {
       socket: null,
+      solvedCases: [],
+      pendingCases: []
     };
   },
   mounted() {
@@ -106,10 +118,15 @@ export default {
       this.loadPendingCases();
       this.loadSolvedCases();
     }, 30000);
+
+    this.$root.solveCase = this.solveCase;
+
+    console.log("✅ Component mounted, checking solveCase method...");
+    console.log("solveCase method exists?", typeof this.solveCase);
   },
   methods: {
     connectWebSocket() {
-      this.socket = new WebSocket("ws://localhost:8000/ws");
+      this.socket = new WebSocket(WS_URL);
 
       this.socket.onopen = () => {
         console.log("✅ WebSocket connected.");
@@ -127,7 +144,7 @@ export default {
         }
       };
 
-      this.socket.onclose = (event) => {
+      this.socket.onclose = () => {
         console.warn("⚠️ WebSocket disconnected. Attempting to reconnect in 5s...");
         setTimeout(this.connectWebSocket, 5000);
       };
@@ -138,7 +155,7 @@ export default {
     },
     async fetchLogs() {
       try {
-        const response = await fetch('/api/get_norms');
+        const response = await fetch(`${API_BASE_URL}/api/get_norms`);
         if (!response.ok) throw new Error(`Failed to fetch norms: ${response.status}`);
 
         const norms = await response.json();
@@ -156,7 +173,6 @@ export default {
           logEntry.innerHTML = `<strong>Norm #${norm.id}:</strong> ${norm.text} - Valid: ${norm.valid}`;
           logEntries.appendChild(logEntry);
         });
-
       } catch (error) {
         console.error('❌ Error fetching norms:', error);
       }
@@ -166,7 +182,7 @@ export default {
       if (!normId) return;
 
       try {
-        const response = await fetch('/api/mark_unconstitutional', {
+        const response = await fetch(`${API_BASE_URL}/api/mark_unconstitutional`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ norm_id: parseInt(normId) })
@@ -186,8 +202,10 @@ export default {
       }
     },
     async solveCase(caseId, decision) {
+      console.log("🛠️ solveCase called with:", caseId, decision);
+
       try {
-        const response = await fetch(`/api/solve_case/${caseId}?decision=${decision}`, { method: 'POST' });
+        const response = await fetch(`${API_BASE_URL}/api/solve_case/${caseId}?decision=${decision}`, { method: 'POST' });
 
         if (!response.ok) {
           const errorData = await response.json();
@@ -204,67 +222,34 @@ export default {
         alert('An error occurred while solving the case.');
       }
     },
-    async loadSolvedCases() {
-      try {
-        const response = await fetch('/api/get_solved_cases');
-        const data = await response.json();
-        const solvedList = document.getElementById('solved-cases-list');
-
-        if (!solvedList) {
-          console.error("❌ Solved cases list element not found!");
-          return;
-        }
-        // Sort solved cases from most recent to oldest
-        data.solved_cases.sort((a, b) => b.id - a.id);
-
-        solvedList.innerHTML = data.solved_cases.map(caseItem => `
-          <div class="case-item solved">
-            <p>Case #${caseItem.id}: ${caseItem.text}</p>
-            <small>Resolved at: ${caseItem.resolved_at ? caseItem.resolved_at : "Unknown Time"}</small>
-            <strong>Decision: ${caseItem.decision || "N/A"}</strong>
-          </div>
-        `).join('');
-      } catch (error) {
-        console.error('❌ Error fetching solved cases:', error);
-      }
-    },
     async loadPendingCases() {
       try {
-        const response = await fetch('/api/get_pending_cases');
+        const response = await fetch(`${API_BASE_URL}/api/get_pending_cases`);
         const data = await response.json();
 
-        const casesList = document.getElementById('pending-cases-list');
-        if (!casesList) {
-          console.error("❌ Pending cases list element not found!");
-          return;
-        }
-
         if (!data.pending_cases || !Array.isArray(data.pending_cases)) {
-          console.error("❌ API response is missing 'pending_cases' or is not an array.");
-          casesList.innerHTML = "<p>No pending cases found.</p>";
+          console.error("❌ API response missing 'pending_cases' or not an array.");
           return;
         }
 
-        // Sort cases from most recent to oldest
-        data.pending_cases.sort((a, b) => b.id - a.id);
-
-        casesList.innerHTML = data.pending_cases.map(caseItem => {
-          if (!caseItem.id) return '';
-          return `
-            <div class="case-item">
-              <p>Case #${caseItem.id}: ${caseItem.text}</p>
-              <button onclick="solveCase(${caseItem.id}, 'Accepted')" class="accept-button">Accept</button>
-              <button onclick="solveCase(${caseItem.id}, 'Rejected')" class="reject-button">Reject</button>
-            </div>
-          `;
-        }).join('');
+        // Sort cases from newest to oldest and update Vue state
+        this.pendingCases = data.pending_cases.sort((a, b) => b.id - a.id);
       } catch (error) {
         console.error('❌ Error loading pending cases:', error);
       }
     },
+    async loadSolvedCases() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/get_solved_cases`);
+        const data = await response.json();
+        this.solvedCases = data.solved_cases.sort((a, b) => b.id - a.id);
+      } catch (error) {
+        console.error('❌ Error loading solved cases:', error);
+      }
+    },
     async generateCitizenCases() {
       try {
-        const response = await fetch('/api/generate_citizen_cases', { method: 'POST' });
+        const response = await fetch(`${API_BASE_URL}/api/generate_citizen_cases`, { method: 'POST' });
         const data = await response.json();
 
         alert(data.message);
@@ -277,6 +262,14 @@ export default {
       } catch (error) {
         console.error('❌ Error generating citizen cases:', error);
         alert('An error occurred while generating citizen cases.');
+      }
+    },
+    handleCaseClick(caseId, decision) {
+      console.log("🔄 Calling solveCase:", caseId, decision);
+      if (typeof this.solveCase !== 'function') {
+        console.error("❌ solveCase is NOT defined in Vue!");
+      } else {
+        this.solveCase(caseId, decision);
       }
     }
   }
