@@ -59,14 +59,13 @@ socket_manager = SocketManager(app=app)
 
 # Define paths
 frontend_path = Path(__file__).parent / "frontend" / "dist"
-assets_path = frontend_path / "assets"
 
-# Ensure paths exist before serving
+# Ensure frontend build exists
 if not frontend_path.exists():
     raise RuntimeError(f"Frontend build not found at: {frontend_path}")
 
-# Serve static assets (JS, CSS)
-app.mount("/assets", StaticFiles(directory=str(assets_path)), name="assets")
+# Serve the entire frontend dist folder
+app.mount("/assets", StaticFiles(directory=str(frontend_path / "assets")), name="assets")
 
 # CORS middleware
 app.add_middleware(
@@ -167,9 +166,9 @@ connected_clients = set()
 # Global variable for society
 society = None
 
-@app.get("/test")
-def test_api():
-    return {"message": "API is running!"}
+@app.get("/api/test")
+async def test_api():
+    return {"message": "API is working"}
 
 @app.on_event("startup")
 async def initialize_society():
@@ -629,16 +628,21 @@ async def get_normative_inflation(db: AsyncSession = Depends(get_db)):
         logging.error(f"Error retrieving normative inflation: {e}")
         return JSONResponse(content={"error": "Failed to retrieve normative inflation"}, status_code=500)
 
-# Serve index.html for Vue Router history mode
 @app.get("/{full_path:path}")
 async def serve_vue(full_path: str):
-    file_path = frontend_path / full_path
+    """Serve Vue's frontend while handling history mode"""
+    
+    requested_file = frontend_path / full_path
 
-    # If a requested file exists, serve it
-    if file_path.exists() and file_path.is_file():
-        return FileResponse(file_path)
+    # 🔴 1. Serve API routes normally (prevent Vue from hijacking them)
+    if full_path.startswith("api/"):
+        return JSONResponse(status_code=404, content={"detail": "API Not Found"})
 
-    # Otherwise, serve index.html for Vue Router handling
+    # 🟢 2. Serve static files (JS, CSS, images)
+    if requested_file.exists() and requested_file.is_file():
+        return FileResponse(requested_file)
+
+    # 🔵 3. Redirect all other routes to Vue's `index.html`
     return FileResponse(frontend_path / "index.html")
 
 if __name__ == "__main__":
