@@ -1,8 +1,8 @@
-"""Add models tables
+"""Set default value for decision
 
-Revision ID: 1ada795ae549
-Revises: cc8e03136616
-Create Date: 2025-02-05 13:11:39.046751
+Revision ID: 3ccc2587f134
+Revises: 0af0b32a65ff
+Create Date: 2025-02-18 15:46:33.868931
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '1ada795ae549'
-down_revision: Union[str, None] = 'cc8e03136616'
+revision: str = '3ccc2587f134'
+down_revision: Union[str, None] = '0af0b32a65ff'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

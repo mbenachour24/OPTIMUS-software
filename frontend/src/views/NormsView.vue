@@ -1,3 +1,5 @@
+// NormsView.vue
+
 <template>
   <div>
     <header>
@@ -19,7 +21,6 @@
       </ul>
       <h3>Analytics</h3>
       <ul>
-        <li><a href="/general_log">General Log</a></li>
         <li><a href="/statistics">Statistics Dashboard</a></li>
       </ul>
     </aside>
@@ -161,8 +162,8 @@ header {
   position: fixed;
   top: var(--header-height);
   left: 0;
-  width: var(--sidebar-width);
-  height: calc(100vh - var(--header-height));
+  width: var(--sidebar-width) !important;
+  height: calc(100vh - var(--header-height)) !important;
   background: white;
   border-right: 1px solid #e5e7eb;
   padding: 1.5rem;
@@ -215,7 +216,9 @@ header {
 }
 
 .main-content {
-  margin-left: var(--sidebar-width);
+  margin-left: var(--sidebar-width) !important;
+  width: calc(100vw - var(--sidebar-width)) !important;
+  min-height: 100vh;
   margin-top: var(--header-height);
   padding: 2rem;
 }

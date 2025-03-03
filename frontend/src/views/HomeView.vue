@@ -1,156 +1,178 @@
+//HomeView.vue
+
 <template>
-    <div>
-      <header>
-        <h1>Optimus - Rule of Law Interactive System</h1>
-      </header>
-  
-      <aside class="sidebar">
-        <h3>Navigation</h3>
+  <div>
+    <header>
+      <h1>Optimus - Rule of Law Interactive System</h1>
+    </header>
+
+    <aside class="sidebar">
+      <h3>Navigation</h3>
+      <ul>
+        <li><router-link :to="{ path: '/' }" :class="{ 'active-link': $route.path === '/' }">Home</router-link></li>
+        <li><router-link to="/about">About</router-link></li>
+      </ul>
+      <h3>Systems</h3>
+      <ul>
+        <li><router-link to="/judicial">Judicial System</router-link></li>
+        <li><router-link to="/political">Political System</router-link></li>
+        <li><router-link to="/norms">View Norms</router-link></li>
+        <li><router-link to="/cases">View Cases</router-link></li>
+      </ul>
+      <h3>Analytics</h3>
+      <ul>
+        <li><a href="/statistics">Statistics Dashboard</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <h2>Welcome to Optimus</h2>
+
+      <section class="usage-guide">
+        <h3>How to Use This Platform</h3>
+        <p>Optimus is an interactive system for analyzing the interaction between political and judicial systems.
+        Use the navigation menu to explore different sections:</p>
         <ul>
-          <li><a href="/" class="active-link">Home</a></li>
-          <li><a href="/about">About</a></li>
+          <li><strong>Political System:</strong> Create and manage legal norms.</li>
+          <li><strong>Judicial System:</strong> Review cases and evaluate their constitutionality.</li>
+          <li><strong>View Cases:</strong> Browse pending and resolved legal cases.</li>
+          <li><strong>View Norms:</strong> Check existing norms and their status.</li>
+          <li><strong>Statistics Dashboard:</strong> View real-time analytics on system performance.</li>
         </ul>
-        <h3>Systems</h3>
-        <ul>
-          <li><a href="/judicial">Judicial System</a></li>
-          <li><a href="/political">Political System</a></li>
-          <li><a href="/norms">View Norms</a></li>
-          <li><a href="/cases">View Cases</a></li>
-        </ul>
-        <h3>Analytics</h3>
-        <ul>
-          <li class="has-submenu">
-            <a href="/general_log">General Log</a>
-            <ul class="submenu">
-              <li><a href="/general_log#todays-activities">Today's Activities</a></li>
-              <li><a href="/general_log#norm-updates">Norm Updates</a></li>
-              <li><a href="/general_log#case-decisions">Case Decisions</a></li>
-            </ul>
-          </li>
-          <li><a href="/statistics">Statistics Dashboard</a></li>
-        </ul>
-      </aside>
-  
-      <main class="main-content">
-        <h2>Welcome to Optimus</h2>
-  
-        <div class="usage-guide">
-          <h3>How to Use This Platform</h3>
-          <p>Optimus is an interactive system for analyzing the interaction between political and judicial systems.
-          Use the navigation menu to explore different sections:</p>
-          <ul>
-            <li><strong>Political System:</strong> Create and manage legal norms.</li>
-            <li><strong>Judicial System:</strong> Review cases and evaluate their constitutionality.</li>
-            <li><strong>View Cases:</strong> Browse pending and resolved legal cases.</li>
-            <li><strong>View Norms:</strong> Check existing norms and their status.</li>
-            <li><strong>General Log:</strong> Track system activities and key events.</li>
-            <li><strong>Statistics Dashboard:</strong> View real-time analytics on system performance.</li>
-          </ul>
-        </div>
-  
-        <div class="log-section">
-          <h3>System Overview</h3>
-          <div class="overview-grid">
-            <div class="card overview-card">
-              <i data-lucide="book" class="mb-4"></i>
-              <h4>Political System</h4>
-              <p>Create and manage norms through the political interface.</p>
-              <a href="/political" class="action-button">Access Political System</a>
-            </div>
-            <div class="card overview-card">
-              <i data-lucide="gavel" class="mb-4"></i>
-              <h4>Judicial System</h4>
-              <p>Review cases and evaluate norm constitutionality.</p>
-              <a href="/judicial" class="action-button">Access Judicial System</a>
-            </div>
+      </section>
+
+      <section class="log-section">
+        <h3>System Overview</h3>
+        <div class="overview-grid">
+          <div class="card overview-card">
+            <i data-lucide="book" class="mb-4"></i>
+            <h4>Political System</h4>
+            <p>Create and manage norms through the political interface.</p>
+            <router-link to="/political" class="action-button">Access Political System</router-link>
+          </div>
+          <div class="card overview-card">
+            <i data-lucide="gavel" class="mb-4"></i>
+            <h4>Judicial System</h4>
+            <p>Review cases and evaluate norm constitutionality.</p>
+            <router-link to="/judicial" class="action-button">Access Judicial System</router-link>
           </div>
         </div>
-  
-        <div class="log-section">
-          <h3>Recent Activity</h3>
-          <div id="activities-log" class="card">
-            <!-- Activities will be loaded here -->
+      </section>
+
+      <section class="log-section">
+        <h3>Recent Activity</h3>
+        <div v-if="activities.length" class="card">
+          <div v-for="activity in activities" :key="activity.id" class="log-entry">{{ activity.text }}</div>
+        </div>
+        <div v-else class="card">
+          <p>No activities recorded today.</p>
+        </div>
+      </section>
+
+      <section class="log-section">
+        <h3>Quick Statistics</h3>
+        <div class="stats-grid">
+          <div class="card">
+            <h4>Norms</h4>
+            <br>
+            <p>Total Norms: {{ normsStats.total }}</p>
+            <p>Valid: {{ normsStats.valid }}</p>
+            <p>Invalid: {{ normsStats.invalid }}</p>
+          </div>
+          <div class="card">
+            <h4>Cases</h4>
+            <br>
+            <p>Total Cases: {{ casesStats.total }}</p>
+            <p>Recently Resolved: {{ casesStats.recentlyResolvedCount }}</p>
           </div>
         </div>
-  
-        <div class="log-section">
-          <h3>Quick Statistics</h3>
-          <div class="stats-grid">
-            <div class="card">
-              <h4>Norms</h4>
-              <div id="norm-stats">Loading...</div>
-            </div>
-            <div class="card">
-              <h4>Cases</h4>
-              <div id="case-stats">Loading...</div>
-            </div>
-          </div>
-        </div>
-      </main>
-  
-      <footer>
-        © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
-      </footer>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'OptimusApp',
-    mounted() {
-      this.updateData();
-      setInterval(this.updateData, 30000);
-    },
-    methods: {
-      async fetchActivities() {
-        try {
-          const response = await fetch('/api/get_activities');
-          const activities = await response.json();
-          const activitiesLog = document.getElementById('activities-log');
-          activitiesLog.innerHTML = activities.length
-            ? activities.map(activity => `<div class="log-entry">${activity}</div>`).join('')
-            : '<p>No activities recorded today.</p>';
-        } catch (error) {
-          console.error('Error fetching activities:', error);
-        }
-      },
-      async fetchQuickStats() {
-        try {
-          const [normsRes, casesRes, solvedCasesRes] = await Promise.all([
-            fetch('/api/get_norms'),
-            fetch('/api/get_all_cases'),
-            fetch('/api/get_solved_cases')
-          ]);
-  
-          const [norms, cases, solved] = await Promise.all([
-            normsRes.json(),
-            casesRes.json(),
-            solvedCasesRes.json()
-          ]);
-  
-          document.getElementById('norm-stats').innerHTML = `
-            <p>Total Norms: ${norms.length}</p>
-            <p>Valid: ${norms.filter(n => n.valid).length}</p>
-            <p>Invalid: ${norms.filter(n => !n.valid).length}</p>
-          `;
-  
-          document.getElementById('case-stats').innerHTML = `
-            <p>Total Cases: ${cases.total}</p>
-            <p>Recently Resolved: ${solved.solved_cases.slice(-5).length}</p>
-          `;
-        } catch (error) {
-          console.error('Error fetching quick stats:', error);
-        }
-      },
-      updateData() {
-        this.fetchActivities();
-        this.fetchQuickStats();
+      </section>
+    </main>
+
+    <footer>
+      © 2024 Optimus Interface - Enhancing Rule of Law through Systems Interaction
+    </footer>
+  </div>
+</template>
+
+<script>
+import { ref, onMounted, onUnmounted } from 'vue'
+
+export default {
+  name: 'OptimusApp',
+  setup() {
+    const activities = ref([])
+    const normsStats = ref({ total: 0, valid: 0, invalid: 0 })
+    const casesStats = ref({ total: 0, recentlyResolvedCount: 0 })
+    let intervalId = null
+
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+
+    console.log("VITE_API_BASE_URL:", API_BASE_URL); // Debugging
+
+    const fetchActivities = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/get_activities`);
+        activities.value = await response.json();
+      } catch (error) {
+        console.error('Error fetching activities:', error);
       }
-    }
-  };
-  </script>
-  
-  <style>
+    };
+
+    const fetchQuickStats = async () => {
+      try {
+        const [normsRes, casesRes, solvedCasesRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/get_norms`),
+          fetch(`${API_BASE_URL}/api/get_all_cases`),
+          fetch(`${API_BASE_URL}/api/get_solved_cases`)
+        ]);
+
+        const [norms, cases, solved] = await Promise.all([
+          normsRes.json(),
+          casesRes.json(),
+          solvedCasesRes.json()
+        ]);
+
+        normsStats.value = {
+          total: norms.length,
+          valid: norms.filter(n => n.valid).length,
+          invalid: norms.filter(n => !n.valid).length
+        };
+
+        casesStats.value = {
+          total: cases.total,
+          recentlyResolvedCount: solved.solved_cases.slice(-5).length
+        };
+      } catch (error) {
+        console.error('Error fetching quick stats:', error);
+      }
+    };
+
+    const updateData = () => {
+      fetchActivities();
+      fetchQuickStats();
+    };
+
+    onMounted(() => {
+      updateData();
+      intervalId = setInterval(updateData, 30000);
+    });
+
+    onUnmounted(() => {
+      if (intervalId) clearInterval(intervalId);
+    });
+
+    return {
+      activities,
+      normsStats,
+      casesStats
+    };
+  }
+};
+</script>
+
+<style scoped>
+
   * {
     margin: 0;
     padding: 0;
@@ -183,15 +205,8 @@
   }
   
   .sidebar {
-    position: fixed;
-    top: var(--header-height);
-    left: 0;
-    width: var(--sidebar-width);
-    height: calc(100vh - var(--header-height));
-    background: white;
-    border-right: 1px solid #e5e7eb;
-    padding: 1.5rem;
-    overflow-y: auto;
+    width: var(--sidebar-width) !important;
+    height: calc(100vh - var(--header-height)) !important;
   }
   
   .sidebar h3 {
@@ -240,7 +255,9 @@
   }
   
   .main-content {
-    margin-left: var(--sidebar-width);
+    margin-left: var(--sidebar-width) !important;
+    width: calc(100vw - var(--sidebar-width)) !important;
+    min-height: 100vh;
     margin-top: var(--header-height);
     padding: 2rem;
   }
@@ -323,6 +340,10 @@
   
   footer {
     margin-left: var(--sidebar-width);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100vw - var(--sidebar-width));
     padding: 1.5rem;
     text-align: center;
     color: #6b7280;
@@ -331,16 +352,17 @@
   
   @media (max-width: 1024px) {
     .sidebar {
-      transform: translateX(-100%);
-      transition: transform 0.3s;
+        width: 200px; /* Adjusted width for smaller screens */
+        position: fixed;
+        min-height: 100vh;
     }
-  
-    .sidebar.active {
-      transform: translateX(0);
+
+    .main-content {
+        margin-left: 200px; /* Adjusted margin for new sidebar width */
     }
-  
-    .main-content, footer {
-      margin-left: 0;
+
+    footer {
+        margin-left: 200px;
     }
   }
   </style>

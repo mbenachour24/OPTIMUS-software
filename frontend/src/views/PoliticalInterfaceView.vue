@@ -1,3 +1,5 @@
+// PoliticalInterfaceView.vue
+
 <template>
     <div>
       <header>
@@ -19,16 +21,6 @@
         </ul>
         <h3>Analytics</h3>
         <ul>
-          <li class="has-submenu">
-            <a href="/general_log">General Log</a>
-            <ul class="submenu">
-              <li><a href="/general_log#todays-activities">Today's Activities</a></li>
-              <li><a href="/general_log#norm-updates">Norm Updates</a></li>
-              <li><a href="/general_log#case-decisions">Case Decisions</a></li>
-              <li><a href="/norms">View Norms</a></li>
-              <li><a href="/cases">View Cases</a></li>
-            </ul>
-          </li>
           <li><a href="/statistics">Statistics Dashboard</a></li>
         </ul>
       </aside>
@@ -113,29 +105,39 @@
       async fetchLogs() {
         try {
           const response = await fetch('/api/get_norms');
-          if (!response.ok) throw new Error(`Failed to fetch norms: ${response.status}`);
-  
-          const norms = await response.json();
+
+          // ✅ Log response before parsing
+          console.log("🔍 Fetch Logs Response:", response);
+
+          if (!response.ok) {
+            throw new Error(`Failed to fetch norms: ${response.status} ${response.statusText}`);
+          }
+
+          const norms = await response.json(); // Ensure this is valid JSON
+          console.log("✅ Parsed Norms:", norms);
+
           const logEntries = document.getElementById('log-entries');
           if (!logEntries) {
             console.error("❌ Error: 'log-entries' element not found.");
             return;
           }
-  
-          logEntries.innerHTML = '';
-          // Trier du plus récent au plus ancien
-          norms.sort((a, b) => b.id - a.id);
-  
+
+          logEntries.innerHTML = ''; // Clear old entries
+
+          norms.sort((a, b) => b.id - a.id); // Sort newest first
+
           norms.forEach(norm => {
             const logEntry = document.createElement('div');
             logEntry.className = 'log-entry';
             logEntry.innerHTML = `<strong>Norm #${norm.id}:</strong> ${norm.text} - Valid: ${norm.valid}`;
             logEntries.appendChild(logEntry);
           });
+
         } catch (error) {
-          console.error('Error fetching norms:', error);
+          console.error("❌ Error fetching norms:", error);
         }
       },
+      
       async fetchNotifications() {
         try {
           const response = await fetch('/api/get_notifications');

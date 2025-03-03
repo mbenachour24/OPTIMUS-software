@@ -77,17 +77,18 @@ app.add_middleware(
     allow_headers=["*"],  
 )
 
-# Database setup
-os.makedirs("data", exist_ok=True)
-load_dotenv()
+# Load environment variables from .env file
+load_dotenv()  # This will look for a .env file in the current working directory
 
-# Database configuration
-DATABASE_URL = (
-    os.getenv("RENDER_DATABASE_URL") or
-    os.getenv("DATABASE_URL") or
-    os.getenv("SUPABASE_DATABASE_URL") or
-    "sqlite:///data/optimus.db"
-)
+# Access the DATABASE_URL
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    raise ValueError("❌ DATABASE_URL is not set! Check your .env file or environment variables.")
+
+print("Loaded environment variables:")
+print("DATABASE_URL:", DATABASE_URL)
+
+print("Current working directory:", os.getcwd())
 
 engine = create_async_engine(DATABASE_URL, echo=True, future=True)
 
@@ -393,7 +394,9 @@ async def get_all_cases(db: AsyncSession = Depends(get_db)):
             "constitutional": case.constitutional,
             "status": case.status,
             "created_at": case.created_at.isoformat() if case.created_at else None,
-            "resolved_at": case.resolved_at.isoformat() if case.resolved_at else None
+            "resolved_at": case.resolved_at.isoformat() if case.resolved_at else None,
+            "decision": case.decision if hasattr(case, "decision") else "Unknown"
+
         } for case in cases]
 
         return {"total": len(formatted_cases), "cases": formatted_cases}
@@ -421,10 +424,24 @@ async def get_solved_cases(db: AsyncSession = Depends(get_db)):
         result = await db.execute(select(Case).filter(Case.status == "solved"))
         solved_cases_list = result.scalars().all()
 
-        # Debugging log
-        logging.info(f"📌 Returning {len(solved_cases_list)} solved cases")
+        # Convert cases to a list of dictionaries and ensure "decision" is included
+        solved_cases_with_decision = [
+            {
+                "id": case.id,
+                "text": case.text,
+                "norm_id": case.norm_id,
+                "created_at": case.created_at.isoformat() if case.created_at else None,
+                "resolved_at": case.resolved_at.isoformat() if case.resolved_at else "Pending",
+                "status": case.status,
+                "decision": case.decision if hasattr(case, "decision") else "Unknown"
+            }
+            for case in solved_cases_list
+        ]
 
-        return {"solved_cases": solved_cases_list}  # Ensure this key matches frontend
+        # Debugging log
+        logging.info(f"📌 Returning {len(solved_cases_with_decision)} solved cases with decisions")
+
+        return {"solved_cases": solved_cases_with_decision}  # Matches frontend expectation
     except Exception as e:
         logging.error(f"❌ Error retrieving solved cases: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve solved cases.")

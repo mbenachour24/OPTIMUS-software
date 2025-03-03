@@ -2,39 +2,74 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 
-// Import MathJax
-import 'mathjax/es5/tex-mml-chtml.js';
+// ✅ Stocke Vue globalement (évite les conflits)
+let vueApp = null;
 
-// 🔧 MathJax Configuration
-window.MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']],
-    displayMath: [['$$', '$$'], ['\\[', '\\]']],
-    processEscapes: true,
-    processEnvironments: true
-  },
-  options: {
-    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-  },
-  loader: {
-    load: ['input/tex', 'output/chtml', 'ui/menu', '[tex]/ams', '[tex]/amscd']
+// 📌 Fonction qui monte Vue après MathJax
+function mountVueApp() {
+  if (vueApp) {
+    console.warn("⚠️ Vue app is already mounted.");
+    return;
   }
-};
 
-// 🚀 FIX: Properly Initialize Vue App
-const app = createApp(App);
+  console.log("🚀 Mounting Vue...");
+  vueApp = createApp(App);
+  vueApp.use(router);
+  vueApp.mount('#app');
 
-// 🌎 Attach Vue globally for debugging & external calls
-window.__VUE_APP__ = app;
+  // 📡 Stocker Vue globalement pour debugging
+  window.__VUE_APP__ = vueApp;
+  console.log("🎉 Vue App Successfully Mounted! 🚀");
 
-console.log("✅ Vue App Initialized:", window.__VUE_APP__);
+  // 🌎 Ajout de méthodes globales
+  vueApp.config.globalProperties.solveCase = solveCase;
+  vueApp.config.globalProperties.loadSolvedCases = loadSolvedCases;
+}
 
-// 🔥 Register Global Method: solveCase
-app.config.globalProperties.solveCase = async function (caseId, decision) {
+// ✅ Charger MathJax après Vue
+function loadMathJax() {
+    console.log("📄 Loading MathJax...");
+  
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$']],
+        processEscapes: true,
+        packages: ['base', 'ams']  // Corrige le chargement des packages
+      },
+      loader: {
+        load: ['input/tex', 'output/chtml', '[tex]/ams']
+      },
+      chtml: {
+        scale: 1.0, // Échelle par défaut des maths rendues
+        minScale: 0.5,
+        matchFontHeight: true, // Ajuste la hauteur des maths aux polices de la page
+        mtextInheritFont: true, // Les mathtext utilisent la police environnante
+        merrorInheritFont: true,
+        mathmlSpacing: false,
+        skipAttributes: {},
+        exFactor: 0.5,
+        displayAlign: 'center',
+        displayIndent: '0em'
+      },      
+      startup: {
+        ready: () => {
+          console.log("✅ MathJax initialized!");
+          window.MathJax.startup.defaultReady();
+          if (window.__VUE_APP__) {
+            window.MathJax.typeset();
+          }
+        }
+      }
+    };
+  }
+  
+// ✅ Fonction API : résoudre un cas
+async function solveCase(caseId, decision) {
   console.log(`🛠️ solveCase(${caseId}, ${decision}) triggered`);
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/solve_case/${caseId}?decision=${decision}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/solve_case/${caseId}?decision=${decision}`, {
       method: 'POST',
     });
 
@@ -48,7 +83,7 @@ app.config.globalProperties.solveCase = async function (caseId, decision) {
     alert(`✅ Case ${caseId} solved as ${decision}`);
     console.log("📡 API Response:", result);
 
-    // 🔄 Reload cases after solving
+    // 🔄 Recharge les cas résolus
     if (typeof window.__VUE_APP__.config.globalProperties.loadSolvedCases === 'function') {
       console.log("🔄 Refreshing solved cases...");
       await window.__VUE_APP__.config.globalProperties.loadSolvedCases();
@@ -59,14 +94,14 @@ app.config.globalProperties.solveCase = async function (caseId, decision) {
     console.error('❌ Error solving case:', error);
     alert('An unexpected error occurred while solving the case.');
   }
-};
+}
 
-// 🔄 Register Global Method: loadSolvedCases (Ensure cases refresh properly)
-app.config.globalProperties.loadSolvedCases = async function () {
+// ✅ Fonction API : charger les cas résolus
+async function loadSolvedCases() {
   console.log("🔄 Calling loadSolvedCases()...");
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/get_solved_cases`);
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/get_solved_cases`);
     const data = await response.json();
 
     if (!Array.isArray(data.solved_cases)) {
@@ -76,16 +111,15 @@ app.config.globalProperties.loadSolvedCases = async function () {
 
     console.log("📡 Solved Cases Updated:", data.solved_cases);
 
-    // Manually update Vue state if needed
+    // Met à jour l'état Vue si nécessaire
     if (window.__VUE_APP__._instance) {
       window.__VUE_APP__._instance.proxy.solvedCases = data.solved_cases.sort((a, b) => b.id - a.id);
     }
   } catch (error) {
     console.error("❌ Error loading solved cases:", error);
   }
-};
+}
 
-// ✅ Use router & mount Vue app
-app.use(router).mount('#app');
-
-console.log("🎉 Vue App Successfully Mounted! 🚀");
+// 🚀 **Lancement** : Monte Vue **puis** charge MathJax
+mountVueApp();
+loadMathJax();

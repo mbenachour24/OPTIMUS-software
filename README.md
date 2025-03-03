@@ -88,7 +88,6 @@ The UI provides users with an interactive dashboard where they can:
 - **View Real-Time Data**: The statistics dashboard provides insights into normative inflation, case resolution rates, and overall system health. Normative inflation refers to the increasing volume of legal norms relative to the system’s capacity to process and enforce them. The dashboard tracks this phenomenon by analyzing the rate of norm creation versus judicial resolution, identifying backlogs, and assessing systemic efficiency. Users can monitor trends over time, evaluate the impact of new legal norms, and predict potential legal bottlenecks.
 - **Receive Notifications**: Users get real-time updates on norm modifications, judicial decisions, and system events via WebSockets.
 - **Interact with Systems**: The political and judicial interfaces allow respective actions, such as creating norms, generating and solving cases.
-- **Log System Events**: The general log captures all system interactions, providing a chronological record of changes and activities.
 
 ## API Endpoints
 

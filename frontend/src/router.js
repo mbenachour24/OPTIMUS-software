@@ -3,7 +3,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from './views/HomeView.vue';
 import CasesView from './views/CasesView.vue';
-import GeneralLogView from './views/GeneralLogView.vue';
 import JudicialInterfaceView from './views/JudicialInterfaceView.vue';
 import PoliticalInterfaceView from './views/PoliticalInterfaceView.vue';
 import StatisticsDashboardView from './views/StatisticsDashboardView.vue';
@@ -13,7 +12,6 @@ import AboutView from './views/AboutView.vue';
 const routes = [
   { path: '/', component: HomeView },
   { path: '/cases', component: CasesView },
-  { path: '/general-log', component: GeneralLogView },
   { path: '/judicial', component: JudicialInterfaceView },
   { path: '/political', component: PoliticalInterfaceView },
   { path: '/statistics', component: StatisticsDashboardView },

@@ -1,8 +1,8 @@
-"""Add models tables
+"""Add decision column to cases
 
-Revision ID: 1b80b825c65f
-Revises: 1ada795ae549
-Create Date: 2025-02-05 13:17:46.637546
+Revision ID: 0af0b32a65ff
+Revises: adf6639cfbdf
+Create Date: 2025-02-18 15:41:10.067305
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '1b80b825c65f'
-down_revision: Union[str, None] = '1ada795ae549'
+revision: str = '0af0b32a65ff'
+down_revision: Union[str, None] = 'adf6639cfbdf'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
