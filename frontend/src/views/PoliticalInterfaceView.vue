@@ -35,8 +35,9 @@
   
         <h3>Log Entries</h3>
         <div id="log-entries" class="scrollable-section">
-          <!-- Logs will be dynamically loaded here -->
-          <p>No log entries yet.</p>
+          <div v-for="norm in logs" :key="norm.id" class="log-entry">
+            <strong>Norm #{{ norm.id }}:</strong> {{ norm.text }} - Valid: {{ norm.valid }}
+          </div>
         </div>
   
         <!-- Interaction Area -->
@@ -104,40 +105,26 @@
       },
       async fetchLogs() {
         try {
-          const response = await fetch('/api/get_norms');
+            const response = await fetch('/api/get_norms');
 
-          // ✅ Log response before parsing
-          console.log("🔍 Fetch Logs Response:", response);
+            // ✅ Log response before parsing
+            console.log("🔍 Fetch Logs Response:", response);
 
-          if (!response.ok) {
-            throw new Error(`Failed to fetch norms: ${response.status} ${response.statusText}`);
-          }
+            if (!response.ok) {
+                throw new Error(`Failed to fetch norms: ${response.status} ${response.statusText}`);
+            }
 
-          const norms = await response.json(); // Ensure this is valid JSON
-          console.log("✅ Parsed Norms:", norms);
+            const norms = await response.json(); // Ensure this is valid JSON
+            console.log("✅ Parsed Norms:", norms);
 
-          const logEntries = document.getElementById('log-entries');
-          if (!logEntries) {
-            console.error("❌ Error: 'log-entries' element not found.");
-            return;
-          }
-
-          logEntries.innerHTML = ''; // Clear old entries
-
-          norms.sort((a, b) => b.id - a.id); // Sort newest first
-
-          norms.forEach(norm => {
-            const logEntry = document.createElement('div');
-            logEntry.className = 'log-entry';
-            logEntry.innerHTML = `<strong>Norm #${norm.id}:</strong> ${norm.text} - Valid: ${norm.valid}`;
-            logEntries.appendChild(logEntry);
-          });
+            // 🚀 Sort newest first
+            this.logs = norms.sort((a, b) => b.id - a.id);
 
         } catch (error) {
-          console.error("❌ Error fetching norms:", error);
+            console.error("❌ Error fetching norms:", error);
         }
-      },
-      
+    },
+          
       async fetchNotifications() {
         try {
           const response = await fetch('/api/get_notifications');

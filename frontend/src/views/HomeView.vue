@@ -33,6 +33,7 @@
         <p>Optimus is an interactive system for analyzing the interaction between political and judicial systems.
         Use the navigation menu to explore different sections:</p>
         <ul>
+          <li><strong>About:</strong> Explanations on the systems-theoretic foundations of the software.</li>
           <li><strong>Political System:</strong> Create and manage legal norms.</li>
           <li><strong>Judicial System:</strong> Review cases and evaluate their constitutionality.</li>
           <li><strong>View Cases:</strong> Browse pending and resolved legal cases.</li>

@@ -27,16 +27,15 @@
 
     <!-- Main Content -->
     <main class="main-content">
-      <h1>1.1. Systemic Modelling of the Rule of Law</h1>
+      <h1>Systemic Modelling of the Rule of Law</h1>
       <p>
-        The systemic theory we were discussing is modellable graphically and algorithmically. To model the Rule of Law using a systemic method, we must consider two levels of observation:
-      </p>
+        The Rule of Law can be systematically modeled both graphically and algorithmically. A systemic approach requires distinguishing between two levels of observation: </p>
       <ul>
         <li>First, the <strong>first-order observation</strong>: From an objective point of view, the distinction between the judge and the norm (1.1.1).</li>
         <li>Then, the <strong>second-order observation</strong>: From a systemic point of view, the distinction between the judicial system and the political system (1.1.2).</li>
       </ul>
 
-      <h2>1.1.1. First-Order Analysis: The Distinction between Judge and Norm</h2>
+      <h2>1.1. First-Order Analysis: The Distinction between Judge and Norm</h2>
       <div>
         <img :src="judgeLawImage" alt="Interaction Between the Norm and the Judge" />
         <p>Illustration 1: Interaction Between the Norm and the Judge</p>
@@ -52,7 +51,7 @@
         <strong>the judge is structurally linked to the norm through the reference operation. The proposition is equally valid in both directions: the norm is structurally linked to the judge through the reference operation. There is no norm without a judge (voluntarism), and no judge without a norm (normativism).</strong> The dialectic between rationalism and voluntarism on which 20th century legal theory was founded does not concern systems theory. There is a fundamental relationship between judges (voluntarist element) and norms (rational element). The interpretative activity of judges plays a central role in the application of norms, and the positive existence of norms grounds the function of the judge.
       </p>
 
-      <h2>1.1.2. Second-Order Analysis: The Distinction between the Legal System and the Political System</h2>
+      <h2>1.2. Second-Order Analysis: The Distinction between the Legal System and the Political System</h2>
       <div>
         <img :src="structuralCouplingImage" alt="Autonomy and Structural Coupling of Legal and Political Systems" />
         <p>Illustration 2: Autonomy and Structural Coupling of Legal and Political Systems</p>
@@ -67,7 +66,7 @@
         It is important to note that the structural coupling between the judicial system and the political system is not automatic; <strong>it results from the fundamental principle of the Rule of Law</strong>, and its establishment can only be achieved through constitutional means. <strong>The political system must be constitutionally authorised to produce norms, while the judicial system, also constitutionally mandated, has the mission of rendering judgements by referring to the existing political norms</strong>.
       </p>
 
-      <h2>1.1.3. Fundamental Rules of the Rule of Law</h2>
+      <h2>1.3. Fundamental Rules of the Rule of Law</h2>
       <p>
         Four fundamental rules for algorithmic modelling of the Rule of Law are directly deduced from the four elements of the second order distinction: functional differentiation, autopoiesis, structural coupling, and the functioning of society.
       </p>
@@ -78,12 +77,12 @@
         <li><strong>Rule of temporal recursion (functioning of society)</strong>: For the system to be 'alive', the operation of the judge referencing the norm must be iterated in time. Social temporality paces the operations of the judicial system. Without the judge's active reference to the norm, the norm cannot be applied in society. The recursive functioning of society (typically, the flow of days, the work calendar) must take place for the Rule of Law to exist. This is commonly met in legal notions such as prescription, reasonable time, various procedural timelines, contractual durations, penalties, etc. In politics, it is operationalised through electoral calendars, terms of office, constitutionally prescribed deadlines, etc. Simply put, the court must open its doors in the morning and accept cases.</li>
       </ol>
 
-      <h1>1.2. Algorithmic Translation of the Specific Systemic Rules Applicable to the Rule of Law</h1>
+      <h1>2. Algorithmic Translation of the Specific Systemic Rules Applicable to the Rule of Law</h1>
       <p>
         The four concepts to define and convert into code are: functional differentiation, autopoiesis, structural coupling, and society.
       </p>
 
-      <h2>1.2.1. Functional Differentiation</h2>
+      <h2>2.1. Functional Differentiation</h2>
       <p>
         Functional differentiation is the process by which social systems specialise and distinguish themselves according to their specific roles in society. In the context of the Rule of Law, this means that the judicial system and the political system have distinct, yet interdependent functions: the political system fulfils a decision-making function (represented by the PoliticalSystem class and the make_decision method), while the judicial system is dedicated to producing judgements (represented by the JudicialSystem class and the produce_cases method).
       </p>
@@ -117,7 +116,7 @@ class JudicialSystem:
             print(f"Judicial System: Processed {case}")
       </code></pre>
 
-      <h2>1.2.2. Autopoiesis</h2>
+      <h2>2.2. Autopoiesis</h2>
       <p>
         Autopoiesis, in the context of legal and political systems, describes how these systems generate and maintain themselves. The political system produces norms, while the judicial system generates judgements, including a reference to the norms.
       </p>
@@ -142,7 +141,7 @@ class Case:
         self.complexity = complexity
       </code></pre>
 
-      <h2>1.2.3. Structural Coupling</h2>
+      <h2>2.3. Structural Coupling</h2>
       <p>
         Structural coupling refers to how two distinct systems, although operationally closed, can interact and influence each other's internal structures. For example, political decisions that produce norms must be interpreted and applied by the judicial system. Conversely, judicial decisions can impact future political decisions.
       </p>
@@ -186,7 +185,7 @@ class PoliticalSystem:
                 norm.log_event("Reformed by political decision")
       </code></pre>
 
-      <h2>1.2.4. Society</h2>
+      <h2>2.4. Society</h2>
       <p>
         Society is the environment in which the political and judicial systems operate and interact. Its recursive process creates the necessary conditions for the existence and functioning of its subsystems by formulating expectations and exerting pressures that influence political and legal decisions.
       </p>
