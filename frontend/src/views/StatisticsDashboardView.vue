@@ -211,7 +211,7 @@ import 'katex/dist/katex.min.css';
 // Register all the components that Chart.js provides
 Chart.register(...registerables);
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://optimus-software.onrender.com";
 
 export default {
   name: 'StatisticsDashboard',
