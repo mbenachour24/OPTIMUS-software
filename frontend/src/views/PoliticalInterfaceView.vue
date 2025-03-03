@@ -118,13 +118,28 @@
             console.log("✅ Parsed Norms:", norms);
 
             // 🚀 Sort newest first
-            this.logs = norms.sort((a, b) => b.id - a.id);
+            norms.sort((a, b) => b.id - a.id);
+
+            const logEntries = document.getElementById('log-entries');
+            if (!logEntries) {
+                console.error("❌ Error: 'log-entries' element not found.");
+                return;
+            }
+
+            logEntries.innerHTML = ''; // Clear old entries
+
+            norms.forEach(norm => {
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.innerHTML = `<strong>Norm #${norm.id}:</strong> ${norm.text} - Valid: ${norm.valid}`;
+                logEntries.appendChild(logEntry);
+            });
 
         } catch (error) {
             console.error("❌ Error fetching norms:", error);
         }
     },
-          
+  
       async fetchNotifications() {
         try {
           const response = await fetch('/api/get_notifications');
